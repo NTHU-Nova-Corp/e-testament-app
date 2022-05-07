@@ -1,0 +1,34 @@
+nav.navbar.navbar-expand-sm.navbar-dark.bg-dark role="navigation"
+  div.container-fluid
+    a.navbar-brand rel="home" href="/" title="Securely Share Configurations"
+      img alt="ETestament" src="/logo.png" style="max-width:35px; margin-top: -7px;"
+    a.navbar-brand href="/" E-Testament
+    button.navbar-toggler type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation"
+      span.navbar-toggler-icon
+
+    div.collapse.navbar-collapse#mainNavbar
+      ul.navbar-nav.me-auto
+        - if @current_account
+          li.nav-item
+            - if @current_route = '/properties'
+              a.nav-link.active href="/properties" Properties
+            - else
+              a.nav-link href="/properties" Properties
+          li.nav-item
+            - if @current_route = '/heirs'
+              a.nav-link.active href="/heirs" heirs
+            - else
+              a.nav-link href="/heirs" heirs
+          li.nav-item.dropdown
+            a.nav-link.dropdown-toggle data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
+              = "#{@current_account['username']}"
+
+            div.dropdown-menu
+              a.dropdown-item href="/account/#{@current_account['username']}" Account
+              a.dropdown-item href='/auth/logout' Logout
+        - else
+          li.nav-item
+            a.nav-link href='/auth/login' Login
+          li.nav-item
+            a.nav-link.disabled href='/auth/login' Register
+        

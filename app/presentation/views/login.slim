@@ -1,0 +1,18 @@
+/ Fontawesome and Bootstrap-Social for Github buttons
+link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous"
+link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.0.0/bootstrap-social.css" integrity="sha384-KMis1ci1uYEByUqyQ+ys92P9u9WtqmYQmUvEpXsB5BuMYyTHljPVNJ24Jl6ib3o8" crossorigin="anonymous"
+
+.row
+  .col-sm-4
+  .col-sm-4
+    h3.text-center Login
+    form method='post' action='/auth/login' id='form-login'
+      .form-group
+        label for='input-username' Username
+        input.form-control#input-username type='text' name='username'
+      .form-group
+        label for='input-password' Password
+        input.form-control#input-password type='password' name='password'
+
+      button#button-login.btn.btn-primary.btn-block.mt-2 type='submit' value='login'  Login
+  .col-sm-4

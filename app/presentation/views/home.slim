@@ -1,0 +1,10 @@
+.d-flex.flex-column style="align-items:center"
+  h1#title.mt-2 Welcome to E-Testament
+  img alt="ETestament" style='width:40%' src="/trans-logo.png"
+  p Store your will safely
+  p
+    i E-Testament dedicates to help you to manage all of your properties
+
+  - unless current_account
+    p
+      a href='/auth/login' login to start!
