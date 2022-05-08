@@ -19,6 +19,7 @@ module ETestament
         secret: config.SESSION_SECRET
 
     route do |routing|
+      update_breadcrumb_session(nil)
       response['Content-Type'] = 'text/html; charset=utf-8'
       @current_account = session[:current_account]
       @current_route = routing.instance_variable_get(:@remaining_path)
@@ -29,6 +30,16 @@ module ETestament
       # GET /
       routing.root do
         view :home, locals: { current_account: @current_account }
+      end
+    end
+
+    def update_breadcrumb_session(breadcrumb)
+      if breadcrumb.nil?
+        session[:breadcrumb] = nil
+        @breadcrumb = nil
+      else
+        session[:breadcrumb] = breadcrumb
+        @breadcrumb = session[:breadcrumb].split('/')
       end
     end
   end

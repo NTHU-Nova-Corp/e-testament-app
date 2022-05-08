@@ -1,0 +1,84 @@
+script src="js/properties.js"
+
+table.table.table-hover
+  thead
+    tr
+      th scope="col"  Name
+      th scope="col"  Description
+      th.text-center scope="col"  View
+      th.text-center scope="col"  Menage
+  tbody
+  - for property in properties
+    tr
+      th scope="row" = property['name']
+      td = property['description']
+      td.text-center
+        a.btn.btn-info.mx-1 type="button" href="/properties/#{property['id']}/heirs"
+          i.fa-solid.fa-people-line
+        a.btn.btn-success type="button" href="/properties/#{property['id']}/documents"
+          i.fa-solid.fa-file-lines
+      td.text-center
+        button.btn.btn-info.mx-1 type="button" onClick="test()"
+          i.fa-solid.fa-pen-to-square
+        button.btn.btn-danger type="button" onClick="test()"
+          i.fa-solid.fa-trash
+
+  tr
+    th.text-center colspan="4" scope="col"
+      button.btn.btn-primary type="button" onClick="open_add_property_modal()"
+        span
+          i.fa-solid.fa-plus.mx-2
+          | Add New Property
+
+#add_property_modal.modal.fade
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        h5.modal-title Add New Property
+        button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+          span aria-hidden="true"
+      .modal-body
+        form
+          .form-group
+            label.col-form-label.mt-4 for="property_name_input"  Name
+            input#property_name_input.form-control placeholder=("Enter property name") type="text" /
+          .form-group
+            label.col-form-label.mt-4 for="property_description_input"  Description
+            input#property_description_input.form-control placeholder=("Enter description") type="text" /
+          .form-group
+            label.form-label.mt-4 for="property_type_select"  Type
+            select#property_type_select.form-select
+              option Choose property type
+              option Type 1
+              option Type 2
+              option Type 3
+              option Type 4
+              option Type 5
+      .modal-footer
+        button.btn.btn-primary type="button"  Save changes
+        button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close
+
+
+#view_heirs_modal.modal.fade
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        h5.modal-title Heirs
+        button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+          span aria-hidden="true"
+      .modal-body
+        p Heirs list
+      .modal-footer
+        button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close
+
+#view_document_modal.modal.fade
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        h5.modal-title Document
+        button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+          span aria-hidden="true"
+      .modal-body
+        p Document list
+      .modal-footer
+        button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close

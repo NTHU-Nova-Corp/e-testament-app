@@ -8,9 +8,10 @@ module ETestament
   class App < Roda
     route('heirs') do |routing|
       routing.on do
-        # GET /properties
+        # GET /heir
         routing.get do
-          view :heirs, locals: {}
+          heirs = Heirs.new(App.config).all(session[:current_account]['id'])
+          view 'heirs/heirs', locals: { heirs: }
         end
       end
     end

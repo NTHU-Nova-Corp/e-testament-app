@@ -10,15 +10,9 @@ nav.navbar.navbar-expand-sm.navbar-dark.bg-dark role="navigation"
       ul.navbar-nav.me-auto
         - if @current_account
           li.nav-item
-            - if @current_route = '/properties'
-              a.nav-link.active href="/properties" Properties
-            - else
-              a.nav-link href="/properties" Properties
+            a.nav-link href="/properties" Properties
           li.nav-item
-            - if @current_route = '/heirs'
-              a.nav-link.active href="/heirs" heirs
-            - else
-              a.nav-link href="/heirs" heirs
+            a.nav-link href="/heirs" Heirs
           li.nav-item.dropdown
             a.nav-link.dropdown-toggle data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
               = "#{@current_account['username']}"
