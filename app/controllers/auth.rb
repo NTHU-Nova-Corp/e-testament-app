@@ -7,14 +7,14 @@ module ETestament
   # Web controller for ETestament API
   class App < Roda
     route('auth') do |routing|
-      @login_route = '/auth/login'
-      routing.is 'login' do
-        # GET /auth/login
+      @signin_route = '/auth/signin'
+      routing.is 'signin' do
+        # GET /auth/signin
         routing.get do
-          view :login
+          view :signin
         end
 
-        # POST /auth/login
+        # POST /auth/signin
         routing.post do
           account = AuthenticateAccount.new(App.config).call(
             username: routing.params['username'],
@@ -27,14 +27,14 @@ module ETestament
         rescue StandardError
           flash.now[:error] = 'Username and password did not match our records'
           response.status = 400
-          view :login
+          view :signin
         end
       end
 
-      routing.on 'logout' do
+      routing.on 'signout' do
         routing.get do
           session[:current_account] = nil
-          routing.redirect @login_route
+          routing.redirect @signin_route
         end
       end
     end

@@ -3,8 +3,8 @@
 .row
   .col-sm-4
   .col-sm-4
-    h3.text-center Login
-    form method='post' action='/auth/login' id='form-login'
+    h3.text-center Sign in
+    form method='post' action='/auth/signin' id='form-signin'
       .form-group
         label for='input-username' Username
         input.form-control#input-username type='text' name='username'
@@ -12,5 +12,5 @@
         label for='input-password' Password
         input.form-control#input-password type='password' name='password'
 
-      button#button-login.btn.btn-primary.btn-block.mt-2 type='submit' value='login'  Login
+      button#button-signin.btn.btn-primary.btn-block.mt-2 type='submit' value='signin'  Sign in
   .col-sm-4

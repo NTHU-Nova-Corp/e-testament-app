@@ -13,14 +13,14 @@ table.table.table-hover
       th scope="row" = property['name']
       td = property['description']
       td.text-center
-        a.btn.btn-info.mx-1 type="button" href="/properties/#{property['id']}/heirs"
-          i.fa-solid.fa-people-line
-        a.btn.btn-success type="button" href="/properties/#{property['id']}/documents"
+        a.btn.btn-info.mx-1 style="width: 38px;" type="button" href="/properties/#{property['id']}/heirs"
+          i.fa-solid.fa-people-line style="margin: -3px;"
+        a.btn.btn-success type="button" style="width: 38px;" href="/properties/#{property['id']}/documents"
           i.fa-solid.fa-file-lines
       td.text-center
-        button.btn.btn-info.mx-1 type="button" onClick="test()"
+        button.btn.btn-info.mx-1 style="width: 38px;" type="button" onClick="test()"
           i.fa-solid.fa-pen-to-square
-        button.btn.btn-danger type="button" onClick="test()"
+        button.btn.btn-danger style="width: 38px;" type="button" onClick="test()"
           i.fa-solid.fa-trash
 
   tr
@@ -29,6 +29,7 @@ table.table.table-hover
         span
           i.fa-solid.fa-plus.mx-2
           | Add New Property
+
 
 #add_property_modal.modal.fade
   .modal-dialog.modal-lg role="document"
@@ -59,6 +60,7 @@ table.table.table-hover
         button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close
 
 
+
 #view_heirs_modal.modal.fade
   .modal-dialog.modal-lg role="document"
     .modal-content
@@ -70,6 +72,7 @@ table.table.table-hover
         p Heirs list
       .modal-footer
         button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close
+
 
 #view_document_modal.modal.fade
   .modal-dialog.modal-lg role="document"

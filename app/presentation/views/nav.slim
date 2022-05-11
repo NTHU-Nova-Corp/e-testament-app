@@ -19,10 +19,10 @@ nav.navbar.navbar-expand-sm.navbar-dark.bg-dark role="navigation"
 
             div.dropdown-menu
               a.dropdown-item href="/account/#{@current_account['username']}" Account
-              a.dropdown-item href='/auth/logout' Logout
+              a.dropdown-item href='/auth/signout' Sign out
         - else
           li.nav-item
-            a.nav-link href='/auth/login' Login
+            a#signin-nav.nav-link href='/auth/signin' Sign in
           li.nav-item
-            a.nav-link.disabled href='/auth/login' Register
+            a#signup-nav.nav-link href='/account/signup' Sign up
         
