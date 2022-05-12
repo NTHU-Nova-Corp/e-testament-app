@@ -1,3 +1,10 @@
+script src='/js/properties/heirs.js'
+
+button#add-heir-btn.btn.btn-primary.mb-2 style="float:right" type="button" onClick="open_add_heir_modal()"
+  span
+    i.fa-solid.fa-plus.mx-2
+    | Add New Heir
+
 table.table.table-hover
   thead
     tr
@@ -6,12 +13,32 @@ table.table.table-hover
       th scope="col"  Email
       th.text-center scope="col"  Menage
   tbody
+  - for heir in heirs
     tr
-      th scope="row"  Firstname x
-      td  Lastname x
-      td  email@c.com
+      th scope="row" = heir['first_name']
+      td = heir['last_name']
+      td = heir['email']
       td.text-center
-        a.btn.btn-info.mx-1 type="button"
+        button.btn.btn-info.mx-1 style="width: 38px;" type="button" onClick="test()"
           i.fa-solid.fa-pen-to-square
-        a.btn.btn-danger type="button"
+        button.btn.btn-danger style="width: 38px;" type="button" onClick="test()"
           i.fa-solid.fa-trash
+
+#add_heir_modal.modal.fade
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      form method='post' action='/properties/heirs' id='form-create-heir'
+        .modal-header
+          h5.modal-title Add New Heir
+          button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+            span aria-hidden="true"
+        .modal-body
+          .form-group
+            label.col-form-label.mt-4 for="name"
+            input#name.form-control name="name" placeholder=("Enter property name") type="text" /
+          .form-group
+            label.col-form-label.mt-4 for="description"  Description
+            input#description.form-control name="description" placeholder=("Enter description") type="text" /
+        .modal-footer
+          button#save-property-btn.btn.btn-primary type="submit"  Save changes
+          button#close-property-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close

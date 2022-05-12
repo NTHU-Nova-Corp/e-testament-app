@@ -1,14 +1,24 @@
+script src="/js/properties/documents.js"
+
+button#add-document-btn.btn.btn-primary.mb-2 style="float:right" type="button" onClick="open_add_document_modal()"
+  span
+    i.fa-solid.fa-plus.mx-2
+    | Add New Document
+
 table.table.table-hover
   thead
     tr
       th scope="col"  Name
       th scope="col"  Path
+      th scope="col"  Description
       th.text-center scope="col"  View
       th.text-center scope="col"  Menage
   tbody
+  - for document in documents
     tr
-      th scope="row"  Document file name
-      td  Document path
+      th scope="row" = document['file_name']
+      td = document['relative_path']
+      td = document['description']
       td.text-center
         a.btn.btn-success type="button"
           i.fa-solid.fa-file-lines
@@ -17,3 +27,22 @@ table.table.table-hover
           i.fa-solid.fa-pen-to-square
         a.btn.btn-danger type="button"
           i.fa-solid.fa-trash
+
+#add_document_modal.modal.fade
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      form method='post' action='/properties/documents' id='form-create-document'
+        .modal-header
+          h5.modal-title Add New Document
+          button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+            span aria-hidden="true"
+        .modal-body
+          .form-group
+            label.col-form-label.mt-4 for="name"
+            input#name.form-control name="name" placeholder=("Enter property name") type="text" /
+          .form-group
+            label.col-form-label.mt-4 for="description"  Description
+            input#description.form-control name="description" placeholder=("Enter description") type="text" /
+        .modal-footer
+          button#save-property-btn.btn.btn-primary type="submit"  Save changes
+          button#close-property-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close

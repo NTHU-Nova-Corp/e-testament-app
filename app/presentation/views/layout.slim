@@ -20,7 +20,7 @@ html
     == render :nav
     .container#html_body
       section
+        == render :flash_bar
         - unless @current_account.nil? || @breadcrumb.nil?
           == render :breadcrumb
-        == render :flash_bar
         == yield

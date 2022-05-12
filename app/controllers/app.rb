@@ -13,7 +13,7 @@ module ETestament
     plugin :flash
 
     route do |routing|
-      update_breadcrumb_session(nil)
+      get_view_path(nil)
       response['Content-Type'] = 'text/html; charset=utf-8'
       # @current_account = session[:current_account]
       @current_account = SecureSession.new(session).get(:current_account)
@@ -28,7 +28,7 @@ module ETestament
       end
     end
 
-    def update_breadcrumb_session(breadcrumb)
+    def get_view_path(breadcrumb, in_page = nil)
       if breadcrumb.nil?
         session[:breadcrumb] = nil
         @breadcrumb = nil
@@ -36,6 +36,7 @@ module ETestament
         session[:breadcrumb] = breadcrumb
         @breadcrumb = session[:breadcrumb].split('/')
       end
+      in_page.nil? ? breadcrumb : "#{breadcrumb}/#{in_page}"
     end
   end
 end

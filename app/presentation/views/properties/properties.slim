@@ -1,4 +1,9 @@
-script src="js/properties.js"
+script src="/js/properties/properties.js"
+
+button#add-properties-btn.btn.btn-primary.mb-2 style="float:right" type="button" onClick="open_add_property_modal()"
+  span
+    i.fa-solid.fa-plus.mx-2
+    | Add New Property
 
 table.table.table-hover
   thead
@@ -23,65 +28,28 @@ table.table.table-hover
         button.btn.btn-danger style="width: 38px;" type="button" onClick="test()"
           i.fa-solid.fa-trash
 
-  tr
-    th.text-center colspan="4" scope="col"
-      button.btn.btn-primary type="button" onClick="open_add_property_modal()"
-        span
-          i.fa-solid.fa-plus.mx-2
-          | Add New Property
-
-
 #add_property_modal.modal.fade
   .modal-dialog.modal-lg role="document"
     .modal-content
-      .modal-header
-        h5.modal-title Add New Property
-        button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
-          span aria-hidden="true"
-      .modal-body
-        form
+      form method='post' action='/properties' id='form-create-property'
+        .modal-header
+          h5.modal-title Add New Property
+          button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+            span aria-hidden="true"
+        .modal-body
           .form-group
-            label.col-form-label.mt-4 for="property_name_input"  Name
-            input#property_name_input.form-control placeholder=("Enter property name") type="text" /
+            label.col-form-label.mt-4 for="name"  Name
+            input#name.form-control name="name" placeholder=("Enter property name") type="text" /
           .form-group
-            label.col-form-label.mt-4 for="property_description_input"  Description
-            input#property_description_input.form-control placeholder=("Enter description") type="text" /
+            label.col-form-label.mt-4 for="description"  Description
+            input#description.form-control name="description" placeholder=("Enter description") type="text" /
           .form-group
-            label.form-label.mt-4 for="property_type_select"  Type
-            select#property_type_select.form-select
-              option Choose property type
-              option Type 1
-              option Type 2
-              option Type 3
-              option Type 4
-              option Type 5
-      .modal-footer
-        button.btn.btn-primary type="button"  Save changes
-        button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close
-
-
-
-#view_heirs_modal.modal.fade
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        h5.modal-title Heirs
-        button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
-          span aria-hidden="true"
-      .modal-body
-        p Heirs list
-      .modal-footer
-        button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close
-
-
-#view_document_modal.modal.fade
-  .modal-dialog.modal-lg role="document"
-    .modal-content
-      .modal-header
-        h5.modal-title Document
-        button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
-          span aria-hidden="true"
-      .modal-body
-        p Document list
-      .modal-footer
-        button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close
+            label.form-label.mt-4 for="property_type_id"  Type
+            select#property_type_id.form-select name="property_type_id"
+              option selected="true"
+                | Choose property type
+              - types.each_with_index do |type, index|
+                option value="#{type['id']}" == type['name']
+        .modal-footer
+          button#save-property-btn.btn.btn-primary type="submit"  Save changes
+          button#close-property-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close

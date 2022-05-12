@@ -10,16 +10,16 @@ nav.navbar.navbar-expand-sm.navbar-dark.bg-dark role="navigation"
       ul.navbar-nav.me-auto
         - if @current_account
           li.nav-item
-            a.nav-link href="/properties" Properties
+            a#properties-nav.nav-link href="/properties" Properties
           li.nav-item
-            a.nav-link href="/heirs" Heirs
+            a#heirs-nav.nav-link href="/heirs" Heirs
           li.nav-item.dropdown
             a.nav-link.dropdown-toggle data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
               = "#{@current_account['username']}"
 
             div.dropdown-menu
-              a.dropdown-item href="/account/#{@current_account['username']}" Account
-              a.dropdown-item href='/auth/signout' Sign out
+              a#profile-nav.dropdown-item href="/account/#{@current_account['username']}" Account
+              a#signout-nav.dropdown-item href='/auth/signout' Sign out
         - else
           li.nav-item
             a#signin-nav.nav-link href='/auth/signin' Sign in

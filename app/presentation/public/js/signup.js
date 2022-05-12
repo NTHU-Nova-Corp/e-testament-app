@@ -23,6 +23,7 @@ function set_valid(id) {
 function set_invalid(id) {
     let icon_element = document.getElementById(id + "-icon");
     let label_element = document.getElementById(id + "-label");
+
     icon_element.classList.remove('fa-square-check')
     icon_element.classList.add('fa-square-xmark')
     icon_element.style.color = "#948b8b"

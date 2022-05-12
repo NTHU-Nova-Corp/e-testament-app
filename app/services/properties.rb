@@ -7,12 +7,31 @@ module ETestament
 
     def initialize(config)
       @config = config
-      @api_path = "#{@config.API_URL}/properties"
     end
 
     def all
-      response = HTTP.get(@api_path)
+      response = HTTP.get("#{@config.API_URL}/properties")
       response.parse['data'].map { |m| m['data']['attributes'] }
+    end
+
+    def new(account_id:, name:, property_type_id:, description:)
+      message = { name:, property_type_id:, description: }
+      HTTP.headers(account_id:).post("#{@config.API_URL}/properties", json: message)
+    end
+
+    def types
+      response = HTTP.get("#{@config.API_URL}/property_types")
+      response.parse['data'].map { |m| m['data']['attributes'] }
+    end
+
+    def documents(property_id)
+      response = HTTP.get("#{@config.API_URL}/properties/#{property_id}/documents")
+      JSON.parse(response).map { |m| m['data']['attributes'] }
+    end
+
+    def heirs(property_id)
+      response = HTTP.get("#{@config.API_URL}/properties/#{property_id}/heirs")
+      JSON.parse(response).map { |m| m['data']['attributes'] }
     end
   end
 end
