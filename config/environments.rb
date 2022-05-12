@@ -3,11 +3,16 @@
 require 'roda'
 require 'figaro'
 require 'logger'
+require 'rack/ssl-enforcer'
 
 module ETestament
   # Configuration for the API
   class App < Roda
     plugin :environments
+
+    configure :production do
+      use Rack::SslEnforcer, hsts: true
+    end
 
     # Environment variables setup
     Figaro.application = Figaro::Application.new(
