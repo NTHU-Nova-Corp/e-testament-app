@@ -5,24 +5,24 @@ nav.navbar.navbar-expand-sm.navbar-dark.bg-dark role="navigation"
     a.navbar-brand href="/" E-Testament
     button.navbar-toggler type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation"
       span.navbar-toggler-icon
-
-    div.collapse.navbar-collapse#mainNavbar
+    div#mainNavbar.collapse.navbar-collapse
       ul.navbar-nav.me-auto
         - if @current_account
           li.nav-item
             a#properties-nav.nav-link href="/properties" Properties
           li.nav-item
             a#heirs-nav.nav-link href="/heirs" Heirs
-          li.nav-item.dropdown
-            a.nav-link.dropdown-toggle data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-              = "#{@current_account['username']}"
-
-            div.dropdown-menu
-              a#profile-nav.dropdown-item href="/account/#{@current_account['username']}" Account
-              a#signout-nav.dropdown-item href='/auth/signout' Sign out
-        - else
-          li.nav-item
-            a#signin-nav.nav-link href='/auth/signin' Sign in
-          li.nav-item
+      form.d-flex
+        ul.navbar-nav.me-auto
+          - if @current_account
+            li.nav-item.dropdown
+              a.nav-link.dropdown-toggle data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
+                = "#{@current_account['username']}"
+              div.dropdown-menu.end-0
+                a#profile-nav.dropdown-item href="/account/#{@current_account['username']}" Account
+                a#signout-nav.dropdown-item href='/auth/signout' Sign out
+          - else
+            li.nav-item
+              a#signin-nav.nav-link href='/auth/signin' Sign in
+            li.nav-item
             a#signup-nav.nav-link href='/auth/signup' Sign up
-        
