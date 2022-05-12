@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module ETestament
+  # Pasword condition labels
   class PasswordCondition
     def list
       ['A lowercase letter',

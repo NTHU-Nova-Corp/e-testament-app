@@ -6,6 +6,7 @@ require_relative './app'
 module ETestament
   # Web controller for ETestament API
   class App < Roda
+    # rubocop:disable Metrics/BlockLength
     route('auth') do |routing|
       @signin_route = '/auth/signin'
       routing.is 'signin' do
@@ -76,5 +77,6 @@ module ETestament
         end
       end
     end
+    # rubocop:enable Metrics/BlockLength
   end
 end

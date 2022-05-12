@@ -5,7 +5,6 @@ require 'http'
 module ETestament
   # Returns an authenticated user, or nil
   class SignUpNewAccount
-
     def initialize(config)
       @config = config
     end

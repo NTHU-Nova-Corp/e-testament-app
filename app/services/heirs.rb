@@ -1,6 +1,7 @@
-# Returns an authenticated user, or nil
+# frozen_string_literal: true
 
 module ETestament
+  # Heirs
   class Heirs
     class UnauthorizedError < StandardError; end
 

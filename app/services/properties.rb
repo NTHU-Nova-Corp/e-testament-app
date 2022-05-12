@@ -1,6 +1,7 @@
-# Returns an authenticated user, or nil
+# frozen_string_literal: true
 
 module ETestament
+  # Account properties
   class Properties
     class UnauthorizedError < StandardError; end
 
