@@ -34,11 +34,19 @@ table.table.table-hover
             span aria-hidden="true"
         .modal-body
           .form-group
-            label.col-form-label.mt-4 for="name"
-            input#name.form-control name="name" placeholder=("Enter property name") type="text" /
+            label.col-form-label.mt-4 for="first-name" First Name*
+            input#first-name.form-control name="first_name" placeholder=("Enter first name") type="text" required="true" /
           .form-group
-            label.col-form-label.mt-4 for="description"  Description
-            input#description.form-control name="description" placeholder=("Enter description") type="text" /
+            label.col-form-label.mt-4 for="last-name" Last Name*
+            input#last-name.form-control name="last_name" placeholder=("Enter last name") type="text" required="true" /
+          .form-group
+            label.col-form-label.mt-4 for="email"  Email Address*
+            input#email.form-control name="email" aria-describedby="emailHelp" placeholder=("Enter email") type="email" required="true" /
+          .form-group
+            label.col-form-label.mt-4 for="update-property-type-id"  Relation*
+            select#update-property-type-id.form-select name="update_property_type_id" required="true"
+              - relations.each_with_index do |relation, index|
+                option value="#{relation['id']}" == relation['name']
         .modal-footer
           button#save-property-btn.btn.btn-primary type="submit"  Save changes
           button#close-property-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close

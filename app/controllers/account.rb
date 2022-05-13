@@ -12,7 +12,8 @@ module ETestament
         # GET /account/signin
         routing.get String do |username|
           if @current_account && @current_account['username'] == username
-            view :account, locals: { current_account: @current_account }
+            dir_path = get_view_path('account')
+            view dir_path, locals: { current_account: @current_account }
           else
             routing.redirect '/auth/signin'
           end

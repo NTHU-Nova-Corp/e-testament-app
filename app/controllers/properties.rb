@@ -11,6 +11,30 @@ module ETestament
       @properties_route = '/properties/[properties_id]'
       @documents_dir = 'properties'
 
+      routing.post 'update' do
+        id = routing.params['update_property_id']
+        name = routing.params['update_name']
+        property_type_id = routing.params['update_property_type_id']
+        description = routing.params['update_description']
+
+        Properties.new(App.config).update(account_id: @current_account['id'],
+                                          id:,
+                                          name:,
+                                          property_type_id:,
+                                          description:)
+
+        flash[:notice] = 'Property has been updated!'
+        routing.redirect '/properties'
+      end
+
+      routing.post 'delete' do
+        delete_property_id = routing.params['delete_property_id']
+        Properties.new(App.config).delete(account_id: @current_account['id'], delete_property_id:)
+
+        flash[:notice] = 'Property has been deleted!'
+        routing.redirect '/properties'
+      end
+
       routing.on String do |property_id|
         @documents_route = "#{@properties_route}/#{property_id}/documents"
         routing.on 'documents' do
@@ -26,8 +50,9 @@ module ETestament
           routing.get do
             dir_path = get_view_path("#{@documents_dir}/heirs")
             heirs = Properties.new(App.config).heirs(property_id)
+            relations = Relations.new(App.config).all(account_id: @current_account['id'])
 
-            view dir_path, locals: { heirs: }
+            view dir_path, locals: { heirs:, relations: }
           end
         end
 

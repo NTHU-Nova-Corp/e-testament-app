@@ -23,12 +23,12 @@ table.table.table-hover
         a.btn.btn-success type="button" style="width: 38px;" href="/properties/#{property['id']}/documents"
           i.fa-solid.fa-file-lines
       td.text-center
-        button.btn.btn-info.mx-1 style="width: 38px;" type="button" onClick="test()"
+        button.btn.btn-info.mx-1 style="width: 38px;" type="button" onClick="open_update_property_modal(#{property.to_json})"
           i.fa-solid.fa-pen-to-square
-        button.btn.btn-danger style="width: 38px;" type="button" onClick="test()"
+        button.btn.btn-danger style="width: 38px;" type="button" onClick="open_delete_property_modal(#{property.to_json})"
           i.fa-solid.fa-trash
 
-#add_property_modal.modal.fade
+#add-property-modal.modal.fade
   .modal-dialog.modal-lg role="document"
     .modal-content
       form method='post' action='/properties' id='form-create-property'
@@ -39,17 +39,55 @@ table.table.table-hover
         .modal-body
           .form-group
             label.col-form-label.mt-4 for="name"  Name
-            input#name.form-control name="name" placeholder=("Enter property name") type="text" /
+            input#name.form-control name="name" placeholder=("Enter property name") type="text" required="true" /
           .form-group
             label.col-form-label.mt-4 for="description"  Description
-            input#description.form-control name="description" placeholder=("Enter description") type="text" /
+            input#description.form-control name="description" placeholder=("Enter description") type="text" required="true" /
           .form-group
-            label.form-label.mt-4 for="property_type_id"  Type
-            select#property_type_id.form-select name="property_type_id"
-              option selected="true"
-                | Choose property type
+            label.form-label.mt-4 for="property-type-id"  Type
+            select#property-type-id.form-select name="property_type_id" required="true"
               - types.each_with_index do |type, index|
                 option value="#{type['id']}" == type['name']
         .modal-footer
-          button#save-property-btn.btn.btn-primary type="submit"  Save changes
+          button#add-property-btn.btn.btn-primary type="submit"  Add
           button#close-property-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close
+
+#update-property-modal.modal.fade
+  .modal-dialog role="document"
+    .modal-content
+      form method='post' action='/properties/update' id='form-update-property'
+        input#update-property-id type="hidden" name="update_property_id"
+        .modal-header
+          h5#update-title.modal-title Update
+          button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+            span aria-hidden="true"
+        .modal-body
+          .form-group
+            label.col-form-label.mt-4 for="update-name"  Name
+            input#update-name.form-control name="update_name" placeholder=("Enter property name") type="text" required="true" /
+          .form-group
+            label.col-form-label.mt-4 for="update-description"  Description
+            input#update-description.form-control name="update_description" placeholder=("Enter description") type="text" required="true" /
+          .form-group
+            label.form-label.mt-4 for="update-property-type-id"  Type
+            select#update-property-type-id.form-select name="update_property_type_id" required="true"
+              - types.each_with_index do |type, index|
+                option value="#{type['id']}" == type['name']
+        .modal-footer
+          button#update-property-btn.btn.btn-primary type="submit"  Update
+          button#close-property-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close
+
+#delete-property-modal.modal.fade
+  .modal-dialog role="document"
+    .modal-content
+      form method='post' action='/properties/delete' id='form-delete-property'
+        .modal-header
+          h5#delete-title.modal-title Confirm delete
+          button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+            span aria-hidden="true"
+        .modal-body
+          p This property will be deleted permanently.
+          input#delete-property-id type="hidden" name="delete_property_id"
+        .modal-footer
+          button.btn.btn-danger type="submit"  Delete
+          button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Cancel

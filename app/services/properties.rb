@@ -15,8 +15,17 @@ module ETestament
     end
 
     def new(account_id:, name:, property_type_id:, description:)
-      message = { name:, property_type_id:, description: }
-      HTTP.headers(account_id:).post("#{@config.API_URL}/properties", json: message)
+      body = { name:, property_type_id:, description: }
+      HTTP.headers(account_id:).post("#{@config.API_URL}/properties", json: body)
+    end
+
+    def update(account_id:, id:, name:, property_type_id:, description:)
+      body = { name:, property_type_id:, description: }
+      HTTP.headers(account_id:).post("#{@config.API_URL}/properties/#{id}", json: body)
+    end
+
+    def delete(account_id:, delete_property_id:)
+      HTTP.headers(account_id:).post("#{@config.API_URL}/properties/#{delete_property_id}/delete")
     end
 
     def types
