@@ -1,13 +1,18 @@
 script src="/js/signup.js"
 form method='post' action='/auth/signup' id='form-signup'
-
+  input#register_token type="hidden" name="register_token" value="#{registration_token}"
   .card.border-secondary.w-75.center.mx-auto
     .card-header Sign up
     .card-body
       h4.card-title Please fill your information
       .form-group
         label.col-form-label.mt-4 for="username"  Username*
-        input#username.form-control name="username" placeholder=("Enter username") type="text" required="true"
+        input#username.form-control name="username" placeholder=("Enter username") type="text" required="true" value="#{new_account['username']}" disabled="true"
+
+      .form-group
+        label.form-label.mt-4 for="email"  Email address*
+        input#email.form-control name="email" aria-describedby="emailHelp" placeholder=("Enter email") type="email" required="true" value="#{new_account['email']}" disabled="true" /
+        small#emailHelp.form-text.text-muted We'll never share your email with anyone else.
 
       .form-group
         label.col-form-label.mt-4 for="first_name"  First name*
@@ -17,10 +22,6 @@ form method='post' action='/auth/signup' id='form-signup'
         label.col-form-label.mt-4 for="last_name"  Last name*
         input#last_name.form-control name="last_name" placeholder=("Enter last name") type="text" required="true" /
 
-      .form-group
-        label.form-label.mt-4 for="email"  Email address*
-        input#email.form-control name="email" aria-describedby="emailHelp" placeholder=("Enter email") type="email" required="true" /
-        small#emailHelp.form-text.text-muted We'll never share your email with anyone else.
 
       .form-group
         label.form-label.mt-4 for="password" Password*

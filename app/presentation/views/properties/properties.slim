@@ -18,9 +18,9 @@ table.table.table-hover
       th scope="row" = property['name']
       td = property['description']
       td.text-center
-        a.btn.btn-info.mx-1 style="width: 38px;" type="button" href="/properties/#{property['id']}/heirs"
+        a.btn.btn-info.mx-1 style="width: 38px;" type="button" title="Heirs" href="/properties/#{property['id']}/heirs"
           i.fa-solid.fa-people-line style="margin: -3px;"
-        a.btn.btn-success type="button" style="width: 38px;" href="/properties/#{property['id']}/documents"
+        a.btn.btn-success type="button" style="width: 38px;" title="Documents" href="/properties/#{property['id']}/documents"
           i.fa-solid.fa-file-lines
       td.text-center
         button.btn.btn-info.mx-1 style="width: 38px;" type="button" onClick="open_update_property_modal(#{property.to_json})"
