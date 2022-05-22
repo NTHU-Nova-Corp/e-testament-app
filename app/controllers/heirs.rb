@@ -7,12 +7,14 @@ module ETestament
   # Web controller for ETestament API
   class App < Roda
     route('heirs') do |routing|
-      routing.on do
-        # GET /heir
+      if @current_account.logged_in?
+        # GET /heirs
         routing.get do
-          heirs = Heirs.new(App.config).all(session[:current_account]['id'])
-          view 'heirs/heirs', locals: { heirs: }
+          heirs = Services::Heirs.new(App.config).all(@current_account)
+          view 'heirs/heirs', locals: { current_user: @current_account, heirs: }
         end
+      else
+        routing.redirect '/auth/signin'
       end
     end
   end

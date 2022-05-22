@@ -11,25 +11,32 @@ module ETestament
       @signin_route = '/auth/signin'
       routing.is 'signin' do
         # GET /auth/signin
+        # Gets the sign in view
         routing.get do
           view :signin
         end
 
         # POST /auth/signin
+        # Sends a sign in request to the api
         routing.post do
-          account = AuthenticateAccount.new(App.config).call(
+          account_info = Services::Account.new(App.config).signin(
             username: routing.params['username'],
             password: routing.params['password']
           )
 
-          SecureSession.new(session).set(:current_account, account)
-          flash[:notice] = "Welcome back #{account['username']}!"
+          current_account = Models::Account.new(
+            account_info[:account],
+            account_info[:auth_token]
+          )
+
+          Models::CurrentSession.new(session).current_account = current_account
+          flash[:notice] = "Welcome back #{current_account.username}!"
           routing.redirect '/'
-        rescue AuthenticateAccount::UnauthorizedError
+        rescue Services::Account::UnauthorizedError
           flash.now[:error] = 'Username and password did not match our records'
           response.status = 400
           view :signin
-        rescue AuthenticateAccount::ApiServerError => e
+        rescue Services::Account::ApiServerError => e
           App.logger.warn "API server error: #{e.inspect}\n#{e.backtrace}"
           flash[:error] = 'Our servers are not responding -- please try later'
           response.status = 500
@@ -37,22 +44,68 @@ module ETestament
         end
       end
 
-      @signup_route = '/auth/register'
-      routing.is 'register' do
+      @signup_route = '/auth/signup'
+      routing.on 'signup' do
+        routing.on String do |registration_token|
+          # GET /auth/signup/:register_token
+          routing.get do
+            flash.now[:notice] = 'Email Verified! Please choose a new password'
+            new_account = SecureMessage.decrypt(registration_token)
 
-        # GET /auth/register
-        routing.get do
-          view :register
+            view :signup,
+                 locals: {
+                   password_conditions: ETestament::PasswordCondition.new.list,
+                   new_account:,
+                   registration_token:
+                 }
+          end
+
+          # POST /auth/signup/:register_token
+          routing.post do
+            new_account = SecureMessage.decrypt(registration_token)
+
+            Services::Account.new(App.config).signup(
+              username: new_account['username'],
+              first_name: routing.params['first_name'],
+              last_name: routing.params['last_name'],
+              email: new_account['email'],
+              password: routing.params['password']
+            )
+
+            # AuthenticateAccount.new(App.config).call(
+            #   username: routing.params['username'],
+            #   password: routing.params['password']
+            # )
+
+            flash[:notice] = 'Account created! Please login'
+            routing.redirect '/auth/signin'
+          rescue Services::Account::InvalidAccount => e
+            flash[:error] = e.message
+            routing.redirect '/auth/signup'
+          rescue StandardError => e
+            flash[:error] = e.message
+            routing.redirect(
+              "#{App.config.APP_URL}/auth/signup/#{registration_token}"
+            )
+          end
         end
 
-        # POST /auth/register
+        # GET /auth/signup
+        # Gets the signup first step view
+        routing.get do
+          view :signup_onboard
+        end
+
+        # POST /auth/signup
+        # Post the basic registration request to the api so the api can send the
+        # registration token via email
         routing.post do
           account_data = JsonRequestBody.symbolize(routing.params)
-          VerifyRegistration.new(App.config).verify(account_data)
+          Services::Account.new(App.config).send_email_confirmation(account_data)
 
           flash[:notice] = 'Please check your email for a verification link'
           routing.redirect '/'
-        rescue VerifyRegistration::ApiServerError => e
+        rescue Services::Account::ApiServerError => e
           App.logger.warn "API server error: #{e.inspect}\n#{e.backtrace}"
           flash[:error] = 'Our servers are not responding -- please try later'
           routing.redirect @register_route
@@ -63,54 +116,10 @@ module ETestament
         end
       end
 
-      @signup_route = '/auth/signup'
-      routing.on 'signup' do
-        routing.get(String)  do |registration_token|
-          flash.now[:notice] = 'Email Verified! Please choose a new password'
-          new_account = SecureMessage.decrypt(registration_token)
-
-          view :signup,
-               locals: {
-                 password_conditions: ETestament::PasswordCondition.new.list,
-                 new_account:,
-                 registration_token:
-               }
-        end
-
-        routing.post do
-          register_token = routing.params['register_token']
-          new_account = SecureMessage.decrypt(register_token)
-
-          SignUpNewAccount.new(App.config).call(
-            username: new_account['username'],
-            first_name: routing.params['first_name'],
-            last_name: routing.params['last_name'],
-            email: new_account['email'],
-            password: routing.params['password']
-          )
-
-          # AuthenticateAccount.new(App.config).call(
-          #   username: routing.params['username'],
-          #   password: routing.params['password']
-          # )
-
-          flash[:notice] = 'Account created! Please login'
-          routing.redirect '/auth/signin'
-        rescue SignUpNewAccount::InvalidAccount => e
-          flash[:error] = e.message
-          routing.redirect '/auth/register'
-        rescue StandardError => e
-          flash[:error] = e.message
-          routing.redirect(
-            "#{App.config.APP_URL}/auth/register/#{registration_token}"
-          )
-        end
-      end
-
       @signout_route = '/auth/signout'
       routing.on 'signout' do
         routing.get do
-          SecureSession.new(session).delete(:current_account)
+          Models::CurrentSession.new(session).delete
           flash[:notice] = "You've been logged out"
           routing.redirect @signin_route
         end

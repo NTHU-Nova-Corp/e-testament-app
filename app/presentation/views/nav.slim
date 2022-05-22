@@ -7,22 +7,22 @@ nav.navbar.navbar-expand-sm.navbar-dark.bg-dark role="navigation"
       span.navbar-toggler-icon
     div#mainNavbar.collapse.navbar-collapse
       ul.navbar-nav.me-auto
-        - if @current_account
+        - if @current_account.logged_in?
           li.nav-item
             a#properties-nav.nav-link href="/properties" Properties
           li.nav-item
             a#heirs-nav.nav-link href="/heirs" Heirs
       form.d-flex
         ul.navbar-nav.me-auto
-          - if @current_account
+          - if @current_account.logged_in?
             li.nav-item.dropdown
               a.nav-link.dropdown-toggle data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-                = "#{@current_account['username']}"
+                = "#{@current_account.username}"
               div.dropdown-menu.end-0
-                a#profile-nav.dropdown-item href="/account/#{@current_account['username']}" Account
+                a#profile-nav.dropdown-item href="/account/#{@current_account.username}" Account
                 a#signout-nav.dropdown-item href='/auth/signout' Sign out
           - else
             li.nav-item
               a#signin-nav.nav-link href='/auth/signin' Sign in
             li.nav-item
-            a#signup-nav.nav-link href='/auth/register' Register
+            a#signup-nav.nav-link href='/auth/signup' Sign up

@@ -1,6 +1,5 @@
 script src="/js/signup.js"
-form method='post' action='/auth/signup' id='form-signup'
-  input#register_token type="hidden" name="register_token" value="#{registration_token}"
+form method='post' action='/auth/signup/#{registration_token}' id='form-signup'
   .card.border-secondary.w-75.center.mx-auto
     .card-header Sign up
     .card-body
