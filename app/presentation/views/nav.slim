@@ -12,13 +12,15 @@ nav.navbar.navbar-expand-sm.navbar-dark.bg-dark role="navigation"
             a#properties-nav.nav-link href="/properties" Properties
           li.nav-item
             a#heirs-nav.nav-link href="/heirs" Heirs
+          li.nav-item
+            a#testors-nav.nav-link href="/testors" Testors Associated
       form.d-flex
         ul.navbar-nav.me-auto
           - if @current_account.logged_in?
             li.nav-item.dropdown
               a.nav-link.dropdown-toggle data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
                 = "#{@current_account.username}"
-              div.dropdown-menu.end-0
+              div.dropdown-menu.end-0.dropdown-menu-end
                 a#profile-nav.dropdown-item href="/account/#{@current_account.username}" Account
                 a#signout-nav.dropdown-item href='/auth/signout' Sign out
           - else

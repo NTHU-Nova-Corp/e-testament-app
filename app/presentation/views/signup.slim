@@ -6,7 +6,7 @@ form method='post' action='/auth/signup/#{registration_token}' id='form-signup'
       h4.card-title Please fill your information
       .form-group
         label.col-form-label.mt-4 for="username"  Username*
-        input#username.form-control name="username" placeholder=("Enter username") type="text" required="true" value="#{new_account['username']}" disabled="true"
+        input#username.form-control name="username" placeholder=("Enter username") type="text" required="true" value="#{new_account['username']}"
 
       .form-group
         label.form-label.mt-4 for="email"  Email address*
