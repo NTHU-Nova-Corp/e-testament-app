@@ -7,6 +7,7 @@ module ETestament
   # Web controller for ETestament API
   class App < Roda
     route('heirs') do |routing|
+      @heirs_route = '/heirs'
       if @current_account.logged_in?
         # GET /heirs
         routing.get do
@@ -24,6 +25,16 @@ module ETestament
 
           flash[:notice] = 'Heir has been created!'
           routing.redirect '/heirs'
+        rescue Services::Heirs::ApiServerError
+          flash[:error] = 'Heir not saved'
+          routing.halt
+        rescue StandardError => e
+          flash[:error] = e.message
+          routing.redirect(
+            "#{App.config.APP_URL}/auth/signup/#{registration_token}"
+          )
+        ensure
+          routing.redirect @heirs_route
         end
       else
         routing.redirect '/auth/signin'

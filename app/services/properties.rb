@@ -5,6 +5,7 @@ module ETestament
     # Account properties
     class Properties
       class UnauthorizedError < StandardError; end
+      class ApiServerError < StandardError; end
 
       def initialize(config)
         @config = config
@@ -24,7 +25,7 @@ module ETestament
         body = { name:, property_type_id:, description: }
         response = HTTP.auth("Bearer #{current_account.auth_token}")
                        .post("#{@config.API_URL}/properties", json: body)
-        raise(ApiServerError) if response.code != 200
+        raise(ApiServerError) if response.code != 201
 
         response
       rescue HTTP::ConnectionError

@@ -5,6 +5,7 @@ module ETestament
     # Heirs
     class Heirs
       class UnauthorizedError < StandardError; end
+      class ApiServerError < StandardError; end
 
       def initialize(config)
         @config = config
@@ -25,7 +26,7 @@ module ETestament
         body = { first_name:, last_name:, email:, relation_id: }
         response = HTTP.auth("Bearer #{current_account.auth_token}")
                        .post("#{@config.API_URL}/heirs", json: body)
-        raise(ApiServerError) if response.code != 200
+        raise(ApiServerError) if response.code != 201
 
         response
       rescue HTTP::ConnectionError
