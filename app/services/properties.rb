@@ -73,8 +73,9 @@ module ETestament
 
       def heirs(property_id)
         response = HTTP.get("#{@config.API_URL}/properties/#{property_id}/heirs")
-        JSON.parse(response).map { |m| m['data']['attributes'] }
         raise(ApiServerError) if response.code != 200
+
+        JSON.parse(response).map { |m| m['data']['attributes'] }
       rescue HTTP::ConnectionError
         raise(ApiServerError)
       end

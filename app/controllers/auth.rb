@@ -79,14 +79,9 @@ module ETestament
 
             flash[:notice] = 'Account created! Please login'
             routing.redirect '/auth/signin'
-          rescue Services::Account::InvalidAccount => e
-            flash[:error] = e.message
-            routing.redirect '/auth/signup'
           rescue StandardError => e
             flash[:error] = e.message
-            routing.redirect(
-              "#{App.config.APP_URL}/auth/signup/#{registration_token}"
-            )
+            routing.redirect '/auth/signup'
           end
         end
 
