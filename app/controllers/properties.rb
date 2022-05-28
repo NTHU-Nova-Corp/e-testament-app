@@ -69,7 +69,6 @@ module ETestament
           dir_path = get_view_path('properties', 'properties')
 
           properties = Services::Properties.new(App.config).all(@current_account)
-          puts  properties
           types = Services::Properties.new(App.config).types
           view dir_path, locals: { current_user: @current_account, properties:, types: }
         end

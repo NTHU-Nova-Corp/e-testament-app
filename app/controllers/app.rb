@@ -26,6 +26,12 @@ module ETestament
       routing.root do
         view :home, locals: { current_account: @current_account }
       end
+
+    rescue Exceptions::ApiServerError => e
+      App.logger.warn "API server error: #{e.inspect}\n#{e.backtrace}"
+      flash[:error] = e.message
+      response.status = e.instance_variable_get(:@status_code)
+      routing.redirect '/'
     end
 
     def get_view_path(breadcrumb, in_page = nil)

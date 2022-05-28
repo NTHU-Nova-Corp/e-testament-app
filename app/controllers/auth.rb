@@ -19,28 +19,14 @@ module ETestament
         # POST /auth/signin
         # Sends a sign in request to the api
         routing.post do
-          account_info = Services::Account.new(App.config).signin(
-            username: routing.params['username'],
-            password: routing.params['password']
-          )
-
-          current_account = Models::Account.new(
-            account_info[:account],
-            account_info[:auth_token]
-          )
-
-          Models::CurrentSession.new(session).current_account = current_account
+          current_account = Services::Accounts::SignIn.new(App.config, session)
+                                                      .call(username: routing.params['username'], password: routing.params['password'])
           flash[:notice] = "Welcome back #{current_account.username}!"
           routing.redirect '/'
-        rescue Services::Account::UnauthorizedError
-          flash.now[:error] = 'Username and password did not match our records'
-          response.status = 400
+        rescue Exceptions::BadRequestError => e
+          flash.now[:error] = "Error: #{e.message}"
+          response.status = e.instance_variable_get(:@status_code)
           view :signin
-        rescue Services::Account::ApiServerError => e
-          App.logger.warn "API server error: #{e.inspect}\n#{e.backtrace}"
-          flash[:error] = 'Our servers are not responding -- please try later'
-          response.status = 500
-          routing.redirect @signin_route
         end
       end
 
@@ -58,30 +44,30 @@ module ETestament
                    new_account:,
                    registration_token:
                  }
+
+          rescue Exceptions::BadRequestError => e
+            flash.now[:error] = "Error: #{e.message}"
+            response.status = e.instance_variable_get(:@status_code)
+            view :signin
           end
 
           # POST /auth/signup/:register_token
           routing.post do
-            new_account = SecureMessage.decrypt(registration_token)
-
-            Services::Account.new(App.config).signup(
-              username: new_account['username'],
-              first_name: routing.params['first_name'],
-              last_name: routing.params['last_name'],
-              email: new_account['email'],
-              password: routing.params['password']
-            )
-
-            # AuthenticateAccount.new(App.config).call(
-            #   username: routing.params['username'],
-            #   password: routing.params['password']
-            # )
+            Services::Accounts::SignUp.new(App.config)
+                                      .call(
+                                        registration_token:,
+                                        first_name: routing.params['first_name'],
+                                        last_name: routing.params['last_name'],
+                                        password: routing.params['password']
+                                      )
 
             flash[:notice] = 'Account created! Please login'
             routing.redirect '/auth/signin'
-          rescue StandardError => e
-            flash[:error] = e.message
-            routing.redirect '/auth/signup'
+
+          rescue Exceptions::BadRequestError => e
+            flash.now[:error] = "Error: #{e.message}"
+            response.status = e.instance_variable_get(:@status_code)
+            routing.redirect '/auth/signin'
           end
         end
 
@@ -96,26 +82,24 @@ module ETestament
         # registration token via email
         routing.post do
           account_data = JsonRequestBody.symbolize(routing.params)
-          Services::Account.new(App.config).send_email_confirmation(account_data)
-
+          Services::Accounts::SendConfirmationEmail.new(App.config)
+                                                   .call(registration_data: account_data)
           flash[:notice] = 'Please check your email for a verification link'
           routing.redirect '/'
-        rescue Services::Account::ApiServerError => e
-          App.logger.warn "API server error: #{e.inspect}\n#{e.backtrace}"
-          flash[:error] = 'Our servers are not responding -- please try later'
-          routing.redirect @register_route
-        rescue StandardError => e
-          App.logger.error "Could not verify registration: #{e.inspect}"
-          flash[:error] = 'Registration details are not valid'
-          routing.redirect @register_route
+
+        rescue Exceptions::BadRequestError => e
+          response.status = e.instance_variable_get(:@status_code)
+          flash[:error] = "Error: #{e.message}"
+          routing.redirect @signup_route
         end
       end
 
       @signout_route = '/auth/signout'
       routing.on 'signout' do
         routing.get do
-          Models::CurrentSession.new(session).delete
+          Services::Accounts::SignOut.new(session).call
           flash[:notice] = "You've been logged out"
+
           routing.redirect @signin_route
         end
       end
