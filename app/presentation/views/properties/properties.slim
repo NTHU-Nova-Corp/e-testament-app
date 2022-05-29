@@ -49,8 +49,8 @@ table.table.table-hover
               - types.each_with_index do |type, index|
                 option value="#{type['id']}" == type['name']
         .modal-footer
+          button#close-property-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Cancel
           button#add-property-btn.btn.btn-primary type="submit"  Add
-          button#close-property-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close
 
 #update-property-modal.modal.fade
   .modal-dialog role="document"
@@ -74,8 +74,8 @@ table.table.table-hover
               - types.each_with_index do |type, index|
                 option value="#{type['id']}" == type['name']
         .modal-footer
+          button#close-property-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Cancel
           button#update-property-btn.btn.btn-primary type="submit"  Update
-          button#close-property-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close
 
 #delete-property-modal.modal.fade
   .modal-dialog role="document"
@@ -89,5 +89,5 @@ table.table.table-hover
           p This property will be deleted permanently.
           input#delete-property-id type="hidden" name="delete_property_id"
         .modal-footer
-          button.btn.btn-danger type="submit"  Delete
           button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Cancel
+          button.btn.btn-danger type="submit"  Delete
