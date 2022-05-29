@@ -5,7 +5,7 @@ require 'http'
 module ETestament
   module Services
     module Heirs
-      # Sign in operation
+      # Get all relations available
       class GetRelations
         def initialize(config)
           @config = config

@@ -13,16 +13,11 @@ module ETestament
 
       if @current_account.logged_in?
         routing.post 'update' do
-          id = routing.params['update_property_id']
-          name = routing.params['update_name']
-          property_type_id = routing.params['update_property_type_id']
-          description = routing.params['update_description']
-
-          Services::Properties.new(App.config).update(@current_account,
-                                                      id:,
-                                                      name:,
-                                                      property_type_id:,
-                                                      description:)
+          Services::Properties::Update.new(App.config).call(@current_account,
+                                                            routing.params['update_property_id'],
+                                                            routing.params['update_name'],
+                                                            routing.params['update_property_type_id'],
+                                                            routing.params['update_description'])
 
           flash[:notice] = 'Property has been updated!'
           routing.redirect '/properties'
@@ -30,7 +25,7 @@ module ETestament
 
         routing.post 'delete' do
           delete_property_id = routing.params['delete_property_id']
-          Services::Properties.new(App.config).delete(@current_account, delete_property_id:)
+          Services::Properties::Delete.new(App.config).call(@current_account, delete_property_id:)
 
           flash[:notice] = 'Property has been deleted!'
           routing.redirect '/properties'
@@ -41,7 +36,7 @@ module ETestament
           routing.on 'documents' do
             routing.get do
               dir_path = get_view_path("#{@documents_dir}/documents")
-              documents = Services::Properties.new(App.config).documents(property_id)
+              documents = Services::Properties::Documents::GetAll.new(App.config).call(property_id)
 
               view dir_path, locals: { current_user: @current_account, documents: }
             end
@@ -50,8 +45,8 @@ module ETestament
           routing.on 'heirs' do
             routing.get do
               dir_path = get_view_path("#{@documents_dir}/heirs")
-              heirs = Services::Properties.new(App.config).heirs(property_id)
-              relations = Services::Heirs.new(App.config).relations
+              heirs = Services::PropertyHeirs::GetHeirsRelatedWithProperty.new(App.config).call(property_id)
+              relations = Services::Heirs::GetRelations.new(App.config).call
 
               view dir_path, locals: { current_user: @current_account, heirs:, relations: }
             end
@@ -68,8 +63,8 @@ module ETestament
         routing.get do
           dir_path = get_view_path('properties', 'properties')
 
-          properties = Services::Properties.new(App.config).all(@current_account)
-          types = Services::Properties.new(App.config).types
+          properties = Services::Properties::GetAll.new(App.config).call(@current_account)
+          types = Services::Properties::GetTypes.new(App.config).call
           view dir_path, locals: { current_user: @current_account, properties:, types: }
         end
 
@@ -77,7 +72,7 @@ module ETestament
         routing.post do
           new_property = JsonRequestBody.symbolize(routing.params)
           # account_id:, name:, property_type_id:, description:
-          Services::Properties.new(App.config).create(@current_account, **new_property)
+          Services::Properties::Create.new(App.config).call(@current_account, **new_property)
 
           flash[:notice] = 'Property has been created!'
           routing.redirect '/properties'

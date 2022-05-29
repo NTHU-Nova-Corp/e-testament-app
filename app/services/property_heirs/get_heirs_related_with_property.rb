@@ -4,19 +4,18 @@ require 'http'
 
 module ETestament
   module Services
-    module Heirs
-      # Get all heirs related with an account
-      class GetAll
+    module PropertyHeirs
+      # Get all heirs related with a particular property
+      class GetHeirsRelatedWithProperty
         def initialize(config)
           @config = config
         end
 
-        def call(current_account)
-          response = HTTP.auth("Bearer #{current_account.auth_token}")
-                         .get("#{@config.API_URL}/heirs")
+        def call(property_id)
+          response = HTTP.get("#{@config.API_URL}/properties/#{property_id}/heirs")
           raise Exceptions::ApiServerError if response.code != 200
 
-          response.parse['data'].map { |m| m['data']['attributes'] }
+          JSON.parse(response).map { |m| m['data']['attributes'] }
         rescue HTTP::ConnectionError
           raise Exceptions::ApiServerError
         end

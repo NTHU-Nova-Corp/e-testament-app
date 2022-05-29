@@ -4,17 +4,17 @@ require 'http'
 
 module ETestament
   module Services
-    module Heirs
-      # Create Heir operation
+    module Properties
+      # Create Property operation
       class Create
         def initialize(config)
           @config = config
         end
 
-        def call(current_account, first_name:, last_name:, email:, relation_id:)
-          body = { first_name:, last_name:, email:, relation_id: }
+        def call(current_account, name:, property_type_id:, description:)
+          body = { name:, property_type_id:, description: }
           response = HTTP.auth("Bearer #{current_account.auth_token}")
-                         .post("#{@config.API_URL}/heirs", json: body)
+                         .post("#{@config.API_URL}/properties", json: body)
           raise Exceptions::ApiServerError if response.code != 201
 
           response
