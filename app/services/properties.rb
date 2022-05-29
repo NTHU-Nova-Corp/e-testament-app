@@ -4,7 +4,6 @@ module ETestament
   module Services
     # Account properties
     class Properties
-      class UnauthorizedError < StandardError; end
       class ApiServerError < StandardError; end
 
       def initialize(config)

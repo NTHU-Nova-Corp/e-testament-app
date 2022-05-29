@@ -23,6 +23,10 @@ module ETestament
                                                       .call(username: routing.params['username'], password: routing.params['password'])
           flash[:notice] = "Welcome back #{current_account.username}!"
           routing.redirect '/'
+        rescue Exceptions::UnauthorizedError => e
+          flash.now[:error] = "Error: #{e.message}"
+          response.status = e.instance_variable_get(:@status_code)
+          view :signin
         rescue Exceptions::BadRequestError => e
           flash.now[:error] = "Error: #{e.message}"
           response.status = e.instance_variable_get(:@status_code)

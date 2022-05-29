@@ -12,8 +12,8 @@ module ETestament
         # GET /heirs
         routing.get do
           dir_path = get_view_path('heirs', 'heirs')
-          relations = Services::Heirs.new(App.config).relations
-          heirs = Services::Heirs.new(App.config).all(@current_account)
+          relations = Services::Heirs::GetRelations.new(App.config).call
+          heirs = Services::Heirs::GetAll.new(App.config).call(@current_account)
           view dir_path, locals: { current_user: @current_account, heirs:, relations: }
         end
 
@@ -21,20 +21,14 @@ module ETestament
         routing.post do
           new_heir = JsonRequestBody.symbolize(routing.params)
           # first_name:, last_name:, email:, relation_id
-          Services::Heirs.new(App.config).create(@current_account, **new_heir)
+          Services::Heirs::Create.new(App.config).call(@current_account, **new_heir)
 
           flash[:notice] = 'Heir has been created!'
           routing.redirect '/heirs'
-        rescue Services::Heirs::ApiServerError
-          flash[:error] = 'Heir not saved'
+        rescue Exceptions::BadRequestError => e
+          flash.now[:error] = "Error: #{e.message}"
+          response.status = e.instance_variable_get(:@status_code)
           routing.halt
-        rescue StandardError => e
-          flash[:error] = e.message
-          routing.redirect(
-            "#{App.config.APP_URL}/auth/signup/#{registration_token}"
-          )
-        ensure
-          routing.redirect @heirs_route
         end
       else
         routing.redirect '/auth/signin'

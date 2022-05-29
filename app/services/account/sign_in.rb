@@ -15,12 +15,13 @@ module ETestament
         # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         def call(username:, password:)
           response = HTTP.post("#{@config.API_URL}/auth/authenticate", json: { username:, password: })
+          response_data = JSON.parse(response.to_s)
 
-          raise Exceptions::UnauthorizedError if response.code == 403
+          raise Exceptions::UnauthorizedError, response_data['message'] if response.code == 403
           raise Exceptions::BadRequestError if response.code == 400
           raise Exceptions::ApiServerError if response.code != 200
 
-          account_info = JSON.parse(response.to_s)['attributes']
+          account_info = response_data['attributes']
           current_account = Models::Account.new(account_info['account']['data']['attributes'],
                                                 account_info['auth_token'])
 

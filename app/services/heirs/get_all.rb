@@ -6,13 +6,14 @@ module ETestament
   module Services
     module Heirs
       # Sign in operation
-      class GetRelations
+      class GetAll
         def initialize(config)
           @config = config
         end
 
-        def call
-          response = HTTP.get("#{@config.API_URL}/relations")
+        def call(current_account)
+          response = HTTP.auth("Bearer #{current_account.auth_token}")
+                         .get("#{@config.API_URL}/heirs")
           raise Exceptions::ApiServerError if response.code != 200
 
           response.parse['data'].map { |m| m['data']['attributes'] }
