@@ -20,14 +20,11 @@ module ETestament
         # Sends a sign in request to the api
         routing.post do
           current_account = Services::Accounts::SignIn.new(App.config, session)
-                                                      .call(username: routing.params['username'], password: routing.params['password'])
+                                                      .call(username: routing.params['username'],
+                                                            password: routing.params['password'])
           flash[:notice] = "Welcome back #{current_account.username}!"
           routing.redirect '/'
-        rescue Exceptions::UnauthorizedError => e
-          flash.now[:error] = "Error: #{e.message}"
-          response.status = e.instance_variable_get(:@status_code)
-          view :signin
-        rescue Exceptions::BadRequestError => e
+        rescue Exceptions::UnauthorizedError, Exceptions::BadRequestError => e
           flash.now[:error] = "Error: #{e.message}"
           response.status = e.instance_variable_get(:@status_code)
           view :signin

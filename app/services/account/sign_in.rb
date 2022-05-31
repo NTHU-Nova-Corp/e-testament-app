@@ -30,7 +30,7 @@ module ETestament
         rescue HTTP::ConnectionError
           raise Exceptions::ApiServerError
         end
-        # rubocop:enabe Metrics/AbcSize, Metrics/MethodLength
+        # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
       end
     end
   end

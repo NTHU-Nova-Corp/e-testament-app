@@ -27,7 +27,7 @@ module ETestament
         rescue HTTP::ConnectionError
           raise ApiServerError
         end
-        # rubocop:enabe Metrics/MethodLength
+        # rubocop:enable Metrics/MethodLength
       end
     end
   end
