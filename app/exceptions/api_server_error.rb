@@ -4,7 +4,7 @@ module ETestament
   module Exceptions
     # Bad request exception
     class ApiServerError < StandardError
-      def initialize(msg = 'Our servers are not responding -- please try later',
+      def initialize(msg = 'Error: Our servers are not responding. Please try later',
                      exception_type = 'custom', _redirect_route = '/')
         @exception_type = exception_type
         @status_code = 500
