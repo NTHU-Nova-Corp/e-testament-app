@@ -1,6 +1,6 @@
 script src="/js/properties/properties.js"
 
-button#add-properties-btn.btn.btn-primary.mb-2 style="float:right" type="button" onClick="open_add_property_modal()"
+button#add-properties-btn.btn.btn-primary.mb-2 style="float:right" type="button" data-bs-toggle="modal" data-bs-target="#add-property-modal"
   span
     i.fa-solid.fa-plus.mx-2
     | Add New Property
@@ -23,9 +23,9 @@ table.table.table-hover
         a.btn.btn-success type="button" style="width: 38px;" title="Documents" href="/properties/#{property['id']}/documents"
           i.fa-solid.fa-file-lines
       td.text-center
-        button.btn.btn-info.mx-1 style="width: 38px;" type="button" onClick="open_update_property_modal(#{property.to_json})"
+        button.btn.btn-info.mx-1 style="width: 38px;" type="button" data-bs-toggle="modal" data-bs-target="#update-property-modal" onClick="open_update_property_modal(#{property.to_json})"
           i.fa-solid.fa-pen-to-square
-        button.btn.btn-danger style="width: 38px;" type="button" onClick="open_delete_property_modal(#{property.to_json})"
+        button.btn.btn-danger style="width: 38px;" type="button" data-bs-toggle="modal" data-bs-target="#delete-property-modal" onClick="open_delete_property_modal(#{property.to_json})"
           i.fa-solid.fa-trash
 
 #add-property-modal.modal.fade
@@ -53,7 +53,7 @@ table.table.table-hover
           button#add-property-btn.btn.btn-primary type="submit"  Add
 
 #update-property-modal.modal.fade
-  .modal-dialog role="document"
+  .modal-dialog.modal-lg role="document"
     .modal-content
       form method='post' action='/properties/update' id='form-update-property'
         input#update-property-id type="hidden" name="update_property_id"

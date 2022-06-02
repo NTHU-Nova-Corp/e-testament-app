@@ -1,6 +1,6 @@
 script src='/js/properties/heirs.js'
 
-button#add-heir-btn.btn.btn-primary.mb-2 style="float:right" type="button" onClick="open_add_heir_modal()"
+button#add-heir-btn.btn.btn-primary.mb-2 style="float:right" type="button" data-bs-toggle="modal" data-bs-target="#add-heir-modal"
   span
     i.fa-solid.fa-plus.mx-2
     | Add New Heir
@@ -19,9 +19,9 @@ table.table.table-hover
       td = heir['last_name']
       td = heir['email']
       td.text-center
-        button.btn.btn-info.mx-1 style="width: 38px;" type="button" onClick="test()"
+        button.btn.btn-info.mx-1 style="width: 38px;" type="button"
           i.fa-solid.fa-pen-to-square
-        button.btn.btn-danger style="width: 38px;" type="button" onClick="test()"
+        button.btn.btn-danger style="width: 38px;" type="button"
           i.fa-solid.fa-trash
 
 #add_heir_modal.modal.fade
