@@ -12,7 +12,7 @@ module ETestament
             @config = config
           end
 
-          def call(current_account, property_id)
+          def call(current_account:, property_id:)
             response = HTTP.auth("Bearer #{current_account.auth_token}")
                            .get("#{@config.API_URL}/properties/#{property_id}/documents")
             raise Exceptions::ApiServerError if response.code != 200

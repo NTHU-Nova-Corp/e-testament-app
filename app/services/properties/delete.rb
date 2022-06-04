@@ -11,7 +11,7 @@ module ETestament
           @config = config
         end
 
-        def call(current_account, delete_property_id:)
+        def call(current_account:, delete_property_id:)
           response = HTTP.auth("Bearer #{current_account.auth_token}")
                          .post("#{@config.API_URL}/properties/#{delete_property_id}/delete")
           raise Exceptions::ApiServerError if response.code != 200

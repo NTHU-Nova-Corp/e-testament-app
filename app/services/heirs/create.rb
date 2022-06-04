@@ -11,7 +11,7 @@ module ETestament
           @config = config
         end
 
-        def call(current_account, first_name:, last_name:, email:, relation_id:)
+        def call(current_account:, first_name:, last_name:, email:, relation_id:)
           body = { first_name:, last_name:, email:, relation_id: }
           response = HTTP.auth("Bearer #{current_account.auth_token}")
                          .post("#{@config.API_URL}/heirs", json: body)

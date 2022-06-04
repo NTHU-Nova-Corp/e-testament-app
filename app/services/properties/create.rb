@@ -11,7 +11,7 @@ module ETestament
           @config = config
         end
 
-        def call(current_account, name:, property_type_id:, description:)
+        def call(current_account:, name:, property_type_id:, description:)
           body = { name:, property_type_id:, description: }
           response = HTTP.auth("Bearer #{current_account.auth_token}")
                          .post("#{@config.API_URL}/properties", json: body)

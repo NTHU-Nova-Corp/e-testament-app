@@ -12,16 +12,16 @@ module ETestament
         # GET /heirs
         routing.get do
           dir_path = get_view_path('heirs', 'heirs')
-          relations = Services::Heirs::GetRelations.new(App.config).call(@current_account)
-          heirs = Services::Heirs::GetAll.new(App.config).call(@current_account)
-          view dir_path, locals: { current_user: @current_account, heirs:, relations: }
+          relations = Services::Heirs::GetRelations.new(App.config).call(current_account: @current_account)
+          heirs = Services::Heirs::GetAll.new(App.config).call(current_account: @current_account)
+          view dir_path, locals: { current_account: @current_account, heirs:, relations: }
         end
 
         # POST /heirs
         routing.post do
           new_heir = JsonRequestBody.symbolize(routing.params)
           # first_name:, last_name:, email:, relation_id
-          Services::Heirs::Create.new(App.config).call(@current_account, **new_heir)
+          Services::Heirs::Create.new(App.config).call(current_account: @current_account, **new_heir)
 
           flash[:notice] = 'Heir has been created!'
           routing.redirect '/heirs'
