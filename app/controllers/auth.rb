@@ -19,9 +19,15 @@ module ETestament
         # POST /auth/signin
         # Sends a sign in request to the api
         routing.post do
+          credentials = Form::LoginCredentials.new.call(routing.params)
+
+          if credentials.failure?
+            flash[:error] = 'Please enter both username and password.'
+            routing.redirect @signin_route
+          end
+
           current_account = Services::Accounts::SignIn.new(App.config, session)
-                                                      .call(username: routing.params['username'],
-                                                            password: routing.params['password'])
+                                                      .call(**credentials.values)
           flash[:notice] = "Welcome back #{current_account.username}!"
           routing.redirect '/'
         rescue Exceptions::UnauthorizedError, Exceptions::BadRequestError => e
@@ -54,12 +60,15 @@ module ETestament
 
           # POST /auth/signup/:register_token
           routing.post do
+            passwords = Form::Passwords.new.call(routing.params)
+            raise Form.message_values(passwords) if passwords.failure?
+
             Services::Accounts::SignUp.new(App.config)
                                       .call(
                                         registration_token:,
                                         first_name: routing.params['first_name'],
                                         last_name: routing.params['last_name'],
-                                        password: routing.params['password']
+                                        password: passwords['password']
                                       )
 
             flash[:notice] = 'Account created! Please login'
@@ -82,9 +91,16 @@ module ETestament
         # Post the basic registration request to the api so the api can send the
         # registration token via email
         routing.post do
-          account_data = JsonRequestBody.symbolize(routing.params)
+          registration = Form::Registration.new.call(routing.params)
+
+          if registration.failure?
+            flash[:error] = Form.validation_errors(registration)
+            routing.redirect @signup_route
+          end
+
+          # account_data = JsonRequestBody.symbolize(routing.params)
           Services::Accounts::SendConfirmationEmail.new(App.config)
-                                                   .call(registration_data: account_data)
+                                                   .call(registration_data: registration)
           flash[:notice] = 'Please check your email for a verification link'
           routing.redirect '/'
 
@@ -92,6 +108,10 @@ module ETestament
           response.status = e.instance_variable_get(:@status_code)
           flash[:error] = "Error: #{e.message}"
           routing.redirect @signup_route
+        # TODO: Create new error handler for invalid input
+        rescue StandardError => e
+          App.logger.error "Could not verify registration: #{e.inspect}"
+          flash[:error]
         end
       end
 
