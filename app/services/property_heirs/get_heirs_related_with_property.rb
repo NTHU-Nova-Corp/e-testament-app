@@ -11,8 +11,9 @@ module ETestament
           @config = config
         end
 
-        def call(property_id)
-          response = HTTP.get("#{@config.API_URL}/properties/#{property_id}/heirs")
+        def call(current_account, property_id)
+          response = HTTP.auth("Bearer #{current_account.auth_token}")
+                         .get("#{@config.API_URL}/properties/#{property_id}/heirs")
           raise Exceptions::ApiServerError if response.code != 200
 
           JSON.parse(response).map { |m| m['data']['attributes'] }

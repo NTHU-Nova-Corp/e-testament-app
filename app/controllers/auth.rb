@@ -60,8 +60,13 @@ module ETestament
 
           # POST /auth/signup/:register_token
           routing.post do
+            puts 'start'
             passwords = Form::Passwords.new.call(routing.params)
+            puts 'validation start '
+            puts passwords.failure?
             raise Form.message_values(passwords) if passwords.failure?
+
+            puts 'validation pass'
 
             Services::Accounts::SignUp.new(App.config)
                                       .call(
@@ -100,7 +105,7 @@ module ETestament
 
           # account_data = JsonRequestBody.symbolize(routing.params)
           Services::Accounts::SendConfirmationEmail.new(App.config)
-                                                   .call(registration_data: registration)
+                                                   .call(registration_data: JsonRequestBody.symbolize(routing.params))
           flash[:notice] = 'Please check your email for a verification link'
           routing.redirect '/'
 

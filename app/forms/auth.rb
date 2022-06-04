@@ -4,6 +4,7 @@ require_relative 'form_base'
 
 module ETestament
   module Form
+    # LoginCredentials
     class LoginCredentials < Dry::Validation::Contract
       params do
         required(:username).filled
@@ -11,6 +12,7 @@ module ETestament
       end
     end
 
+    # Registration
     class Registration < Dry::Validation::Contract
       config.messages.load_paths << File.join(__dir__, 'errors/account_details.yml')
 
@@ -20,6 +22,7 @@ module ETestament
       end
     end
 
+    # Passwords
     class Passwords < Dry::Validation::Contract
       config.messages.load_paths << File.join(__dir__, 'errors/password.yml')
 
@@ -33,15 +36,11 @@ module ETestament
       end
 
       rule(:password) do
-        unless enough_entropy?(value)
-          key.failure('Password must be more complex')
-        end
+        key.failure('Password must be more complex') unless enough_entropy?(value)
       end
 
       rule(:password, :password_confirm) do
-        unless values[:password].eql?(values[:password_confirm])
-          key.failure('Passwords do not match')
-        end
+        key.failure('Passwords do not match') unless values[:password].eql?(values[:password_confirm])
       end
     end
   end

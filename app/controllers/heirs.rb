@@ -12,7 +12,7 @@ module ETestament
         # GET /heirs
         routing.get do
           dir_path = get_view_path('heirs', 'heirs')
-          relations = Services::Heirs::GetRelations.new(App.config).call
+          relations = Services::Heirs::GetRelations.new(App.config).call(@current_account)
           heirs = Services::Heirs::GetAll.new(App.config).call(@current_account)
           view dir_path, locals: { current_user: @current_account, heirs:, relations: }
         end

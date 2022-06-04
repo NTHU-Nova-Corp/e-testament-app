@@ -11,8 +11,9 @@ module ETestament
           @config = config
         end
 
-        def call
-          response = HTTP.get("#{@config.API_URL}/property_types")
+        def call(current_account)
+          response = HTTP.auth("Bearer #{current_account.auth_token}")
+                         .get("#{@config.API_URL}/property_types")
           raise Exceptions::ApiServerError if response.code != 200
 
           response.parse['data'].map { |m| m['data']['attributes'] }

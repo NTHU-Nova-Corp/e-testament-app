@@ -36,7 +36,7 @@ module ETestament
           routing.on 'documents' do
             routing.get do
               dir_path = get_view_path("#{@documents_dir}/documents")
-              documents = Services::Properties::Documents::GetAll.new(App.config).call(property_id)
+              documents = Services::Properties::Documents::GetAll.new(App.config).call(@current_account, property_id)
 
               view dir_path, locals: { current_user: @current_account, documents: }
             end
@@ -45,8 +45,8 @@ module ETestament
           routing.on 'heirs' do
             routing.get do
               dir_path = get_view_path("#{@documents_dir}/heirs")
-              heirs = Services::PropertyHeirs::GetHeirsRelatedWithProperty.new(App.config).call(property_id)
-              relations = Services::Heirs::GetRelations.new(App.config).call
+              heirs = Services::PropertyHeirs::GetHeirsRelatedWithProperty.new(App.config).call(@current_account, property_id)
+              relations = Services::Heirs::GetRelations.new(App.config).call(@current_account)
 
               view dir_path, locals: { current_user: @current_account, heirs:, relations: }
             end
@@ -64,7 +64,7 @@ module ETestament
           dir_path = get_view_path('properties', 'properties')
 
           properties = Services::Properties::GetAll.new(App.config).call(@current_account)
-          types = Services::Properties::GetTypes.new(App.config).call
+          types = Services::Properties::GetTypes.new(App.config).call(@current_account)
           view dir_path, locals: { current_user: @current_account, properties:, types: }
         end
 
