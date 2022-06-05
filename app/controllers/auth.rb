@@ -1,11 +1,26 @@
 # frozen_string_literal: true
 
 require 'roda'
+require 'google/apis/oauth2_v2'
+
 require_relative './app'
 
 module ETestament
-  # Web controller for ETestament API
+  # Web controller for ETestament APP
+  # rubocop:disable Metrics/ClassLength
   class App < Roda
+    def gg_oauth_url(config)
+      client = Signet::OAuth2::Client.new({
+                                            client_id: config.GOOGLE_API_CLIENT_ID,
+                                            client_secret: config.GOOGLE_API_CLIENT_SECRET,
+                                            authorization_uri: 'https://accounts.google.com/o/oauth2/auth',
+                                            scope: [Google::Apis::Oauth2V2::AUTH_USERINFO_PROFILE,
+                                                    Google::Apis::Oauth2V2::AUTH_USERINFO_EMAIL],
+                                            redirect_uri: "#{request.base_url}/auth/google_callback"
+                                          })
+      client.authorization_uri.to_s
+    end
+
     # rubocop:disable Metrics/BlockLength
     route('auth') do |routing|
       @signin_route = '/auth/signin'
@@ -13,7 +28,9 @@ module ETestament
         # GET /auth/signin
         # Gets the sign in view
         routing.get do
-          view :signin
+          view :signin, locals: {
+            gg_oauth_url: gg_oauth_url(App.config).to_s
+          }
         end
 
         # POST /auth/signin
@@ -26,15 +43,48 @@ module ETestament
             routing.redirect @signin_route
           end
 
-          current_account = Services::Accounts::SignIn.new(App.config, session)
-                                                      .call(**credentials.values)
+          current_account = Services::Accounts::SignInInternal.new(App.config, session)
+                                                              .call(**credentials.values)
           flash[:notice] = "Welcome back #{current_account.username}!"
           routing.redirect '/'
         rescue Exceptions::UnauthorizedError, Exceptions::BadRequestError => e
           flash.now[:error] = "Error: #{e.message}"
           response.status = e.instance_variable_get(:@status_code)
-          view :signin
+          view :signin, locals: {
+            gg_oauth_url: gg_oauth_url(App.config).to_s
+          }
         end
+      end
+
+      @oauth_callback = '/auth/google_callback'
+      routing.on 'google_callback' do
+        client = Signet::OAuth2::Client.new({
+                                              client_id: App.config.GOOGLE_API_CLIENT_ID,
+                                              client_secret: App.config.GOOGLE_API_CLIENT_SECRET,
+                                              token_credential_uri: 'https://accounts.google.com/o/oauth2/token',
+                                              redirect_uri: "#{request.base_url}/auth/google_callback",
+                                              code: routing.params['code']
+                                            })
+
+        sso_response = client.fetch_access_token!
+        session[:access_token] = sso_response['access_token']
+        current_account = Services::Accounts::SignInGoogleAccount.new(App.config, session).call(
+          access_token: sso_response['access_token']
+        )
+        Models::CurrentSession.new(session).current_account = current_account
+
+        flash[:notice] = "Welcome #{current_account.username}!"
+
+        # GET /auth/google_callback
+        routing.get do
+          routing.redirect "/#{routing['state']}"
+        end
+      rescue Exceptions::UnauthorizedError => e
+        flash.now[:error] = "Error: #{e.message}"
+        response.status = e.instance_variable_get(:@status_code)
+        view :signin, locals: {
+          gg_oauth_url: gg_oauth_url(App.config).to_s
+        }
       end
 
       @signup_route = '/auth/signup'
@@ -55,18 +105,15 @@ module ETestament
           rescue Exceptions::BadRequestError => e
             flash.now[:error] = "Error: #{e.message}"
             response.status = e.instance_variable_get(:@status_code)
-            view :signin
+            view :signin, locals: {
+              gg_oauth_url: gg_oauth_url(App.config).to_s
+            }
           end
 
           # POST /auth/signup/:register_token
           routing.post do
-            puts 'start'
             passwords = Form::Passwords.new.call(routing.params)
-            puts 'validation start '
-            puts passwords.failure?
             raise Form.message_values(passwords) if passwords.failure?
-
-            puts 'validation pass'
 
             Services::Accounts::SignUp.new(App.config)
                                       .call(
@@ -132,4 +179,5 @@ module ETestament
     end
     # rubocop:enable Metrics/BlockLength
   end
+  # rubocop:enable Metrics/ClassLength
 end

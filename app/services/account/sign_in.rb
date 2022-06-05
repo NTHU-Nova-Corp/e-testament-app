@@ -13,8 +13,7 @@ module ETestament
         end
 
         # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        def call(username:, password:)
-          response = HTTP.post("#{@config.API_URL}/auth/authenticate", json: { username:, password: })
+        def call(response:)
           response_data = JSON.parse(response.to_s)
 
           raise Exceptions::UnauthorizedError, response_data['message'] if response.code == 403

@@ -15,8 +15,6 @@ module ETestament
     end
 
     def self.message_values(validation)
-      puts '==================='
-      puts validation.errors.to_h
       validation.errors.to_h.values.join('; ')
     end
   end

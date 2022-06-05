@@ -42,3 +42,6 @@ group :development, :test do
   gem 'rack-test'
   gem 'rerun'
 end
+
+# OAuth
+gem 'google-api-client'
