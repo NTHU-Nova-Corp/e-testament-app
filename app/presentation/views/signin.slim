@@ -7,14 +7,14 @@
     form method='post' action='/auth/signin' id='form-signin'
       .form-group
         label for='input-username' Username
-        input.form-control#input-username type='text' name='username'
+        input.form-control#input-username type='text' placeholder='novacorp' name='username'
       .form-group
         label for='input-password' Password
-        input.form-control#input-password type='password' name='password'
+        input.form-control#input-password type='password' placeholder='******' name='password'
 
-      button#button-signin.btn.btn-primary.btn-block.mt-2 type='submit' value='signin'  Sign in
-      .d-grid.gap-2.mt-4
-        a.btn.btn-lg.btn-danger type="button" href="#{gg_oauth_url}"
-          | Login with Gmail
+      .d-grid.gap-2.mt-1
+        button#button-signin.btn.btn-lg.btn-primary.mt-2 type='submit' value='signin'  Sign in
+        a.btn.btn-lg.btn-danger.mt-4 type="button" href="#{gg_oauth_url}"
+          | Sign in with Gmail
           i.fa-brands.fa-google.mx-3
   .col-sm-4

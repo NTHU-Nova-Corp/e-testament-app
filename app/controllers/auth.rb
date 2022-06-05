@@ -99,7 +99,8 @@ module ETestament
                  locals: {
                    password_conditions: ETestament::PasswordCondition.new.list,
                    new_account:,
-                   registration_token:
+                   registration_token:,
+                   gg_oauth_url: gg_oauth_url(App.config).to_s
                  }
 
           rescue Exceptions::BadRequestError => e
@@ -136,7 +137,9 @@ module ETestament
         # GET /auth/signup
         # Gets the signup first step view
         routing.get do
-          view :signup_onboard
+          view :signup_onboard, locals: {
+            gg_oauth_url: gg_oauth_url(App.config).to_s
+          }
         end
 
         # POST /auth/signup
