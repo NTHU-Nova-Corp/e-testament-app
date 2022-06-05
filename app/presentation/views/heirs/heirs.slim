@@ -14,11 +14,11 @@ table.table.table-hover
       th.text-center scope="col"  View
       th.text-center scope="col"  Manage
   tbody
-  - for heir in heirs
+  - heirs.all.each do |heir|
     tr
-      th scope="row" = heir['first_name']
-      td = heir['last_name']
-      td = heir['email']
+      th scope="row" = heir.first_name
+      td = heir.last_name
+      td = heir.email
 
       td.text-center
         button.btn.btn-info type="button" 

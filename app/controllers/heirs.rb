@@ -24,11 +24,10 @@ module ETestament
           Services::Heirs::Create.new(App.config).call(current_account: @current_account, **new_heir)
 
           flash[:notice] = 'Heir has been created!'
-          routing.redirect '/heirs'
         rescue Exceptions::BadRequestError => e
-          flash.now[:error] = "Error: #{e.message}"
-          response.status = e.instance_variable_get(:@status_code)
-          routing.halt
+          flash[:error] = "Error: #{e.message}"
+        ensure
+          routing.redirect @heirs_route
         end
       else
         routing.redirect '/auth/signin'

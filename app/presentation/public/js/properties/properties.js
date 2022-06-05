@@ -1,4 +1,5 @@
 open_update_property_modal = (property) => {
+    console.log(property)
     document.getElementById('update-property-id').value = property.id
     document.getElementById('update-name').value = property.name
     document.getElementById('update-description').value = property.description

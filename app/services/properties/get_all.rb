@@ -16,7 +16,7 @@ module ETestament
                          .get("#{@config.API_URL}/properties")
           raise Exceptions::ApiServerError if response.code != 200
 
-          response.parse['data'].map { |m| m['attributes'] }
+          Models::Properties.new(response.code == 200 ? response.parse['data'] : [])
         rescue HTTP::ConnectionError
           raise Exceptions::ApiServerError
         end

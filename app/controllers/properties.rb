@@ -8,8 +8,8 @@ module ETestament
   class App < Roda
     # rubocop:disable Metrics/BlockLength
     route('properties') do |routing|
-      @properties_route = '/properties/[properties_id]'
-      @documents_dir = 'properties'
+      @properties_route = '/properties'
+      @properties_dir = 'properties'
 
       if @current_account.logged_in?
         routing.post 'update' do
@@ -20,7 +20,10 @@ module ETestament
                                                             description: routing.params['update_description'])
 
           flash[:notice] = 'Property has been updated!'
-          routing.redirect '/properties'
+        rescue Exceptions::BadRequestError => e
+          flash[:error] = "Error: #{e.message}"
+        ensure
+          routing.redirect @properties_route
         end
 
         routing.post 'delete' do
@@ -35,7 +38,7 @@ module ETestament
           @documents_route = "#{@properties_route}/#{property_id}/documents"
           routing.on 'documents' do
             routing.get do
-              dir_path = get_view_path("#{@documents_dir}/documents")
+              dir_path = get_view_path("#{@properties_dir}/documents")
               documents = Services::Properties::Documents::GetAll.new(App.config)
                                                                  .call(current_account: @current_account,
                                                                        property_id:)
@@ -46,18 +49,18 @@ module ETestament
 
           routing.on 'heirs' do
             routing.get do
-              dir_path = get_view_path("#{@documents_dir}/heirs")
-              heirs = Services::PropertyHeirs::GetHeirsRelatedWithProperty.new(App.config)
-                                                                          .call(current_account: @current_account,
-                                                                                property_id:)
+              dir_path = get_view_path("#{@properties_dir}/heirs")
+              property_heirs = Services::PropertyHeirs::GetHeirsRelatedWithProperty
+                               .new(App.config)
+                               .call(current_account: @current_account, property_id:)
               relations = Services::Heirs::GetRelations.new(App.config).call(current_account: @current_account)
 
-              view dir_path, locals: { current_account: @current_account, heirs:, relations: }
+              view dir_path, locals: { current_account: @current_account, property_heirs:, relations: }
             end
           end
 
           routing.get do
-            dir_path = get_view_path("#{@documents_dir}/property")
+            dir_path = get_view_path("#{@properties_dir}/property")
 
             view dir_path
           end
@@ -77,9 +80,11 @@ module ETestament
           new_property = JsonRequestBody.symbolize(routing.params)
           # account_id:, name:, property_type_id:, description:
           Services::Properties::Create.new(App.config).call(current_account: @current_account, **new_property)
-
-          flash[:notice] = 'Property has been created!'
-          routing.redirect '/properties'
+          flash[:notice] = 'Add documents and heirs to your new property'
+        rescue Exceptions::BadRequestError => e
+          flash[:error] = "Error: #{e.message}"
+        ensure
+          routing.redirect @properties_route
         end
       else
         routing.redirect '/auth/signin'

@@ -15,6 +15,9 @@ module ETestament
           body = { name:, property_type_id:, description: }
           response = HTTP.auth("Bearer #{current_account.auth_token}")
                          .post("#{@config.API_URL}/properties", json: body)
+
+          response_data = JSON.parse(response.to_s)
+          raise Exceptions::BadRequestError, response_data['message'] if response.code == 400
           raise Exceptions::ApiServerError if response.code != 201
 
           response

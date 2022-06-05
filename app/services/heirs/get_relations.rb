@@ -16,8 +16,6 @@ module ETestament
                          .get("#{@config.API_URL}/relations")
           raise Exceptions::ApiServerError if response.code != 200
 
-          puts response.parse['data']
-
           response.parse['data'].map { |m| m['attributes'] }
         rescue HTTP::ConnectionError
           raise Exceptions::ApiServerError

@@ -6,7 +6,7 @@ module ETestament
   module Services
     module Properties
       module Documents
-        # Get all properties related with an account
+        # Get all Documents related with a property related with an account
         class GetAll
           def initialize(config)
             @config = config
@@ -16,8 +16,6 @@ module ETestament
             response = HTTP.auth("Bearer #{current_account.auth_token}")
                            .get("#{@config.API_URL}/properties/#{property_id}/documents")
             raise Exceptions::ApiServerError if response.code != 200
-
-            puts response
 
             response.parse['data'].map { |m| m['attributes'] }
           rescue HTTP::ConnectionError

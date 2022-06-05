@@ -11,13 +11,15 @@ table.table.table-hover
       th scope="col"  Firstname
       th scope="col"  Lastname
       th scope="col"  Email
+      th scope="col"  Percentage
       th.text-center scope="col"  Manage
   tbody
-  - for heir in heirs
+  - property_heirs.all.each do |property_heir|
     tr
-      th scope="row" = heir['first_name']
-      td = heir['last_name']
-      td = heir['email']
+      th scope="row" = property_heir.heir.first_name
+      td = property_heir.heir.last_name
+      td = property_heir.heir.email
+      td = property_heir.heir.percentage
       td.text-center
         button.btn.btn-info.mx-1 style="width: 38px;" type="button"
           i.fa-solid.fa-pen-to-square
