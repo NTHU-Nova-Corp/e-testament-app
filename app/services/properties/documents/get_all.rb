@@ -17,7 +17,9 @@ module ETestament
                            .get("#{@config.API_URL}/properties/#{property_id}/documents")
             raise Exceptions::ApiServerError if response.code != 200
 
-            JSON.parse(response).map { |m| m['data']['attributes'] }
+            puts response
+
+            response.parse['data'].map { |m| m['attributes'] }
           rescue HTTP::ConnectionError
             raise Exceptions::ApiServerError
           end

@@ -20,8 +20,8 @@ module ETestament
           raise Exceptions::BadRequestError if response.code == 400
           raise Exceptions::ApiServerError if response.code != 200
 
-          account_info = response_data['attributes']
-          current_account = Models::Account.new(account_info['account']['data']['attributes'],
+          account_info = response_data['data']['attributes']
+          current_account = Models::Account.new(account_info['account']['attributes'],
                                                 account_info['auth_token'])
 
           Models::CurrentSession.new(@session).current_account = current_account
