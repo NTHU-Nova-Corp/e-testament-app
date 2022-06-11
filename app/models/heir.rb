@@ -8,16 +8,16 @@ module ETestament
       attr_reader :id, :first_name, :last_name, :email, :relation_id, :relation, :presentation_name
 
       # rubocop:disable Metrics/AbcSize
-      def initialize(property_info)
-        @id = property_info['attributes']['id']
-        @first_name = property_info['attributes']['first_name']
-        @last_name = property_info['attributes']['last_name']
-        @email = property_info['attributes']['email']
-        @relation_id = property_info['attributes']['relation_id']
-        @relation = property_info['attributes']['relation']
+      def initialize(heir_info)
+        @id = heir_info['attributes']['id']
+        @first_name = heir_info['attributes']['first_name']
+        @last_name = heir_info['attributes']['last_name']
+        @email = heir_info['attributes']['email']
+        @relation_id = heir_info['attributes']['relation_id']
+        @relation = heir_info['attributes']['relation']
         @presentation_name = "
-          #{property_info['attributes']['first_name']}
-          #{property_info['attributes']['last_name']} (#{property_info['attributes']['relation']})"
+          #{heir_info['attributes']['first_name']}
+          #{heir_info['attributes']['last_name']} (#{heir_info['attributes']['relation']})"
       end
       # rubocop:enable Metrics/AbcSize
 

@@ -20,7 +20,7 @@ module ETestament
                                                             property_type_id: routing.params['update_property_type_id'],
                                                             description: routing.params['update_description'])
 
-          flash[:notice] = 'Property has been updated!'
+          flash[:notice] = 'Property updated!'
         rescue Exceptions::BadRequestError => e
           flash[:error] = "Error: #{e.message}"
         ensure
@@ -31,7 +31,7 @@ module ETestament
           delete_property_id = routing.params['delete_property_id']
           Services::Properties::Delete.new(App.config).call(current_account: @current_account, delete_property_id:)
 
-          flash[:notice] = 'Property has been deleted!'
+          flash[:notice] = 'Property deleted!'
         rescue Exceptions::BadRequestError => e
           flash[:error] = "Error: #{e.message}"
         ensure
@@ -41,13 +41,46 @@ module ETestament
         routing.on String do |property_id|
           routing.on 'documents' do
             @documents_route = "#{@properties_route}/#{property_id}/documents"
+
+            routing.on String do |document_id|
+              routing.post 'delete' do
+                Services::Properties::Documents::Delete.new(App.config)
+                                                       .call(current_account: @current_account,
+                                                             property_id:,
+                                                             document_id:)
+
+                flash[:notice] = 'Document deleted!'
+              rescue Exceptions::BadRequestError => e
+                flash[:error] = "Error: #{e.message}"
+              ensure
+                routing.redirect @documents_route
+              end
+            end
+
             routing.get do
               dir_path = get_view_path("#{@properties_dir}/documents")
               documents = Services::Properties::Documents::GetAll.new(App.config)
                                                                  .call(current_account: @current_account,
                                                                        property_id:)
 
-              view dir_path, locals: { current_account: @current_account, documents: }
+              view dir_path, locals: { current_account: @current_account, property_id:, documents: }
+            end
+
+            routing.post do
+              file = routing.params['formFile']
+              Services::Properties::Documents::Create.new(App.config)
+                                                     .call(current_account: @current_account,
+                                                           property_id:,
+                                                           file_name: file[:filename],
+                                                           type: file[:type],
+                                                           description: routing.params['description'],
+                                                           content: Base64.strict_encode64(file[:tempfile].read))
+
+              flash[:notice] = 'Document created!'
+            rescue Exceptions::BadRequestError => e
+              flash[:error] = "Error: #{e.message}"
+            ensure
+              routing.redirect @documents_route
             end
           end
 

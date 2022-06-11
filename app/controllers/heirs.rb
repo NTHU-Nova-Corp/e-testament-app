@@ -19,7 +19,7 @@ module ETestament
                                                        last_name: routing.params['update_last_name'],
                                                        email: routing.params['update_email'],
                                                        relation_id: routing.params['update_relation_id'])
-          flash[:notice] = 'Heir has been updated!'
+          flash[:notice] = 'Heir updated!'
         rescue Exceptions::BadRequestError => e
           flash[:error] = "Error: #{e.message}"
         ensure
@@ -30,7 +30,7 @@ module ETestament
           delete_heir_id = routing.params['delete_heir_id']
           Services::Heirs::Delete.new(App.config).call(current_account: @current_account, delete_heir_id:)
 
-          flash[:notice] = 'Heir has been deleted!'
+          flash[:notice] = 'Heir deleted!'
         rescue Exceptions::BadRequestError => e
           flash[:error] = "Error: #{e.message}"
         ensure
@@ -111,7 +111,7 @@ module ETestament
           # first_name:, last_name:, email:, relation_id
           Services::Heirs::Create.new(App.config).call(current_account: @current_account, **new_heir)
 
-          flash[:notice] = 'Heir has been created!'
+          flash[:notice] = 'Heir created!'
         rescue Exceptions::BadRequestError => e
           flash[:error] = "Error: #{e.message}"
         ensure
