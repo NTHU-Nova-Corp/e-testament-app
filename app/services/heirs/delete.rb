@@ -4,19 +4,22 @@ require 'http'
 
 module ETestament
   module Services
-    module PropertyHeirs
-      # Get all properties related with a particular heir
-      class GetPropertiesRelatedWitHeir
+    module Heirs
+      # Delete Heir operation
+      class Delete
         def initialize(config)
           @config = config
         end
 
-        def call(current_account:, heir_id:)
+        def call(current_account:, delete_heir_id:)
           response = HTTP.auth("Bearer #{current_account.auth_token}")
-                         .get("#{@config.API_URL}/heirs/#{heir_id}/properties")
+                         .post("#{@config.API_URL}/heirs/#{delete_heir_id}/delete")
+
+          response_data = JSON.parse(response.to_s)
+          raise Exceptions::BadRequestError, response_data['message'] if response.code == 400
           raise Exceptions::ApiServerError if response.code != 200
 
-          Models::PropertyHeirs.new(response.code == 200 ? response.parse['data'] : [])
+          response
         rescue HTTP::ConnectionError
           raise Exceptions::ApiServerError
         end

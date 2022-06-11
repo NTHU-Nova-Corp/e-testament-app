@@ -21,12 +21,12 @@ table.table.table-hover
       td = heir.email
 
       td.text-center
-        button.btn.btn-info type="button" 
-          i.fa-solid.fa-people-line
+        a.btn.btn-info.mx-1 style="width: 38px;" type="button" title="Heirs" href="/heirs/#{heir.id}/properties"
+          i.fa-solid.fa-people-line style="margin: -3px;"
       td.text-center
-        button.btn.btn-info.mx-1 type="button" 
+        button.btn.btn-info.mx-1 type="button" data-bs-toggle="modal" data-bs-target="#update-heir-modal" onClick="open_update_heir_modal(#{heir.to_json})"
           i.fa-solid.fa-pen-to-square
-        button.btn.btn-danger.mx-1 type="button" 
+        button.btn.btn-danger.mx-1 type="button" data-bs-toggle="modal" data-bs-target="#delete-heir-modal" onClick="open_delete_heir_modal(#{heir.to_json})"
           i.fa-solid.fa-trash
 
 #add-heir-modal.modal.fade
@@ -55,3 +55,46 @@ table.table.table-hover
         .modal-footer
           button#close-heir-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Cancel
           button#add-heir-btn.btn.btn-primary type="submit"  Add
+
+#update-heir-modal.modal.fade
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      form method='post' action='/heirs/update' id='form-update-heir'
+        input#update-heir-id type="hidden" name="update_heir_id"
+        .modal-header
+          h5#update-title.modal-title Update Heir
+          button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+            span aria-hidden="true"
+        .modal-body
+          .form-group
+            label.col-form-label for="update-first-name" First Name
+            input#update-first-name.form-control name="update_first_name" placeholder=("Enter heir first name") type="text" required="true" /
+          .form-group
+            label.col-form-label.mt-2 for="update-last-name" Last Name
+            input#update-last-name.form-control name="update_last_name" placeholder=("Enter heir last name") type="text" required="true" /
+          .form-group
+            label.col-form-label.mt-2 for="update-email" Email
+            input#update-email.form-control name="update_email" placeholder=("Enter heir email") type="text" required="true" /
+          .form-group
+            label.form-label.mt-2 for="update-relation-id"  Relation
+            select#update-relation-id.form-select name="update_relation_id" required="true"
+              - relations.each_with_index do |relation, index|
+                option value="#{relation['id']}" == relation['name']
+        .modal-footer
+          button#close-heir-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Cancel
+          button#update-heir-btn.btn.btn-primary type="submit"  Update
+
+#delete-heir-modal.modal.fade
+  .modal-dialog role="document"
+    .modal-content
+      form method='post' action='/heirs/delete' id='form-delete-heir'
+        .modal-header
+          h5#delete-title.modal-title Confirm delete
+          button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+            span aria-hidden="true"
+        .modal-body
+          p This heir will be deleted permanently.
+          input#delete-heir-id type="hidden" name="delete_heir_id"
+        .modal-footer
+          button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Cancel
+          button.btn.btn-danger type="submit"  Delete

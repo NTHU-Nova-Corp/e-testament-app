@@ -9,6 +9,7 @@ table.table.table-hover
   thead
     tr
       th scope="col"  Name
+      th scope="col"  Type
       th scope="col"  Description
       th.text-center scope="col"  View
       th.text-center scope="col"  Manage
@@ -16,6 +17,7 @@ table.table.table-hover
   - properties.all.each do |property|
     tr
       th scope="row" = property.name
+      td = property.type
       td = property.description
       td.text-center
         a.btn.btn-info.mx-1 style="width: 38px;" type="button" title="Heirs" href="/properties/#{property.id}/heirs"
@@ -58,7 +60,7 @@ table.table.table-hover
       form method='post' action='/properties/update' id='form-update-property'
         input#update-property-id type="hidden" name="update_property_id"
         .modal-header
-          h5#update-title.modal-title Update
+          h5#update-title.modal-title Update Property
           button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
             span aria-hidden="true"
         .modal-body

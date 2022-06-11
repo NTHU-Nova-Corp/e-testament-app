@@ -73,9 +73,9 @@ module ETestament
                                                            .call(current_account: @current_account,
                                                                  heir_id:,
                                                                  property_id:,
-                                                                 percentage: routing.params['update-percentage'])
+                                                                 percentage: routing.params['update_percentage'])
 
-                flash[:notice] = 'Heir associated to property!'
+                flash[:notice] = 'Heir association updated!'
               rescue Exceptions::BadRequestError => e
                 flash[:error] = "Error: #{e.message}"
               ensure
@@ -88,11 +88,10 @@ module ETestament
               property_heirs = Services::PropertyHeirs::GetHeirsRelatedWithProperty
                                .new(App.config)
                                .call(current_account: @current_account, property_id:)
-              relations = Services::Heirs::GetRelations.new(App.config).call(current_account: @current_account)
               heirs = Services::Heirs::GetAll.new(App.config).call(current_account: @current_account)
 
               view dir_path,
-                   locals: { current_account: @current_account, property_id:, property_heirs:, relations:, heirs: }
+                   locals: { current_account: @current_account, property_id:, property_heirs:, heirs: }
             end
 
             routing.post do
@@ -108,12 +107,6 @@ module ETestament
             ensure
               routing.redirect @heirs_route
             end
-          end
-
-          routing.get do
-            dir_path = get_view_path("#{@properties_dir}/property")
-
-            view dir_path
           end
         end
 

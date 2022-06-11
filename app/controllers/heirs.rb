@@ -6,9 +6,97 @@ require_relative './app'
 module ETestament
   # Web controller for ETestament API
   class App < Roda
+    # rubocop:disable Metrics/BlockLength
     route('heirs') do |routing|
       @heirs_route = '/heirs'
+      @heirs_dir = 'heirs'
+
       if @current_account.logged_in?
+        routing.post 'update' do
+          Services::Heirs::Update.new(App.config).call(current_account: @current_account,
+                                                       id: routing.params['update_heir_id'],
+                                                       first_name: routing.params['update_first_name'],
+                                                       last_name: routing.params['update_last_name'],
+                                                       email: routing.params['update_email'],
+                                                       relation_id: routing.params['update_relation_id'])
+          flash[:notice] = 'Heir has been updated!'
+        rescue Exceptions::BadRequestError => e
+          flash[:error] = "Error: #{e.message}"
+        ensure
+          routing.redirect @heirs_route
+        end
+
+        routing.post 'delete' do
+          delete_heir_id = routing.params['delete_heir_id']
+          Services::Heirs::Delete.new(App.config).call(current_account: @current_account, delete_heir_id:)
+
+          flash[:notice] = 'Heir has been deleted!'
+        rescue Exceptions::BadRequestError => e
+          flash[:error] = "Error: #{e.message}"
+        ensure
+          routing.redirect @heirs_route
+        end
+
+        routing.on String do |heir_id|
+          routing.on 'properties' do
+            @properties_route = "#{@heirs_route}/#{heir_id}/properties"
+
+            routing.on String do |property_id|
+              routing.post 'delete' do
+                Services::PropertyHeirs::DeleteAssociationBetweenPropertyAndHeir.new(App.config)
+                                                                                .call(current_account: @current_account,
+                                                                                      heir_id:,
+                                                                                      property_id:)
+
+                flash[:notice] = 'Property associated deleted from heir!'
+              rescue Exceptions::BadRequestError => e
+                flash[:error] = "Error: #{e.message}"
+              ensure
+                routing.redirect @properties_route
+              end
+
+              routing.post 'update' do
+                Services::PropertyHeirs::UpdatePropertyHeir.new(App.config)
+                                                           .call(current_account: @current_account,
+                                                                 heir_id:,
+                                                                 property_id:,
+                                                                 percentage: routing.params['update_percentage'])
+
+                flash[:notice] = 'Property association updated!'
+              rescue Exceptions::BadRequestError => e
+                flash[:error] = "Error: #{e.message}"
+              ensure
+                routing.redirect @properties_route
+              end
+            end
+
+            routing.get do
+              dir_path = get_view_path("#{@heirs_dir}/properties")
+              property_heirs = Services::PropertyHeirs::GetPropertiesRelatedWitHeir
+                               .new(App.config)
+                               .call(current_account: @current_account, heir_id:)
+              properties = Services::Properties::GetAll.new(App.config).call(current_account: @current_account)
+
+              view dir_path,
+                   locals: { current_account: @current_account, heir_id:, property_heirs:, properties: }
+            end
+
+            routing.post do
+              Services::PropertyHeirs::AssociatePropertyHeir.new(App.config)
+                                                            .call(current_account: @current_account,
+                                                                  heir_id:,
+                                                                  property_id: routing.params['add_property_id'],
+                                                                  percentage: routing.params['percentage'])
+
+              flash[:notice] = 'Property associated to heir!'
+            rescue Exceptions::BadRequestError => e
+              flash[:error] = "Error: #{e.message}"
+            ensure
+              routing.redirect @properties_route
+            end
+          end
+        end
+
         # GET /heirs
         routing.get do
           dir_path = get_view_path('heirs', 'heirs')
@@ -33,5 +121,6 @@ module ETestament
         routing.redirect '/auth/signin'
       end
     end
+    # rubocop:enable Metrics/BlockLength
   end
 end

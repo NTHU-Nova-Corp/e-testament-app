@@ -13,6 +13,11 @@ module ETestament
           Models::Property.new(property)
         end
       end
+
+      def pending_to_assign(property_heirs:)
+        properties_associated = property_heirs.map { |property_heir| property_heir.property.id }
+        @all.reject { |property| properties_associated.include? property.id }
+      end
     end
   end
 end
