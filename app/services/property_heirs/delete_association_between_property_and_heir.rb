@@ -4,22 +4,20 @@ require 'http'
 
 module ETestament
   module Services
-    module Properties
-      # Delete Property operation
-      class Delete
+    module PropertyHeirs
+      # Associates a heir with a property
+      class DeleteAssociationBetweenPropertyAndHeir
         def initialize(config)
           @config = config
         end
 
-        def call(current_account:, delete_property_id:)
+        def call(current_account:, heir_id:, property_id:)
           response = HTTP.auth("Bearer #{current_account.auth_token}")
-                         .post("#{@config.API_URL}/properties/#{delete_property_id}/delete")
+                         .post("#{@config.API_URL}/properties/#{property_id}/heirs/#{heir_id}/delete")
 
           response_data = JSON.parse(response.to_s)
           raise Exceptions::BadRequestError, response_data['message'] if response.code == 400
           raise Exceptions::ApiServerError if response.code != 200
-
-          response
         rescue HTTP::ConnectionError
           raise Exceptions::ApiServerError
         end

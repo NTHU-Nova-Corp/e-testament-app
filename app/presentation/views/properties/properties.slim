@@ -38,13 +38,13 @@ table.table.table-hover
             span aria-hidden="true"
         .modal-body
           .form-group
-            label.col-form-label.mt-4 for="name"  Name
+            label.col-form-label for="name"  Name
             input#name.form-control name="name" placeholder=("Enter property name") type="text" required="true" /
           .form-group
-            label.col-form-label.mt-4 for="description"  Description
+            label.col-form-label.mt-2 for="description"  Description
             input#description.form-control name="description" placeholder=("Enter description") type="text" required="true" /
           .form-group
-            label.form-label.mt-4 for="property-type-id"  Type
+            label.form-label.mt-2 for="property-type-id"  Type
             select#property-type-id.form-select name="property_type_id" required="true"
               - types.each_with_index do |type, index|
                 option value="#{type['id']}" == type['name']
@@ -63,13 +63,13 @@ table.table.table-hover
             span aria-hidden="true"
         .modal-body
           .form-group
-            label.col-form-label.mt-4 for="update-name"  Name
+            label.col-form-label for="update-name"  Name
             input#update-name.form-control name="update_name" placeholder=("Enter property name") type="text" required="true" /
           .form-group
-            label.col-form-label.mt-4 for="update-description"  Description
+            label.col-form-label.mt-2 for="update-description"  Description
             input#update-description.form-control name="update_description" placeholder=("Enter description") type="text" required="true" /
           .form-group
-            label.form-label.mt-4 for="update-property-type-id"  Type
+            label.form-label.mt-2 for="update-property-type-id"  Type
             select#update-property-type-id.form-select name="update_property_type_id" required="true"
               - types.each_with_index do |type, index|
                 option value="#{type['id']}" == type['name']

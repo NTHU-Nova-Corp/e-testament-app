@@ -3,52 +3,80 @@ script src='/js/properties/heirs.js'
 button#add-heir-btn.btn.btn-primary.mb-2 style="float:right" type="button" data-bs-toggle="modal" data-bs-target="#add-heir-modal"
   span
     i.fa-solid.fa-plus.mx-2
-    | Add New Heir
+    | Associate Heir
 
 table.table.table-hover
   thead
     tr
-      th scope="col"  Firstname
-      th scope="col"  Lastname
+      th scope="col"  Name 
+      th scope="col"  Relation
       th scope="col"  Email
       th scope="col"  Percentage
       th.text-center scope="col"  Manage
   tbody
   - property_heirs.all.each do |property_heir|
     tr
-      th scope="row" = property_heir.heir.first_name
-      td = property_heir.heir.last_name
+      td scope="row" = "#{property_heir.heir.first_name} #{property_heir.heir.last_name}"
+      td = property_heir.heir.relation
       td = property_heir.heir.email
-      td = property_heir.heir.percentage
+      td = "#{property_heir.percentage} %"
       td.text-center
-        button.btn.btn-info.mx-1 style="width: 38px;" type="button"
+        button.btn.btn-info.mx-1 style="width: 38px;" type="button" data-bs-toggle="modal" data-bs-target="#update-property-heir-modal" onClick="open_update_property_heir_modal(#{property_heir.to_json})"
           i.fa-solid.fa-pen-to-square
-        button.btn.btn-danger style="width: 38px;" type="button"
+        button.btn.btn-danger style="width: 38px;" type="button" data-bs-toggle="modal" data-bs-target="#delete-property-heir-modal" onClick="open_delete_property_heir_modal(#{property_heir.to_json})"
           i.fa-solid.fa-trash
 
-#add_heir_modal.modal.fade
+#add-heir-modal.modal.fade
   .modal-dialog.modal-lg role="document"
     .modal-content
-      form method='post' action='/properties/heirs' id='form-create-heir'
+      form method='post' action='/properties/#{property_id}/heirs' id='form-create-heir'
         .modal-header
           h5.modal-title Add New Heir
           button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
             span aria-hidden="true"
         .modal-body
           .form-group
-            label.col-form-label.mt-4 for="first-name" First Name*
-            input#first-name.form-control name="first_name" placeholder=("Enter first name") type="text" required="true" /
+            label.col-form-label for="add-heir-id"  Relation*
+            select#add-heir-id.form-select name="add_heir_id" required="true"
+              - heirs.pending_to_assign(property_heirs: property_heirs.all).each do |heir|
+                option value="#{heir.id}" == heir.presentation_name
           .form-group
-            label.col-form-label.mt-4 for="last-name" Last Name*
-            input#last-name.form-control name="last_name" placeholder=("Enter last name") type="text" required="true" /
-          .form-group
-            label.col-form-label.mt-4 for="email"  Email Address*
-            input#email.form-control name="email" aria-describedby="emailHelp" placeholder=("Enter email") type="email" required="true" /
-          .form-group
-            label.col-form-label.mt-4 for="update-property-type-id"  Relation*
-            select#update-property-type-id.form-select name="update_property_type_id" required="true"
-              - relations.each_with_index do |relation, index|
-                option value="#{relation['id']}" == relation['name']
+            label.col-form-label.mt-2 for="pdate-percentage" Percentage*
+            input#percentage.form-control name="percentage" placeholder=("##") type="number" required="true" /
         .modal-footer
           button#close-property-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Cancel
           button#save-property-btn.btn.btn-primary type="submit"  Save
+
+#update-property-heir-modal.modal.fade
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      form#update-property-heir-form method='post' action='/properties/#{property_id}/heirs'
+        .modal-header
+          h5.modal-title#update-title Update Heir Associated
+          button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+            span aria-hidden="true"
+        .modal-body
+          input#update-property-id type="hidden" name="delete_property_id"
+          input#update-heir-id type="hidden" name="delete_heir_id"
+          .form-group
+            label.col-form-label for="pdate-percentage" Percentage*
+            input#update-percentage.form-control name="update-percentage" placeholder=("##") type="number" required="true" /
+        .modal-footer
+          button#close-property-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Cancel
+          button#save-property-btn.btn.btn-primary type="submit"  Save
+
+#delete-property-heir-modal.modal.fade
+  .modal-dialog role="document"
+    .modal-content
+      form#delete-property-heir-form method='post' action='/properties/delete'
+        .modal-header
+          h5#delete-title.modal-title Confirm delete
+          button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+            span aria-hidden="true"
+        .modal-body
+          p This association will be deleted permanently.
+          input#delete-property-id type="hidden" name="delete_property_id"
+          input#delete-heir-id type="hidden" name="delete_heir_id"
+        .modal-footer
+          button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Cancel
+          button.btn.btn-danger type="submit"  Delete

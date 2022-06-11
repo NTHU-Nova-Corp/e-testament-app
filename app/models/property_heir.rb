@@ -5,21 +5,23 @@ module ETestament
   module Models
     # Property model
     class PropertyHeir
-      attr_reader :id, :heir, :property
+      attr_reader :id, :heir, :property, :percentage
 
-      def initialize(property_info)
-        @id = property_info['attributes']['id']
-        @heir = Models::Heir.new(property_info['attributes']['heir'])
-        @property = Models::Property.new(property_info['attributes']['property'])
+      def initialize(property_heir)
+        @id = property_heir['attributes']['id']
+        @percentage = BigDecimal(property_heir['attributes']['percentage']).to_s('F').to_i
+        @heir = Models::Heir.new(property_heir['relationships']['heir'])
+        @property = Models::Property.new(property_heir['relationships']['property'])
       end
-    end
 
-    def to_json(options = {})
-      JSON({
-             id: @id,
-             heir: @heir.to_json,
-             property: @property.to_json
-           }, options)
+      def to_json(options = {})
+        JSON({
+               id: @id,
+               percentage: @percentage,
+               heir: @heir,
+               property: @property
+             }, options)
+      end
     end
   end
 end

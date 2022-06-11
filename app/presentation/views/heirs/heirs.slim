@@ -9,15 +9,15 @@ table.table.table-hover
   thead
     tr
       th scope="col"  Name 
-      th scope="col"  Lastname
+      th scope="col"  Relation
       th scope="col"  Email
       th.text-center scope="col"  View
       th.text-center scope="col"  Manage
   tbody
   - heirs.all.each do |heir|
     tr
-      th scope="row" = heir.first_name
-      td = heir.last_name
+      td scope="row" = "#{heir.first_name} #{heir.last_name}"
+      td = heir.relation
       td = heir.email
 
       td.text-center
@@ -39,16 +39,16 @@ table.table.table-hover
             span aria-hidden="true"
         .modal-body
           .form-group
-            label.col-form-label.mt-4 for="first_name"  First Name
+            label.col-form-label for="first_name"  First Name
             input#name.form-control name="first_name" placeholder=("Enter heir first name") type="text" required="true" /
           .form-group
-            label.col-form-label.mt-4 for="last_name"  Last Name
+            label.col-form-label.mt-2 for="last_name"  Last Name
             input#name.form-control name="last_name" placeholder=("Enter heir last name") type="text" required="true" /
           .form-group
-            label.col-form-label.mt-4 for="email"  Email
+            label.col-form-label.mt-2 for="email"  Email
             input#name.form-control name="email" placeholder=("Enter heir email") type="text" required="true" /
           .form-group
-            label.form-label.mt-4 for="relation_id"  Relation
+            label.form-label.mt-2 for="relation_id"  Relation
             select#relation_id.form-select name="relation_id" required="true"
               - relations.each_with_index do |type, index|
                 option value="#{type['id']}" == type['name']

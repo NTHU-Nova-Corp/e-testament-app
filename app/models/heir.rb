@@ -5,15 +5,21 @@ module ETestament
   module Models
     # Property model
     class Heir
-      attr_reader :id, :first_name, :last_name, :email, :realation_id
+      attr_reader :id, :first_name, :last_name, :email, :relation_id, :relation, :presentation_name
 
+      # rubocop:disable Metrics/AbcSize
       def initialize(property_info)
         @id = property_info['attributes']['id']
         @first_name = property_info['attributes']['first_name']
         @last_name = property_info['attributes']['last_name']
         @email = property_info['attributes']['email']
-        @realation_id = property_info['attributes']['realation_id']
+        @relation_id = property_info['attributes']['relation_id']
+        @relation = property_info['attributes']['relation']
+        @presentation_name = "
+          #{property_info['attributes']['first_name']}
+          #{property_info['attributes']['last_name']} (#{property_info['attributes']['relation']})"
       end
+      # rubocop:enable Metrics/AbcSize
 
       def to_json(options = {})
         JSON({
@@ -21,7 +27,8 @@ module ETestament
                first_name: @first_name,
                last_name: @last_name,
                email: @email,
-               realation_id: @realation_id
+               relation_id: @relation_id,
+               relation: @relation
              }, options)
       end
     end

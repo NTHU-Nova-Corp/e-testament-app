@@ -1,5 +1,4 @@
 open_update_property_modal = (property) => {
-    console.log(property)
     document.getElementById('update-property-id').value = property.id
     document.getElementById('update-name').value = property.name
     document.getElementById('update-description').value = property.description
@@ -7,6 +6,6 @@ open_update_property_modal = (property) => {
 }
 
 open_delete_property_modal = (property) => {
-    document.getElementById('delete-title').innerText = `Confirm delete : ${property.name}`
+    document.getElementById('delete-title').innerText = `Confirm delete: ${property.name}`
     document.getElementById('delete-property-id').value = property.id
 }
