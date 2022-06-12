@@ -12,3 +12,23 @@ open_update_document_from_property_modal = (property_document) => {
   document.getElementById('update-document-id').value = property_document.document.id
   document.getElementById('update-percentage').value = property_document.percentage
 }
+
+createAndDownloadBlobFile = (property_document) => {
+  const binaryString = atob(property_document.content); // Comment this if not using base64
+  const bytes = new Uint8Array(binaryString.length);
+  body = bytes.map((byte, i) => binaryString.charCodeAt(i));
+
+  const blob = new Blob([body]);
+  const link = document.createElement("a");
+
+  // Browsers that support HTML5 download attribute
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", property_document.file_name);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+}

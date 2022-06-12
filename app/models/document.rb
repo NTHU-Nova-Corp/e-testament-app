@@ -14,6 +14,7 @@ module ETestament
         @description = document['attributes']['description']
         @content = document['attributes']['content']
         @property_id = document['attributes']['property_id']
+        @content = document['content'].nil? ? nil : document['content']
       end
 
       def to_json(options = {})
@@ -22,7 +23,8 @@ module ETestament
                file_name: @file_name,
                type: @type,
                description: @description,
-               property_id: @property_id
+               property_id: @property_id,
+               content: @content
              }, options)
       end
     end

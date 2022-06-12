@@ -55,6 +55,17 @@ module ETestament
               ensure
                 routing.redirect @documents_route
               end
+
+              routing.get do
+                document = Services::Properties::Documents::Get.new(App.config)
+                                                               .call(current_account: @current_account,
+                                                                     property_id:,
+                                                                     document_id:)
+              rescue Exceptions::BadRequestError => e
+                flash[:error] = "Error: #{e.message}"
+              ensure
+                routing.redirect @documents_route
+              end
             end
 
             routing.get do

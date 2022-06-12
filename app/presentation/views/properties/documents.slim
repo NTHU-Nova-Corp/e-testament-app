@@ -10,7 +10,7 @@ table.table.table-hover
     tr
       th scope="col"  Name
       th scope="col"  Description
-      th.text-center scope="col"  View
+      th.text-center scope="col"  Download
       th.text-center scope="col"  Manage
   tbody
   - documents.all.each do |document|
@@ -18,7 +18,7 @@ table.table.table-hover
       th scope="row" = document.file_name
       td = document.description
       td.text-center
-        a.btn.btn-success type="button"
+        a.btn.btn-success type="button" onClick="createAndDownloadBlobFile(#{document.to_json})"
           i.fa-solid.fa-file-lines
       td.text-center
         a.btn.btn-info.mx-1 type="button"
