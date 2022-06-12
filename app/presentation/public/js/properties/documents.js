@@ -13,8 +13,8 @@ open_update_document_from_property_modal = (property_document) => {
   document.getElementById('update-percentage').value = property_document.percentage
 }
 
-createAndDownloadBlobFile = (property_document) => {
-  const binaryString = atob(property_document.content); // Comment this if not using base64
+createAndDownloadBlobFile = (file_name, content) => {
+  const binaryString = atob(content); // Comment this if not using base64
   const bytes = new Uint8Array(binaryString.length);
   body = bytes.map((byte, i) => binaryString.charCodeAt(i));
 
@@ -25,7 +25,7 @@ createAndDownloadBlobFile = (property_document) => {
   if (link.download !== undefined) {
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
-    link.setAttribute("download", property_document.file_name);
+    link.setAttribute("download", file_name);
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();

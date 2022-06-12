@@ -1,7 +1,10 @@
 script src='/js/properties/documents.js'
 
+- unless document_to_download.nil?
+  script createAndDownloadBlobFile("#{document_to_download.file_name}", "#{document_to_download.content}")
+
 button#add-document-btn.btn.btn-primary.mb-2 style="float:right" type="button" data-bs-toggle="modal" data-bs-target="#add_document_modal"
-  span
+  span 
     i.fa-solid.fa-plus.mx-2
     | Add New Document
 
@@ -18,7 +21,7 @@ table.table.table-hover
       th scope="row" = document.file_name
       td = document.description
       td.text-center
-        a.btn.btn-success type="button" onClick="createAndDownloadBlobFile(#{document.to_json})"
+        a.btn.btn-success type="button" href="/properties/#{property_id}/documents/#{document.id}"
           i.fa-solid.fa-file-lines
       td.text-center
         a.btn.btn-info.mx-1 type="button"

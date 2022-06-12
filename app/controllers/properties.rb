@@ -57,13 +57,19 @@ module ETestament
               end
 
               routing.get do
-                document = Services::Properties::Documents::Get.new(App.config)
-                                                               .call(current_account: @current_account,
-                                                                     property_id:,
-                                                                     document_id:)
+                dir_path = get_view_path("#{@properties_dir}/documents")
+                documents = Services::Properties::Documents::GetAll.new(App.config)
+                                                                   .call(current_account: @current_account,
+                                                                         property_id:)
+                document_to_download = Services::Properties::Documents::Get.new(App.config)
+                                                                           .call(current_account: @current_account,
+                                                                                 property_id:,
+                                                                                 document_id:)
+
+                view dir_path,
+                     locals: { current_account: @current_account, property_id:, documents:, document_to_download: }
               rescue Exceptions::BadRequestError => e
                 flash[:error] = "Error: #{e.message}"
-              ensure
                 routing.redirect @documents_route
               end
             end
@@ -74,7 +80,8 @@ module ETestament
                                                                  .call(current_account: @current_account,
                                                                        property_id:)
 
-              view dir_path, locals: { current_account: @current_account, property_id:, documents: }
+              view dir_path,
+                   locals: { current_account: @current_account, property_id:, documents:, document_to_download: nil }
             end
 
             routing.post do
