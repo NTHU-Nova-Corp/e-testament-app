@@ -10,13 +10,10 @@ module ETestament
     route('account') do |routing|
       routing.on do
         routing.get String do |username|
-          # GET /account/:username
-          if @current_account.logged_in? && @current_account.username == username
-            dir_path = get_view_path('account')
-            view dir_path, locals: { current_account: @current_account }
-          else
-            routing.redirect '/auth/signin'
-          end
+          routing.redirect '/auth/signin' unless @current_account.logged_in? && @current_account.username == username
+
+          dir_path = get_view_path(breadcrumb: 'account')
+          view dir_path, locals: { current_account: @current_account }
         end
       end
     end

@@ -5,17 +5,17 @@ button#add-heir-btn.btn.btn-primary.mb-2 style="float:right" type="button" data-
     i.fa-solid.fa-plus.mx-2
     | Associate Property
 
-table.table.table-hover
+table#content-table.table.table-hover.display style="width:100%;"
   thead
     tr
-      th scope="col"  Name 
-      th scope="col"  Type
-      th scope="col"  Percentage
-      th.text-center scope="col"  Manage
+      th = 'Name'
+      th = 'Type'
+      th = 'Percentage'
+      th.text-center = 'Manage'
   tbody
-  - property_heirs.all.each do |property_heir|
+  - for property_heir in property_heirs.all
     tr
-      td scope="row" = property_heir.property.name
+      td = property_heir.property.name
       td = property_heir.property.type
       td = "#{property_heir.percentage} %"
       td.text-center

@@ -1,7 +1,9 @@
 ol.breadcrumb.mt-5
   - @breadcrumb.each_with_index do |menu, index|
-    - if index == (@breadcrumb.length - 1)
-      li.breadcrumb-item.active == menu.capitalize
-    - else
+    - if index == 0 && @breadcrumb.length > 1
       li.breadcrumb-item
         a href="/#{menu}" == menu.capitalize
+    - elsif index == (@breadcrumb.length - 1)
+      li.breadcrumb-item.active == menu.capitalize
+    - else
+      li.breadcrumb-item == menu.capitalize

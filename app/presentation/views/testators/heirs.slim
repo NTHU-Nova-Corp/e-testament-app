@@ -1,0 +1,10 @@
+table.table.table-hover
+  thead
+    tr
+      th scope="col"  Name
+      th scope="col"  Email
+  tbody
+  - heirs.all.each do |heir|
+    tr
+      td = heir.presentation_name
+      td = heir.email
