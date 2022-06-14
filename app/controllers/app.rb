@@ -24,7 +24,7 @@ module ETestament
 
       # GET /
       routing.root do
-        view :home, locals: { current_account: @current_account }
+        view :home
       end
 
     rescue Exceptions::ApiServerError => e
@@ -53,7 +53,6 @@ module ETestament
         session[:breadcrumb] = nil
         @breadcrumb = nil
       else
-        # session[:breadcrumb] = breadcrumb
         split_breadcrumb = breadcrumb.split('/')
         split_breadcrumb.insert(split_breadcrumb.length - 1, display) unless display.nil?
 

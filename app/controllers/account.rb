@@ -13,7 +13,7 @@ module ETestament
           routing.redirect '/auth/signin' unless @current_account.logged_in? && @current_account.username == username
 
           dir_path = get_view_path(breadcrumb: 'account')
-          view dir_path, locals: { current_account: @current_account }
+          view dir_path
         end
       end
     end
