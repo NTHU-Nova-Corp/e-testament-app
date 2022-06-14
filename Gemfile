@@ -45,3 +45,6 @@ end
 
 # OAuth
 gem 'google-api-client'
+
+# CSP
+gem 'secure_headers'

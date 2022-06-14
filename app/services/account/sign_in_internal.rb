@@ -13,7 +13,9 @@ module ETestament
         end
 
         def call(username:, password:)
-          response = HTTP.post("#{@config.API_URL}/auth/authenticate", json: { username:, password: })
+          credentials = { username: username, password: password }
+
+          response = HTTP.post("#{@config.API_URL}/auth/authenticate", json: SignedMessage.sign(credentials))
           Services::Accounts::SignIn.new(@config, @session).call(response:)
         rescue HTTP::ConnectionError
           raise Exceptions::ApiServerError
