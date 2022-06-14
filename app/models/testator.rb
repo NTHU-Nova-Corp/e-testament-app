@@ -8,7 +8,6 @@ module ETestament
       attr_reader :id, :username, :first_name, :last_name, :email, :testament_status, :presentation_name
 
       def initialize(testator_info)
-        puts testator_info
         @id = testator_info['attributes']['id']
         @username = testator_info['attributes']['username']
         @first_name = testator_info['attributes']['first_name']

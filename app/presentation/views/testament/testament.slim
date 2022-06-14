@@ -1,0 +1,17 @@
+script src="/js/properties/properties.js"
+
+table.table.table-hover
+  thead
+    tr
+      th scope="col"  Name
+      th scope="col"  Description
+      th scope="col"  Heir Distribution
+  tbody
+  - properties.all.each do |property|
+    tr
+      th scope="row" = property.name
+      td = property.description
+      td
+        - property.heirs.all.each do |heir|
+          = "#{heir.percentage}% - #{heir.first_name} #{heir.last_name}"
+          br

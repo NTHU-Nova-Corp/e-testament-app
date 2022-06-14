@@ -22,6 +22,7 @@ nav.navbar.navbar-expand-sm.navbar-dark.bg-dark role="navigation"
                 = "#{@current_account.username}"
               div.dropdown-menu.end-0.dropdown-menu-end
                 a#profile-nav.dropdown-item href="/account/#{@current_account.username}" Account
+                a#profile-nav.dropdown-item href="/testament" Review Tetament
                 a#signout-nav.dropdown-item href='/auth/signout' Sign out
           - else
             li.nav-item
