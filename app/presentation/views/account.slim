@@ -9,13 +9,40 @@
       == @current_account.email
 ol.breadcrumb.mt-5
   li.breadcrumb-item Executor
-- unless executor.unassigned?
+- if executor.active?
   .container
+    .row
+      .col-sm-2 Status:
+      .col-sm-10
+        span.badge.bg-primary == executor.status
     .row
       .col-sm-2 Email:
       .col-sm-10
         == executor.email
-- else
+
+- elsif executor.pending_acceptance?
+  .container
+    .row
+      .col-sm-2 Status:
+      .col-sm-10
+        span.badge.bg-secondary == executor.status
+    .row
+      .col-sm-2 Email:
+      .col-sm-10
+        == executor.email
+
+- elsif executor.pending_registration?
+  .container
+    .row
+      .col-sm-2 Status:
+      .col-sm-10
+        span.badge.bg-warning == executor.status
+    .row
+      .col-sm-2 Email:
+      .col-sm-10
+        == executor.email
+
+- elsif executor.unassigned?
   .container
     p == "Executor hasn't been assigned yet"
     button.btn.btn-outline-primary type="button" data-bs-toggle="modal" data-bs-target="#assign-executor-modal" = 'Assign Executor'

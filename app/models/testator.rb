@@ -7,14 +7,21 @@ module ETestament
     class Testator
       attr_reader :id, :username, :first_name, :last_name, :email, :testament_status, :presentation_name
 
-      def initialize(testator_info)
-        @id = testator_info['attributes']['id']
-        @username = testator_info['attributes']['username']
-        @first_name = testator_info['attributes']['first_name']
-        @last_name = testator_info['attributes']['last_name']
-        @email = testator_info['attributes']['email']
-        @testament_status = testator_info['attributes']['testament_status']
+      def initialize(testator)
+        @testator = testator
+        return if testator.nil?
+
+        @id = testator['attributes']['id']
+        @username = testator['attributes']['username']
+        @first_name = testator['attributes']['first_name']
+        @last_name = testator['attributes']['last_name']
+        @email = testator['attributes']['email']
+        @testament_status = testator['attributes']['testament_status']
         @presentation_name = "#{@first_name} #{@last_name}"
+      end
+
+      def empty?
+        @testator.nil?
       end
 
       def to_json(options = {})

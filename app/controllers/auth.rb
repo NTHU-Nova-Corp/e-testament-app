@@ -46,6 +46,7 @@ module ETestament
           current_account = Services::Accounts::SignInInternal.new(App.config, session)
                                                               .call(**credentials.values)
           flash[:notice] = "Welcome back #{current_account.username}!"
+
           routing.redirect '/'
         rescue Exceptions::UnauthorizedError, Exceptions::BadRequestError => e
           flash.now[:error] = "Error: #{e.message}"

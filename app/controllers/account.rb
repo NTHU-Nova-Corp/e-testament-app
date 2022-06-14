@@ -11,20 +11,20 @@ module ETestament
       routing.on do
 
         routing.post 'executor' do
-          assign_email = routing.params['assign_email']
-          Services::Executors::AssignExecutor.new(App.config).call(current_account: @current_account, assign_email:)
+          email = routing.params['assign_email']
+          # TODO
+          # Services::Executors::AssignExecutor.new(App.config).call(current_account: @current_account, email:)
 
-          flash[:notice] = "Invitation has been sent! Please contact the person to complete the process #{assign_email}"
+          flash[:notice] = "Invitation has been sent to #{email}! Please contact the person to complete the process"
           routing.redirect "/account/#{@current_account.username}"
         end
 
         routing.get String do |username|
           routing.redirect '/auth/signin' unless @current_account.logged_in? && @current_account.username == username
+          # GET executor status
           executor = Services::Executors::GetExecutor.new(App.config).call(current_account: @current_account)
-          pending_executor = Services::Testators::GetPendingExecutor.new(App.config).call(current_account: @current_account)
-
           dir_path = get_view_path(breadcrumb: 'account')
-          view dir_path, locals: { executor:, pending_executor: }
+          view dir_path, locals: { executor: }
         end
       end
     end
