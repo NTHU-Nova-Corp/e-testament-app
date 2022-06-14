@@ -5,14 +5,16 @@ module ETestament
   module Models
     # Property model
     class Testator
-      attr_reader :id, :username, :first_name, :last_name, :email, :presentation_name
+      attr_reader :id, :username, :first_name, :last_name, :email, :testament_status, :presentation_name
 
-      def initialize(heir_info)
-        @id = heir_info['attributes']['id']
-        @username = heir_info['attributes']['username']
-        @first_name = heir_info['attributes']['first_name']
-        @last_name = heir_info['attributes']['last_name']
-        @email = heir_info['attributes']['email']
+      def initialize(testator_info)
+        puts testator_info
+        @id = testator_info['attributes']['id']
+        @username = testator_info['attributes']['username']
+        @first_name = testator_info['attributes']['first_name']
+        @last_name = testator_info['attributes']['last_name']
+        @email = testator_info['attributes']['email']
+        @testament_status = testator_info['attributes']['testament_status']
         @presentation_name = "#{@first_name} #{@last_name}"
       end
 
@@ -22,6 +24,7 @@ module ETestament
                first_name: @first_name,
                last_name: @last_name,
                email: @email,
+               testament_status: @testament_status,
                presentation_name: @presentation_name
              }, options)
       end

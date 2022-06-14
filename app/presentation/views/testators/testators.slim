@@ -3,20 +3,22 @@ table#content-table.table.table-hover.display style="width:100%;"
     tr
       th scope="col" = 'Name'
       th scope="col" = 'Email'
-      th.text-center scope="col" = 'View Heir'
-      th.text-center scope="col" = 'Release Testament'
-      th.text-center scope="col" = 'Read Testament'
+      th scope="col" = 'Status'
+      th.text-center scope="col" = 'View Heirs'
+      th.text-center scope="col" = 'Manage'
   tbody
   - testators.all.each do |testator|
     tr
       td = testator.presentation_name
       td = testator.email
+      td = testator.testament_status
       td.text-center
         a.btn.btn-info.mx-1 style="width: 38px;" type="button" title="Heirs" href="/testators/#{testator.id}/heirs"
           i.fa-solid.fa-people-line style="margin: -3px;"
       td.text-center
-        button.btn.btn-primary.mx-1 type="button"
-          i.fa-solid.fa-chart-pie
-      td.text-center
-        button.btn.btn-success.mx-1 type="button"
-          i.fa-brands.fa-readme
+        - if testator.testament_status == 'Completed'
+          button.btn.btn-primary.mx-1 type="button" title="Release"
+            i.fa-solid.fa-chart-pie
+        - if testator.testament_status == 'Released'
+          button.btn.btn-success.mx-1 type="button" title="Release"
+            i.fa-brands.fa-readme
