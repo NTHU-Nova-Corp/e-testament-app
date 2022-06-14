@@ -1,4 +1,4 @@
-table#content-table.table.table-hover.display style="width:100%;"
+table#content-table.content-table.table.table-hover.display
   thead
     tr
       th scope="col" = 'Name'
@@ -13,8 +13,8 @@ table#content-table.table.table-hover.display style="width:100%;"
       td = testator.email
       td = testator.testament_status
       td.text-center
-        a.btn.btn-info.mx-1 style="width: 38px;" type="button" title="Heirs" href="/testators/#{testator.id}/heirs"
-          i.fa-solid.fa-people-line style="margin: -3px;"
+        a.btn.btn-info.mx-1.icon-btn  type="button" title="Heirs" href="/testators/#{testator.id}/heirs"
+          i.fa-solid.fa-people-line.icon-margin
       td.text-center
         - if testator.testament_status == 'Completed'
           button.btn.btn-primary.mx-1 type="button" title="Release"

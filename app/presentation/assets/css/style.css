@@ -3,3 +3,40 @@
     width: 100%;
     display: block;
 }
+
+.home-container {
+    align-items: center;
+}
+
+.nav-logo {
+    max-width: 35px;
+    margin-top: -7px;
+}
+
+.home-picture {
+    width: 40%;
+}
+
+.password-input {
+    margin-bottom: -15px;
+}
+
+.content-table {
+    width: 100%;
+}
+
+.float-right {
+    float: right;
+}
+
+.warning-color {
+    color: #948b8b
+}
+
+.icon-btn {
+    width: 38px;
+}
+
+.icon-margin {
+    margin: -3px;
+}

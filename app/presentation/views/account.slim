@@ -8,10 +8,33 @@
     .col-sm-10
       == @current_account.email
 ol.breadcrumb.mt-5
-    li.breadcrumb-item Executor
+  li.breadcrumb-item Executor
+- unless executor.unassigned?
+  .container
+    .row
+      .col-sm-2 Email:
+      .col-sm-10
+        == executor.email
+- else
+  .container
+    p == "Executor hasn't been assigned yet"
+    button.btn.btn-outline-primary type="button" data-bs-toggle="modal" data-bs-target="#assign-executor-modal" = 'Assign Executor'
 
-.container
-  .row
-    .col-sm-2 Email:
-    .col-sm-10
-      == @current_account.email
+  #assign-executor-modal.modal.fade
+    .modal-dialog role="document"
+      .modal-content
+        form method='post' action='/account/executor' id='form-assign-executor'
+          .modal-header
+            h5#assign-executor-title.modal-title Assign Executor And Send Invitation
+            button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+              span aria-hidden="true"
+          .modal-body
+            .form-group
+              label.form-label.mt-4 Executor email address
+              .form-floating.mb-3
+                input#assign-email.form-control name='assign_email' placeholder="name@example.com" type="email" required="true"
+                label for="assign-email" Fill in an executor email address
+          .modal-footer
+            button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Cancel
+            button.btn.btn-primary type="submit"  Send an invitation
+

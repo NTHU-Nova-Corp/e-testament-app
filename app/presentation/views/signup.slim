@@ -24,12 +24,12 @@ form method='post' action='/auth/signup/#{registration_token}' id='form-signup'
 
       .form-group
         label.form-label.mt-4 for="password" Password*
-        input#password.form-control pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" style="margin-bottom: -15px;" name="password" placeholder="Password" type="password" required="true" onkeyup="validate_password()"
+        input#password.form-control.password-input pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="password" placeholder="Password" type="password" required="true" onkeyup="validate_password()"
         label.form-label.mt-4 for="password_confirm"  Confirm Password*
         input#password_confirm.form-control pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" oninput="check_password(this)" name="password_confirm" placeholder="Confirm password" type="password" required="true"
         - password_conditions.each_with_index do |condition, index|
           p.mt-1.mb-0.mx-3
-            i.fa-solid.fa-square-xmark id="condition-#{index}-icon" style="color: #948b8b"
+            i.fa-solid.fa-square-xmark.warning-color id="condition-#{index}-icon"
             small.form-text.text-muted.mx-2 id="condition-#{index}-label" == condition
 
     .card-footer.text-center

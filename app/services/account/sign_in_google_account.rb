@@ -13,10 +13,14 @@ module ETestament
         end
 
         def call(access_token:)
-          signed_sso_info = { access_token: access_token }
-                            .then { |sso_info| SignedMessage.sign(sso_info) }
+          # response = HTTP.post("#{ENV.fetch('API_URL', nil)}/auth/authenticate-google", json: { access_token: })
+          # Services::Accounts::SignIn.new(@config, @session).call(response:)
 
-          response = HTTP.post("#{@config.API_URL}/auth/authenticate-google", json: )
+          # signed_sso_info = { access_token: }
+          #                     .then { |sso_info| SignedMessage.sign(sso_info) }
+
+          # response = HTTP.post("#{@config.API_URL}/auth/authenticate-google", json: signed_sso_info)
+          response = HTTP.post("#{@config.API_URL}/auth/authenticate-google", json: SignedMessage.sign({ access_token: }) )
           Services::Accounts::SignIn.new(@config, @session).call(response:)
         rescue HTTP::ConnectionError
           raise Exceptions::ApiServerError

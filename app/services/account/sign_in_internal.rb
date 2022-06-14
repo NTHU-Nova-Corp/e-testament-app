@@ -13,7 +13,7 @@ module ETestament
         end
 
         def call(username:, password:)
-          credentials = { username: username, password: password }
+          credentials = { username:, password: }
 
           response = HTTP.post("#{@config.API_URL}/auth/authenticate", json: SignedMessage.sign(credentials))
           Services::Accounts::SignIn.new(@config, @session).call(response:)

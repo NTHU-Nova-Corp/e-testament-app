@@ -5,7 +5,7 @@ require 'rake/testtask'
 require './require_app'
 
 task :print_env do
-  puts "Environment: #{ENV['RACK_ENV'] || 'development'}"
+  puts "Environment: #{ENV.fetch['RACK_ENV'] || 'development'}"
 end
 
 desc 'Test all the specs'
@@ -57,7 +57,7 @@ namespace :url do
   # usage: $ rake url:integrity URL=http://example.org/script.js
   desc 'Generate integrity hash for a URL'
   task :integrity do
-    sha384 = `curl -L -s #{ENV['URL']} | openssl dgst -sha384 -binary | \
+    sha384 = `curl -L -s #{ENV.fetch['URL']} | openssl dgst -sha384 -binary | \
               openssl enc -base64`
     puts "sha384-#{sha384}"
   end

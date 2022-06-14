@@ -11,10 +11,9 @@ module ETestament
     plugin :environments
     plugin :multi_route
 
-    FONT_SRC = %w[https://cdnjs.cloudflare.com].freeze
+    FONT_SRC = %w[https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com].freeze
     SCRIPT_SRC = %w[https://cdn.jsdelivr.net https://code.jquery.com].freeze
-    STYLE_SRC = %w[https://bootswatch.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com].freeze
-
+    STYLE_SRC = %w[https://bootswatch.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com].freeze
     configure :production do
       use Rack::SslEnforcer, hsts: true
     end
@@ -61,7 +60,7 @@ module ETestament
 
     route('security') do |routing|
       # POST security/report_csp_violation
-      routing 'report_csp_violation' do
+      routing.post 'report_csp_violation' do
         App.logger.warn "CSP VIOLATION: #{request.body.read}"
       end
     end

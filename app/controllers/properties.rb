@@ -143,8 +143,8 @@ module ETestament
 
           routing.get do
             property_heirs = Services::PropertyHeirs::GetHeirsRelatedWithProperty
-                               .new(App.config)
-                               .call(current_account: @current_account, property_id:)
+                             .new(App.config)
+                             .call(current_account: @current_account, property_id:)
             heirs = Services::Heirs::GetAll.new(App.config).call(current_account: @current_account)
             property = Services::Properties::GetInfo.new(App.config).call(current_account: @current_account,
                                                                           property_id:)

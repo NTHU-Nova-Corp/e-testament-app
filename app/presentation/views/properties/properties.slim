@@ -1,6 +1,6 @@
 script src="/js/properties/properties.js"
 
-button#add-properties-btn.btn.btn-primary.mb-2 style="float:right" type="button" data-bs-toggle="modal" data-bs-target="#add-property-modal"
+button#add-properties-btn.btn.btn-primary.mb-2.float-right type="button" data-bs-toggle="modal" data-bs-target="#add-property-modal"
   span
     i.fa-solid.fa-plus.mx-2
     | Add New Property
@@ -20,14 +20,14 @@ table.table.table-hover
       td = property.type
       td = property.description
       td.text-center
-        a.btn.btn-info.mx-1 style="width: 38px;" type="button" title="Heirs" href="/properties/#{property.id}/heirs"
-          i.fa-solid.fa-people-line style="margin: -3px;"
-        a.btn.btn-success type="button" style="width: 38px;" title="Documents" href="/properties/#{property.id}/documents"
+        a.btn.btn-info.mx-1.icon-btn type="button" title="Heirs" href="/properties/#{property.id}/heirs"
+          i.fa-solid.fa-people-line.icon-margin
+        a.btn.btn-success.icon-btn type="button" title="Documents" href="/properties/#{property.id}/documents"
           i.fa-solid.fa-file-lines
       td.text-center
-        button.btn.btn-info.mx-1 style="width: 38px;" type="button" data-bs-toggle="modal" data-bs-target="#update-property-modal" onClick="open_update_property_modal(#{property.to_json})"
+        button.btn.btn-info.mx-1.icon-btn type="button" data-bs-toggle="modal" data-bs-target="#update-property-modal" onClick="open_update_property_modal(#{property.to_json})"
           i.fa-solid.fa-pen-to-square
-        button.btn.btn-danger style="width: 38px;" type="button" data-bs-toggle="modal" data-bs-target="#delete-property-modal" onClick="open_delete_property_modal(#{property.to_json})"
+        button.btn.btn-danger.icon-btn type="button" data-bs-toggle="modal" data-bs-target="#delete-property-modal" onClick="open_delete_property_modal(#{property.to_json})"
           i.fa-solid.fa-trash
 
 #add-property-modal.modal.fade

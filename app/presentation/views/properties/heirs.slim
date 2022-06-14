@@ -1,6 +1,6 @@
 script src='/js/properties/heirs.js'
 
-button#add-heir-btn.btn.btn-primary.mb-2 style="float:right" type="button" data-bs-toggle="modal" data-bs-target="#add-heir-modal"
+button#add-heir-btn.btn.btn-primary.mb-2.float-right type="button" data-bs-toggle="modal" data-bs-target="#add-heir-modal"
   span
     i.fa-solid.fa-plus.mx-2
     | Associate Heir
@@ -21,9 +21,9 @@ table.table.table-hover
       td = property_heir.heir.email
       td = "#{property_heir.percentage} %"
       td.text-center
-        button.btn.btn-info.mx-1 style="width: 38px;" type="button" data-bs-toggle="modal" data-bs-target="#update-property-heir-modal" onClick="open_update_heir_from_property_modal(#{property_heir.to_json})"
+        button.btn.btn-info.mx-1.icon-btn type="button" data-bs-toggle="modal" data-bs-target="#update-property-heir-modal" onClick="open_update_heir_from_property_modal(#{property_heir.to_json})"
           i.fa-solid.fa-pen-to-square
-        button.btn.btn-danger style="width: 38px;" type="button" data-bs-toggle="modal" data-bs-target="#delete-property-heir-modal" onClick="open_delete_heir_from_property_modal(#{property_heir.to_json})"
+        button.btn.btn-danger.icon-btn type="button" data-bs-toggle="modal" data-bs-target="#delete-property-heir-modal" onClick="open_delete_heir_from_property_modal(#{property_heir.to_json})"
           i.fa-solid.fa-trash
 
 #add-heir-modal.modal.fade
