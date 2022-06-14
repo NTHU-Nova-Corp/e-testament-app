@@ -17,7 +17,7 @@ module ETestament
             "#{@config.APP_URL}/auth/signup/#{registration_token}"
 
           response = HTTP.post("#{@config.API_URL}/auth/register",
-                               json: registration_data)
+                               json: SignedMessage.sign(registration_data))
 
           response_data = JSON.parse(response.to_s)
           raise Exceptions::BadRequestError, response_data['message'] if response.code == 400

@@ -167,6 +167,7 @@ GEM
       rubocop-ast (>= 0.4.0)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
+    secure_headers (6.3.3)
     signet (0.16.1)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.0)
@@ -194,6 +195,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   dry-validation
@@ -214,6 +216,7 @@ DEPENDENCIES
   roda
   rubocop
   rubocop-performance
+  secure_headers
   slim
   webmock
 

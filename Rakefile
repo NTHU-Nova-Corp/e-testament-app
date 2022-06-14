@@ -5,7 +5,18 @@ require 'rake/testtask'
 require './require_app'
 
 task :print_env do
-  puts "Environment: #{ENV.fetch('RACK_ENV') || 'development'}"
+  puts "Environment: #{ENV['RACK_ENV'] || 'development'}"
+end
+
+desc 'Test all the specs'
+Rake::TestTask.new(:test) do |t|
+  t.pattern = 'spec/**/*_spec.rb'
+  t.warning = false
+end
+
+desc 'Rerun tests on live code changes'
+task :respec do
+  sh 'rerun -c rake test'
 end
 
 desc 'Run application console (pry)'
