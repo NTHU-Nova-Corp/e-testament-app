@@ -17,11 +17,14 @@ module ETestament
       response['Content-Type'] = 'text/html; charset=utf-8'
       @current_account = Models::CurrentSession.new(session).current_account
       @current_route = routing.instance_variable_get(:@remaining_path)
+      @request_testator = Models::Testator.new(nil)
 
-      begin
-        @request_testator = Services::Testators::GetReceivedRequest.new(App.config).call(current_account: @current_account)
-      rescue StandardError
-        @request_testator = Models::Testator.new(nil)
+      if @current_account.logged_in?
+        begin
+          @request_testator = Services::Testators::GetReceivedRequest.new(App.config).call(current_account: @current_account)
+        rescue StandardError
+          @request_testator = Models::Testator.new(nil)
+        end
       end
 
       routing.public

@@ -68,14 +68,13 @@ module ETestament
                                             })
 
         sso_response = client.fetch_access_token!
-        session[:access_token] = sso_response['access_token']
+        access_token = sso_response['access_token']
+
         current_account = Services::Accounts::SignInGoogleAccount.new(App.config, session).call(
-          access_token: sso_response['access_token']
+          access_token:
         )
-        Models::CurrentSession.new(session).current_account = current_account
 
         flash[:notice] = "Welcome #{current_account.username}!"
-
         # GET /auth/google_callback
         routing.get do
           routing.redirect "/#{routing['state']}"
@@ -164,7 +163,7 @@ module ETestament
           response.status = e.instance_variable_get(:@status_code)
           flash[:error] = "Error: #{e.message}"
           routing.redirect @signup_route
-        # TODO: Create new error handler for invalid input
+          # TODO: Create new error handler for invalid input
         rescue StandardError => e
           App.logger.error "Could not verify registration: #{e.inspect}"
           flash[:error]
@@ -183,5 +182,6 @@ module ETestament
     end
     # rubocop:enable Metrics/BlockLength
   end
+
   # rubocop:enable Metrics/ClassLength
 end
