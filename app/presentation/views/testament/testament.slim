@@ -1,5 +1,3 @@
-script src="/js/properties/properties.js"
-
 table.table.table-hover
   thead
     tr
@@ -15,3 +13,6 @@ table.table.table-hover
         - property.heirs.all.each do |heir|
           = "#{heir.percentage}% - #{heir.first_name} #{heir.last_name}"
           br
+
+  form method='post' action='/testament/complete' id='form-assign-executor'
+    button.btn.btn-primary type="submit" Mark As Completed

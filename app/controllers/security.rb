@@ -11,7 +11,8 @@ module ETestament
     plugin :environments
     plugin :multi_route
 
-    FONT_SRC = %w[https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com].freeze
+    IMG_SRC = %w[data:].freeze
+    FONT_SRC = %w[https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com].freeze
     SCRIPT_SRC = %w[https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com].freeze
     STYLE_SRC = %w[https://bootswatch.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com].freeze
     configure :production do
@@ -22,6 +23,7 @@ module ETestament
     # use Rack::Protection, reaction: :drop_session
     use SecureHeaders::Middleware
 
+    # rubocop:disable Metrics/BlockLength
     SecureHeaders::Configuration.default do |config|
       config.cookies = {
         secure: true,
@@ -37,7 +39,7 @@ module ETestament
       config.x_permitted_cross_domain_policies = 'none'
       config.referrer_policy = 'origin-when-cross-origin'
 
-      # note: single-quotes needed around 'self' and 'none' in CSPs
+      # NOTE: single-quotes needed around 'self' and 'none' in CSPs
       # rubocop:disable Lint/PercentStringArray
       config.csp = {
         report_only: false,
@@ -45,7 +47,7 @@ module ETestament
         default_src: %w['self'],
         child_src: %w['self'],
         connect_src: %w[wws:],
-        img_src: %w['self'],
+        img_src: %w['self'] + IMG_SRC,
         font_src: %w['self'] + FONT_SRC,
         script_src: %w['self'] + SCRIPT_SRC,
         style_src: %w['self'] + STYLE_SRC,
@@ -57,6 +59,7 @@ module ETestament
       }
       # rubocop:enable Lint/PercentStringArray
     end
+    # rubocop:enable Metrics/BlockLength
 
     route('security') do |routing|
       # POST security/report_csp_violation
