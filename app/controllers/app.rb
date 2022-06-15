@@ -19,9 +19,9 @@ module ETestament
       @current_route = routing.instance_variable_get(:@remaining_path)
 
       begin
-        @current_testator = Services::Testators::GetReceivedRequest.new(App.config).call(current_account: @current_account)
+        @request_testator = Services::Testators::GetReceivedRequest.new(App.config).call(current_account: @current_account)
       rescue StandardError
-        @current_testator = Models::Testator.new(nil)
+        @request_testator = Models::Testator.new(nil)
       end
 
       routing.public

@@ -29,6 +29,10 @@
     float: right;
 }
 
+.float-left {
+    float: left;
+}
+
 .warning-color {
     color: #948b8b
 }

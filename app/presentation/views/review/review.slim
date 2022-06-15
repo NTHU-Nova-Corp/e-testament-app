@@ -1,0 +1,23 @@
+.container
+  p = 'Candidate Testator'
+  .row
+    .col-sm-2 Name:
+    .col-sm-10
+      == testator.presentation_name
+  .row
+    .col-sm-2 Email:
+    .col-sm-10
+      == testator.email
+  .row.mt-3
+    .col-2
+      form.form-inline.form-group.mb-2 action="/testators/#{testator.id}/reject" method="post"
+        button.btn.btn-outline-danger.float-right name="accept_btn" type="submit" value="reject"
+          | Reject
+          i.fa-solid.fa-circle-xmark.mx-1
+
+    .col-2
+      form.form-inline.form-group.mb-2 action="/testators/#{testator.id}/accept" method="post"
+        button.btn.btn-outline-primary.float-left name="reject_btn" type="submit" value="accept"
+          | Accept
+          i.fa-solid.fa-circle-check.mx-1
+

@@ -12,7 +12,7 @@ module ETestament
     plugin :multi_route
 
     FONT_SRC = %w[https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com].freeze
-    SCRIPT_SRC = %w[https://cdn.jsdelivr.net https://code.jquery.com].freeze
+    SCRIPT_SRC = %w[https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com].freeze
     STYLE_SRC = %w[https://bootswatch.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com].freeze
     configure :production do
       use Rack::SslEnforcer, hsts: true

@@ -14,11 +14,10 @@ nav.navbar.navbar-expand-sm.navbar-dark.bg-dark role="navigation"
             a#heirs-nav.nav-link href="/heirs" Heirs
           li.nav-item
             a#testators-nav.nav-link href="/testators" Testators Associated
-        - unless @current_testator.empty?
+        - unless @request_testator.empty?
           li.nav-item
-            button.btn.btn-primary type="button"
+            a.btn.btn-primary type="button" href="/testators/review"
               = 'You have an invitation'
-
 
       form.d-flex
         ul.navbar-nav.me-auto

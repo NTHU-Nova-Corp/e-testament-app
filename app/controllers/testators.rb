@@ -14,8 +14,29 @@ module ETestament
 
       routing.redirect '/auth/signin' unless @current_account.logged_in?
 
+      routing.get 'review' do
+        dir_path = get_view_path(breadcrumb: 'review', in_page: 'review')
+
+        view dir_path, locals: { testator: @request_testator, status: 'review' }
+      end
+
       # GET /testators/:id/heirs
       routing.on String do |testator_id|
+
+        routing.post 'reject' do
+          flash[:notice] = 'The invitation has been rejected'
+          dir_path = get_view_path(breadcrumb: 'review', in_page: 'review')
+
+          view dir_path, locals: { status: 'reject' }
+        end
+
+        routing.post 'accept' do
+          flash[:notice] = 'The invitation has been accepted'
+          dir_path = get_view_path(breadcrumb: 'review', in_page: 'review')
+
+          view dir_path, locals: { status: 'accept' }
+        end
+
         routing.get do
           heirs = Services::Testators::Heirs::GetAll.new(App.config).call(current_account: @current_account,
                                                                           testator_id:)
