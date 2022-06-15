@@ -12,8 +12,11 @@ module ETestament
         end
 
         def call(current_account:, email:)
+          registration_data = { username: email, email: }
+          registration_form = Services::Utils::GetRegistrationForm.new(@config).call(registration_data:)
+
           response = HTTP.auth("Bearer #{current_account.auth_token}")
-                         .post("#{@config.API_URL}/executors", json: { email: })
+                         .post("#{@config.API_URL}/executors", json: { email:, registration_form: })
 
           raise Exceptions::ApiServerError if response.code != 200
 

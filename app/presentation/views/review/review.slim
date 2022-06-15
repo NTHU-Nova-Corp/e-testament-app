@@ -1,4 +1,5 @@
 .container
+- if status.eql?('review')
   p = 'Candidate Testator'
   .row
     .col-sm-2 Name:
@@ -20,4 +21,7 @@
         button.btn.btn-outline-primary.float-left name="reject_btn" type="submit" value="accept"
           | Accept
           i.fa-solid.fa-circle-check.mx-1
-
+- elsif status.eql?('reject')
+  p = 'The invitation has been rejected!'
+- elsif status.eql?('accept')
+  p = 'The invitation has been accepted!'

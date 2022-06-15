@@ -20,6 +20,7 @@ module ETestament
           response_data = JSON.parse(response.to_s)['data']
           executor_info = response_data.nil? ? nil : response_data['attributes']
           status = response_data.nil? ? nil : Models::Executor.new.pending_acceptance
+
           Models::Executor.new(executor_info, status)
         rescue HTTP::ConnectionError
           raise Exceptions::ApiServerError

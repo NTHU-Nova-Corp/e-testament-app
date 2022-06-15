@@ -12,12 +12,9 @@ module ETestament
         end
 
         def call(registration_data:)
-          registration_token = SecureMessage.encrypt(registration_data)
-          registration_data['verification_url'] =
-            "#{@config.APP_URL}/auth/signup/#{registration_token}"
-
+          regis_form = Services::Utils::GetRegistrationForm.new(@config).call(registration_data:)
           response = HTTP.post("#{@config.API_URL}/auth/register",
-                               json: SignedMessage.sign(registration_data))
+                               json: SignedMessage.sign(regis_form))
 
           response_data = JSON.parse(response.to_s)
           raise Exceptions::BadRequestError, response_data['message'] if response.code == 400
@@ -25,6 +22,7 @@ module ETestament
         rescue HTTP::ConnectionError
           raise Exceptions::ApiServerError
         end
+
         # rubocop:enabe Metrics/AbcSize, Metrics/MethodLength
       end
     end

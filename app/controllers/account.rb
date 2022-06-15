@@ -12,8 +12,7 @@ module ETestament
 
         routing.post 'executor' do
           email = routing.params['assign_email']
-          # TODO
-          # Services::Executors::AssignExecutor.new(App.config).call(current_account: @current_account, email:)
+          Services::Executors::AssignExecutor.new(App.config).call(current_account: @current_account, email:)
 
           flash[:notice] = "Invitation has been sent to #{email}! Please contact the person to complete the process"
           routing.redirect "/account/#{@current_account.username}"
