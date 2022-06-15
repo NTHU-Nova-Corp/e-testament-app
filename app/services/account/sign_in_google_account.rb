@@ -15,7 +15,12 @@ module ETestament
         def call(access_token:)
           credentials = { access_token: }
 
+          puts '-------------'
+          puts 'access_token'
+
           response = HTTP.post("#{@config.API_URL}/auth/authenticate-google", json: SignedMessage.sign(credentials))
+          puts '-------------'
+          puts response
           Services::Accounts::SignIn.new(@config, @session).call(response:)
         rescue HTTP::ConnectionError
           raise Exceptions::ApiServerError

@@ -75,10 +75,12 @@ module ETestament
         )
 
         flash[:notice] = "Welcome #{current_account.username}!"
+        routing.redirect '/'
         # GET /auth/google_callback
-        routing.get do
-          routing.redirect "/#{routing['state']}"
-        end
+        # routing.get do
+        #   puts routing['state']
+        #   routing.redirect "/#{routing['state']}"
+        # end
       rescue Exceptions::UnauthorizedError => e
         flash.now[:error] = "Error: #{e.message}"
         response.status = e.instance_variable_get(:@status_code)

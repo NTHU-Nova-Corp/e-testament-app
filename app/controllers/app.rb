@@ -33,7 +33,7 @@ module ETestament
 
       # GET /
       routing.root do
-        view :home
+        view :home, locals: { current_account: @current_account }
       end
 
     rescue Exceptions::ApiServerError => e

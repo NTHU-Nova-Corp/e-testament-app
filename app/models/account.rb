@@ -23,6 +23,10 @@ module ETestament
         @account_info ? @account_info['testament_status'] : nil
       end
 
+      def set_testament_status(testament_status:)
+        @account_info['testament_status'] = testament_status
+      end
+
       def logged_out?
         @account_info.nil?
       end
