@@ -59,33 +59,32 @@ module ETestament
 
       @oauth_callback = '/auth/google_callback'
       routing.on 'google_callback' do
-        client = Signet::OAuth2::Client.new({
-                                              client_id: App.config.GOOGLE_API_CLIENT_ID,
-                                              client_secret: App.config.GOOGLE_API_CLIENT_SECRET,
-                                              token_credential_uri: 'https://accounts.google.com/o/oauth2/token',
-                                              redirect_uri: "#{request.base_url}/auth/google_callback",
-                                              code: routing.params['code']
-                                            })
-
-        sso_response = client.fetch_access_token!
-        access_token = sso_response['access_token']
-
-        current_account = Services::Accounts::SignInGoogleAccount.new(App.config, session).call(
-          access_token:
-        )
-
-        flash[:notice] = "Welcome #{current_account.username}!"
-        routing.redirect '/'
         # GET /auth/google_callback
-        # routing.get do
-        #   puts routing['state']
-        #   routing.redirect "/#{routing['state']}"
-        # end
+        routing.get do
+          client = Signet::OAuth2::Client.new({
+                                                client_id: App.config.GOOGLE_API_CLIENT_ID,
+                                                client_secret: App.config.GOOGLE_API_CLIENT_SECRET,
+                                                token_credential_uri: 'https://accounts.google.com/o/oauth2/token',
+                                                redirect_uri: "#{request.base_url}/auth/google_callback",
+                                                code: routing.params['code']
+                                              })
+
+          sso_response = client.fetch_access_token!
+          access_token = sso_response['access_token']
+          current_account = Services::Accounts::SignInGoogleAccount.new(App.config, session).call(
+            access_token:
+          )
+
+          @current_account = Models::CurrentSession.new(session).current_account
+
+          flash[:notice] = "Welcome #{current_account.username}!"
+          routing.redirect '/'
+        end
       rescue Exceptions::UnauthorizedError => e
         flash.now[:error] = "Error: #{e.message}"
         response.status = e.instance_variable_get(:@status_code)
         view :signin, locals: {
-          gg_oauth_url: gg_oauth_url(App.config).to_s
+          gg_oauth_url: gg_oauth_url(App.config)
         }
       end
 
@@ -102,14 +101,14 @@ module ETestament
                    password_conditions: ETestament::PasswordCondition.new.list,
                    new_account:,
                    registration_token:,
-                   gg_oauth_url: gg_oauth_url(App.config).to_s
+                   gg_oauth_url: gg_oauth_url(App.config)
                  }
 
           rescue Exceptions::BadRequestError => e
             flash.now[:error] = "Error: #{e.message}"
             response.status = e.instance_variable_get(:@status_code)
             view :signin, locals: {
-              gg_oauth_url: gg_oauth_url(App.config).to_s
+              gg_oauth_url: gg_oauth_url(App.config)
             }
           end
 
