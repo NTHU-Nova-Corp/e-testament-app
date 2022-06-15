@@ -29,7 +29,7 @@ module ETestament
         secure: true,
         httponly: true,
         samesite: {
-          strict: true
+          lax: true
         }
       }
 
@@ -37,7 +37,7 @@ module ETestament
       config.x_content_type_options = 'nosniff'
       config.x_xss_protection = '1'
       config.x_permitted_cross_domain_policies = 'none'
-      config.referrer_policy = 'origin-when-cross-origin'
+      config.referrer_policy = %w[origin-when-cross-origin strict-origin-when-cross-origin]
 
       # NOTE: single-quotes needed around 'self' and 'none' in CSPs
       # rubocop:disable Lint/PercentStringArray

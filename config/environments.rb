@@ -57,7 +57,7 @@ module ETestament
       use Rack::Session::Pool,
           expire_after: ONE_MONTH,
           httponly: true,
-          same_site: :strict
+          same_site: :lax
 
       # use Rack::Session::Redis,
       #     expire_after: ONE_MONTH,
