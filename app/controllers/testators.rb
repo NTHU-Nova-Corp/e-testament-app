@@ -5,7 +5,6 @@ require_relative './app'
 
 module ETestament
   # Web controller for ETestament API
-  # rubocop:disable Metrics/ClassLength
   class App < Roda
     # rubocop:disable Metrics/BlockLength
     route('testators') do |routing|
@@ -22,7 +21,6 @@ module ETestament
 
       # GET /testators/:id/heirs
       routing.on String do |testator_id|
-
         routing.post 'reject' do
           flash[:notice] = 'The invitation has been rejected'
           dir_path = get_view_path(breadcrumb: 'review', in_page: 'review')
@@ -54,10 +52,7 @@ module ETestament
 
         view dir_path, locals: { testators: }
       end
-
     end
     # rubocop:enable Metrics/BlockLength
   end
-
-  # rubocop:enable Metrics/ClassLength
 end

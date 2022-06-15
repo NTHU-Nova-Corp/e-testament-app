@@ -1,9 +1,10 @@
 script src="/js/properties/properties.js"
 
-button#add-properties-btn.btn.btn-primary.mb-2.float-right type="button" data-bs-toggle="modal" data-bs-target="#add-property-modal"
-  span
-    i.fa-solid.fa-plus.mx-2
-    | Add New Property
+- if testament_status == "Under Edition"
+  button#add-properties-btn.btn.btn-primary.mb-2.float-right type="button" data-bs-toggle="modal" data-bs-target="#add-property-modal"
+    span
+      i.fa-solid.fa-plus.mx-2
+      | Add New Property
 
 table.table.table-hover
   thead
@@ -12,7 +13,8 @@ table.table.table-hover
       th scope="col"  Type
       th scope="col"  Description
       th.text-center scope="col"  View
-      th.text-center scope="col"  Manage
+      - if testament_status == "Under Edition"
+        th.text-center scope="col"  Manage
   tbody
   - properties.all.each do |property|
     tr
@@ -24,11 +26,12 @@ table.table.table-hover
           i.fa-solid.fa-people-line.icon-margin
         a.btn.btn-success.icon-btn type="button" title="Documents" href="/properties/#{property.id}/documents"
           i.fa-solid.fa-file-lines
-      td.text-center
-        button.btn.btn-info.mx-1.icon-btn type="button" data-bs-toggle="modal" data-bs-target="#update-property-modal" onClick="open_update_property_modal(#{property.to_json})"
-          i.fa-solid.fa-pen-to-square
-        button.btn.btn-danger.icon-btn type="button" data-bs-toggle="modal" data-bs-target="#delete-property-modal" onClick="open_delete_property_modal(#{property.to_json})"
-          i.fa-solid.fa-trash
+      - if testament_status == "Under Edition"
+        td.text-center
+          button.btn.btn-info.mx-1.icon-btn type="button" data-bs-toggle="modal" data-bs-target="#update-property-modal" onClick="open_update_property_modal(#{property.to_json})"
+            i.fa-solid.fa-pen-to-square
+          button.btn.btn-danger.icon-btn type="button" data-bs-toggle="modal" data-bs-target="#delete-property-modal" onClick="open_delete_property_modal(#{property.to_json})"
+            i.fa-solid.fa-trash
 
 #add-property-modal.modal.fade
   .modal-dialog.modal-lg role="document"

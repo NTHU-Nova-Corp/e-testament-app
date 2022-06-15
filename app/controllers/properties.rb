@@ -71,7 +71,8 @@ module ETestament
               dir_path = get_view_path(breadcrumb: "#{@properties_dir}/documents", display: property.name)
 
               view dir_path,
-                   locals: { property_id:, documents:, document_to_download: }
+                   locals: { property_id:, documents:, document_to_download:,
+                             testament_status: @current_account.testament_status }
             rescue Exceptions::BadRequestError => e
               flash[:error] = "Error: #{e.message}"
               routing.redirect @documents_route
@@ -88,7 +89,8 @@ module ETestament
             dir_path = get_view_path(breadcrumb: "#{@properties_dir}/documents", display: property.name)
 
             view dir_path,
-                 locals: { property_id:, documents:, document_to_download: nil }
+                 locals: { property_id:, documents:, document_to_download: nil,
+                           testament_status: @current_account.testament_status }
           end
 
           routing.post do
@@ -151,7 +153,7 @@ module ETestament
             dir_path = get_view_path(breadcrumb: "#{@properties_dir}/heirs", display: property.name)
 
             view dir_path,
-                 locals: { property_id:, property_heirs:, heirs: }
+                 locals: { property_id:, property_heirs:, heirs:, testament_status: @current_account.testament_status }
           end
 
           routing.post do
@@ -177,7 +179,7 @@ module ETestament
         properties = Services::Properties::GetAll.new(App.config).call(current_account: @current_account)
         types = Services::Properties::GetTypes.new(App.config).call(current_account: @current_account)
 
-        view dir_path, locals: { properties:, types: }
+        view dir_path, locals: { properties:, types:, testament_status: @current_account.testament_status }
       end
 
       # POST /properties

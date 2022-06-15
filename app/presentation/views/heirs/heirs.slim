@@ -1,9 +1,9 @@
 script src="/js/heirs/heirs.js"
-
-button#add-heirs-btn.btn.btn-primary.mb-2.float-right type="button" data-bs-toggle="modal" data-bs-target="#add-heir-modal"
-  span
-    i.fa-solid.fa-plus.mx-2
-    | Add New Heir
+- if testament_status == "Under Edition"
+  button#add-heirs-btn.btn.btn-primary.mb-2.float-right type="button" data-bs-toggle="modal" data-bs-target="#add-heir-modal"
+    span
+      i.fa-solid.fa-plus.mx-2
+      | Add New Heir
 
 table.table.table-hover
   thead
@@ -12,7 +12,8 @@ table.table.table-hover
       th scope="col"  Relation
       th scope="col"  Email
       th.text-center scope="col"  View
-      th.text-center scope="col"  Manage
+      - if testament_status == "Under Edition"
+        th.text-center scope="col"  Manage
   tbody
   - heirs.all.each do |heir|
     tr
@@ -23,11 +24,12 @@ table.table.table-hover
       td.text-center
         a.btn.btn-info.mx-1.icon-btn type="button" title="Heirs" href="/heirs/#{heir.id}/properties"
           i.fa-solid.fa-landmark.icon-margin
-      td.text-center
-        button.btn.btn-info.mx-1 type="button" data-bs-toggle="modal" data-bs-target="#update-heir-modal" onClick="open_update_heir_modal(#{heir.to_json})"
-          i.fa-solid.fa-pen-to-square
-        button.btn.btn-danger.mx-1 type="button" data-bs-toggle="modal" data-bs-target="#delete-heir-modal" onClick="open_delete_heir_modal(#{heir.to_json})"
-          i.fa-solid.fa-trash
+      - if testament_status == "Under Edition"
+        td.text-center
+          button.btn.btn-info.mx-1 type="button" data-bs-toggle="modal" data-bs-target="#update-heir-modal" onClick="open_update_heir_modal(#{heir.to_json})"
+            i.fa-solid.fa-pen-to-square
+          button.btn.btn-danger.mx-1 type="button" data-bs-toggle="modal" data-bs-target="#delete-heir-modal" onClick="open_delete_heir_modal(#{heir.to_json})"
+            i.fa-solid.fa-trash
 
 #add-heir-modal.modal.fade
   .modal-dialog.modal-lg role="document"
