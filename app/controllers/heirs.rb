@@ -80,7 +80,7 @@ module ETestament
 
             dir_path = get_view_path(breadcrumb: "#{@heirs_dir}/properties", display: heir.presentation_name)
             view dir_path,
-                 locals: { heir_id:, property_heirs:, properties: }
+                 locals: { heir_id:, property_heirs:, properties:, testament_status: @current_account.testament_status }
           end
 
           routing.post do
@@ -104,7 +104,7 @@ module ETestament
         dir_path = get_view_path(breadcrumb: 'heirs', in_page: 'heirs')
         relations = Services::Heirs::GetRelations.new(App.config).call(current_account: @current_account)
         heirs = Services::Heirs::GetAll.new(App.config).call(current_account: @current_account)
-        view dir_path, locals: { heirs:, relations: }
+        view dir_path, locals: { heirs:, relations:, testament_status: @current_account.testament_status }
       end
 
       # POST /heirs

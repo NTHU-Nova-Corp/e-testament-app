@@ -2,11 +2,12 @@ script src='/js/properties/documents.js'
 
 - unless document_to_download.nil?
   script createAndDownloadBlobFile("#{document_to_download.file_name}", "#{document_to_download.content}")
-
-button#add-document-btn.btn.btn-primary.mb-2.float-right type="button" data-bs-toggle="modal" data-bs-target="#add_document_modal"
-  span 
-    i.fa-solid.fa-plus.mx-2
-    | Add New Document
+      
+- if testament_status == "Under Edition"
+  button#add-document-btn.btn.btn-primary.mb-2.float-right type="button" data-bs-toggle="modal" data-bs-target="#add_document_modal"
+    span 
+      i.fa-solid.fa-plus.mx-2
+      | Add New Document
 
 table.table.table-hover
   thead
@@ -14,7 +15,8 @@ table.table.table-hover
       th scope="col"  Name
       th scope="col"  Description
       th.text-center scope="col"  Download
-      th.text-center scope="col"  Manage
+      - if testament_status == "Under Edition"
+        th.text-center scope="col"  Manage
   tbody
   - documents.all.each do |document|
     tr
@@ -23,11 +25,12 @@ table.table.table-hover
       td.text-center
         a.btn.btn-success type="button" href="/properties/#{property_id}/documents/#{document.id}"
           i.fa-solid.fa-file-lines
-      td.text-center
-        a.btn.btn-info.mx-1 type="button"
-          i.fa-solid.fa-pen-to-square
-        a.btn.btn-danger type="button" data-bs-toggle="modal" data-bs-target="#delete-property-document-modal" onClick="open_delete_document_from_property_modal(#{document.to_json})"
-          i.fa-solid.fa-trash
+      - if testament_status == "Under Edition"
+        td.text-center
+          a.btn.btn-info.mx-1 type="button"
+            i.fa-solid.fa-pen-to-square
+          a.btn.btn-danger type="button" data-bs-toggle="modal" data-bs-target="#delete-property-document-modal" onClick="open_delete_document_from_property_modal(#{document.to_json})"
+            i.fa-solid.fa-trash
 
 #add_document_modal.modal.fade
   .modal-dialog.modal-lg role="document"

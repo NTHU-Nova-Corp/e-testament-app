@@ -1,9 +1,9 @@
 script src='/js/properties/heirs.js'
-
-button#add-heir-btn.btn.btn-primary.mb-2.float-right type="button" data-bs-toggle="modal" data-bs-target="#add-heir-modal"
-  span
-    i.fa-solid.fa-plus.mx-2
-    | Associate Heir
+- if testament_status == "Under Edition"
+  button#add-heir-btn.btn.btn-primary.mb-2.float-right type="button" data-bs-toggle="modal" data-bs-target="#add-heir-modal"
+    span
+      i.fa-solid.fa-plus.mx-2
+      | Associate Heir
 
 table.table.table-hover
   thead
@@ -12,7 +12,8 @@ table.table.table-hover
       th scope="col"  Relation
       th scope="col"  Email
       th scope="col"  Percentage
-      th.text-center scope="col"  Manage
+      - if testament_status == "Under Edition"
+        th.text-center scope="col"  Manage
   tbody
   - property_heirs.all.each do |property_heir|
     tr
@@ -20,11 +21,12 @@ table.table.table-hover
       td = property_heir.heir.relation
       td = property_heir.heir.email
       td = "#{property_heir.percentage} %"
-      td.text-center
-        button.btn.btn-info.mx-1.icon-btn type="button" data-bs-toggle="modal" data-bs-target="#update-property-heir-modal" onClick="open_update_heir_from_property_modal(#{property_heir.to_json})"
-          i.fa-solid.fa-pen-to-square
-        button.btn.btn-danger.icon-btn type="button" data-bs-toggle="modal" data-bs-target="#delete-property-heir-modal" onClick="open_delete_heir_from_property_modal(#{property_heir.to_json})"
-          i.fa-solid.fa-trash
+      - if testament_status == "Under Edition"
+        td.text-center
+          button.btn.btn-info.mx-1.icon-btn type="button" data-bs-toggle="modal" data-bs-target="#update-property-heir-modal" onClick="open_update_heir_from_property_modal(#{property_heir.to_json})"
+            i.fa-solid.fa-pen-to-square
+          button.btn.btn-danger.icon-btn type="button" data-bs-toggle="modal" data-bs-target="#delete-property-heir-modal" onClick="open_delete_heir_from_property_modal(#{property_heir.to_json})"
+            i.fa-solid.fa-trash
 
 #add-heir-modal.modal.fade
   .modal-dialog.modal-lg role="document"

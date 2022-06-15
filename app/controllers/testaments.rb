@@ -14,9 +14,20 @@ module ETestament
 
       # POST /testament/complete
       routing.post 'complete' do
-        Services::Testament::Get.new(App.config).call(current_account: @current_account)
+        Services::Testament::MarkAsComplete.new(App.config, session).call(current_account: @current_account)
 
         flash[:notice] = 'Testament completed!'
+      rescue Exceptions::BadRequestError => e
+        flash[:error] = "Error: #{e.message}"
+      ensure
+        routing.redirect @testament_route
+      end
+
+      # POST /testament/enable-edition
+      routing.post 'enable-edition' do
+        Services::Testament::SetUnderEdition.new(App.config, session).call(current_account: @current_account)
+
+        flash[:notice] = 'Testament is now under edition!'
       rescue Exceptions::BadRequestError => e
         flash[:error] = "Error: #{e.message}"
       ensure
@@ -28,7 +39,7 @@ module ETestament
         dir_path = get_view_path(breadcrumb: 'testament', in_page: 'testament')
         properties = Services::Testament::Get.new(App.config).call(current_account: @current_account)
 
-        view dir_path, locals: { properties: }
+        view dir_path, locals: { properties:, testament_status: @current_account.testament_status }
       end
     end
   end

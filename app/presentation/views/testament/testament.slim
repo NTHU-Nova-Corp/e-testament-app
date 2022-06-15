@@ -1,3 +1,9 @@
+- if testament_status == 'Under Edition'
+  form method='post' action='/testament/complete' id='form-assign-executor'
+    button.btn.float-right.mb-2.btn-primary type="submit" Mark As Completed
+- if testament_status == 'Completed'
+  form method='post' action='/testament/enable-edition' id='form-assign-executor'
+    button.btn.float-right.mb-2.btn-primary type="submit" Enable Edition
 table.table.table-hover
   thead
     tr
@@ -12,7 +18,3 @@ table.table.table-hover
       td
         - property.heirs.all.each do |heir|
           = "#{heir.percentage}% - #{heir.first_name} #{heir.last_name}"
-          br
-
-  form method='post' action='/testament/complete' id='form-assign-executor'
-    button.btn.btn-primary type="submit" Mark As Completed
