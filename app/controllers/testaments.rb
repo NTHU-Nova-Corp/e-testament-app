@@ -11,15 +11,6 @@ module ETestament
       @testament_route = '/testament'
       @testaments_dir = 'testament'
 
-      # Does not require to login
-      routing.get 'read' do
-        routing.on String do |key|
-          dir_path = get_view_path(breadcrumb: "#{@testaments_dir}/read")
-
-          view @testaments_dir
-        end
-      end
-
       routing.redirect '/auth/signin' unless @current_account.logged_in?
 
       # POST /testament/complete

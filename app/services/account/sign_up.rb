@@ -11,7 +11,6 @@ module ETestament
           @config = config
         end
 
-        # rubocop:disable Metrics/MethodLength
         def call(registration_token:, first_name:, last_name:, password:)
           new_account = SecureMessage.decrypt(registration_token)
           username = new_account['username']
@@ -22,12 +21,9 @@ module ETestament
           response_data = JSON.parse(response.to_s)
           raise Exceptions::BadRequestError, response_data['message'] if response.code == 400
           raise Exceptions::ApiServerError if response.code != 201
-
         rescue HTTP::ConnectionError
           raise ApiServerError
         end
-
-        # rubocop:enable Metrics/MethodLength
       end
     end
   end

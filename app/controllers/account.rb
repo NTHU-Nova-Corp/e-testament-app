@@ -7,9 +7,9 @@ require_relative '../instances/password_conditions'
 module ETestament
   # Web controller for ETestament API
   class App < Roda
+    # rubocop:disable Metrics/BlockLength:
     route('account') do |routing|
       routing.on do
-
         routing.on 'executor' do
           routing.on String do |executor_email|
             routing.post 'cancel' do
@@ -46,6 +46,8 @@ module ETestament
           view dir_path, locals: { executor: }
         end
       end
+
+      # rubocop:enable Metrics/BlockLength:
     end
   end
 end
