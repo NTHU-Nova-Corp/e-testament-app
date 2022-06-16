@@ -1,3 +1,6 @@
+script src="/js/testators/testators.js" integrity="sha384-tLuhqVYMyq63VcP4AA7wphZijeWK7Rw3IgqqAEH4cGR/+DEfWvF6ppXFamxqrNo5" crossorigin="anonymous"
+
+
 table#content-table.content-table.table.table-hover.display
   thead
     tr
@@ -17,8 +20,23 @@ table#content-table.content-table.table.table-hover.display
           i.fa-solid.fa-people-line.icon-margin
       td.text-center
         - if testator.testament_status == 'Completed'
-          button.btn.btn-primary.mx-1 type="button" title="Release"
+          button.btn.btn-primary.mx-1 type="button" title="Release" data-bs-toggle="modal" data-bs-target="#release-modal" onClick="open_release_testament_modal(#{testator.to_json})"
             i.fa-solid.fa-chart-pie
         - if testator.testament_status == 'Released'
-          button.btn.btn-success.mx-1 type="button" title="Release"
-            i.fa-brands.fa-readme
+          button.btn.btn-success.mx-1 type="button" title="Read" data-bs-toggle="modal" data-bs-target="#release-modal" onClick="open_release_testament_modal(#{testator.to_json})"
+            i.fa-solid.fa-readme
+
+#release-modal.modal.fade
+  .modal-dialog role="testament"
+    .modal-content
+      form#form-release-modal method='post' action='/testator//release'
+        .modal-header
+          h5#release-title.modal-title Confirm Release
+          button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+            span aria-hidden="true"
+        .modal-body
+          p#release-text 
+          input#delete-property-id type="hidden" name="delete_property_id"
+        .modal-footer
+          button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Cancel
+          button.btn.btn-primary type="submit"  Release

@@ -19,20 +19,43 @@ module ETestament
         view review_dir_path, locals: { testator: @request_testator, status: 'review' }
       end
 
-      # GET /testators/:id/heirs
       routing.on String do |testator_id|
+        # POST /testators/:testator_id/reject
         routing.post 'reject' do
           Services::Testators::RejectRequest.new(App.config).call(current_account: @current_account,
                                                                   testator_id:)
-          view review_dir_path, locals: { status: 'reject' }
+          flash[:notice] = 'The invitation has been rejected!'
+        rescue Exceptions::BadRequestError => e
+          flash[:error] = "Error: #{e.message}"
+        ensure
+          routing.redirect '/'
         end
 
+        # POST /testators/:testator_id/accept
         routing.post 'accept' do
           Services::Testators::AcceptRequest.new(App.config).call(current_account: @current_account,
                                                                   testator_id:)
-          view review_dir_path, locals: { status: 'accept' }
+          flash[:notice] = 'The invitation has been accepted!'
+        rescue Exceptions::BadRequestError => e
+          flash[:error] =
+            "Error: #{e.message}"
+        ensure
+          routing.redirect @testators_route
         end
 
+        # POST /testators/:testator_id/release
+        routing.post 'release' do
+          Services::Testators::ReleaseTestament.new(App.config).call(current_account: @current_account,
+                                                                     testator_id:)
+          flash[:notice] =
+            'The invitation has been rejected!'
+        rescue Exceptions::BadRequestError => e
+          flash[:error] = "Error: #{e.message}"
+        ensure
+          routing.redirect @testators_route
+        end
+
+        # GET /testators/:testator_id
         routing.get do
           heirs = Services::Testators::Heirs::GetAll.new(App.config).call(current_account: @current_account,
                                                                           testator_id:)
