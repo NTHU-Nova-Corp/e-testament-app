@@ -14,6 +14,9 @@ table#content-table.table.table-hover.display.content-table
       - if testament_status == "Under Edition"
         th.text-center = 'Manage'
   tbody
+  - if property_heirs.all.size.zero?
+    tr.text-center
+      td colspan="4" = 'No associate information available'
   - for property_heir in property_heirs.all
     tr
       td = property_heir.property.name

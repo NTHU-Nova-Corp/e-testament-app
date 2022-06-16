@@ -16,6 +16,9 @@ table.table.table-hover
       - if testament_status == "Under Edition"
         th.text-center scope="col"  Manage
   tbody
+  - if properties.all.size.zero?
+    tr.text-center
+      td colspan="5" = 'No property information available'
   - properties.all.each do |property|
     tr
       th scope="row" = property.name
