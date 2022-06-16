@@ -21,7 +21,8 @@ module ETestament
 
       if @current_account.logged_in?
         begin
-          @request_testator = Services::Testators::GetReceivedRequest.new(App.config).call(current_account: @current_account)
+          @request_testator = Services::Testators::GetReceivedRequest.new(App.config)
+                                                                     .call(current_account: @current_account)
         rescue StandardError
           @request_testator = Models::Testator.new(nil)
         end

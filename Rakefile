@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Style/HashSyntax
 require 'rake/testtask'
 require './require_app'
 
@@ -72,4 +71,3 @@ namespace :session do
     puts "#{wiped.count} sessions deleted"
   end
 end
-# rubocop:enable Style/HashSyntax

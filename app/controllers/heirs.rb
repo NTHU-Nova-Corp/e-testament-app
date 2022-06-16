@@ -21,9 +21,9 @@ module ETestament
                                                      email: routing.params['update_email'],
                                                      relation_id: routing.params['update_relation_id'])
         flash[:notice] = 'Heir updated!'
+        routing.redirect @heirs_route
       rescue Exceptions::BadRequestError => e
         flash[:error] = "Error: #{e.message}"
-      ensure
         routing.redirect @heirs_route
       end
 
@@ -32,9 +32,9 @@ module ETestament
         Services::Heirs::Delete.new(App.config).call(current_account: @current_account, delete_heir_id:)
 
         flash[:notice] = 'Heir deleted!'
+        routing.redirect @heirs_route
       rescue Exceptions::BadRequestError => e
         flash[:error] = "Error: #{e.message}"
-      ensure
         routing.redirect @heirs_route
       end
 
@@ -50,9 +50,9 @@ module ETestament
                                                                                     property_id:)
 
               flash[:notice] = 'Property associated deleted from heir!'
+              routing.redirect @properties_route
             rescue Exceptions::BadRequestError => e
               flash[:error] = "Error: #{e.message}"
-            ensure
               routing.redirect @properties_route
             end
 
@@ -64,9 +64,9 @@ module ETestament
                                                                percentage: routing.params['update_percentage'])
 
               flash[:notice] = 'Property association updated!'
+              routing.redirect @properties_route
             rescue Exceptions::BadRequestError => e
               flash[:error] = "Error: #{e.message}"
-            ensure
               routing.redirect @properties_route
             end
           end
@@ -91,9 +91,9 @@ module ETestament
                                                                 percentage: routing.params['percentage'])
 
             flash[:notice] = 'Property associated to heir!'
+            routing.redirect @properties_route
           rescue Exceptions::BadRequestError => e
             flash[:error] = "Error: #{e.message}"
-          ensure
             routing.redirect @properties_route
           end
         end
@@ -114,9 +114,9 @@ module ETestament
         Services::Heirs::Create.new(App.config).call(current_account: @current_account, **new_heir)
 
         flash[:notice] = 'Heir created!'
+        routing.redirect @heirs_route
       rescue Exceptions::BadRequestError => e
         flash[:error] = "Error: #{e.message}"
-      ensure
         routing.redirect @heirs_route
       end
     end

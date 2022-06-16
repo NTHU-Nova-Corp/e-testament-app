@@ -15,7 +15,8 @@ module ETestament
         @email = heir_info['attributes']['email']
         @relation_id = heir_info['attributes']['relation_id']
         @relation = heir_info['attributes']['relation']
-        @presentation_name = "#{heir_info['attributes']['first_name']} #{heir_info['attributes']['last_name']} (#{heir_info['attributes']['relation']})"
+        @presentation_name = "#{heir_info['attributes']['first_name']}
+        #{heir_info['attributes']['last_name']} (#{heir_info['attributes']['relation']})"
       end
       # rubocop:enable Metrics/AbcSize
 

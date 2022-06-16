@@ -12,6 +12,7 @@ module ETestament
             @config = config
           end
 
+          # rubocop:disable Metrics/AbcSize
           def call(current_account:, property_id:)
             response = HTTP.auth("Bearer #{current_account.auth_token}")
                            .get("#{@config.API_URL}/properties/#{property_id}/documents")
@@ -24,6 +25,7 @@ module ETestament
           rescue HTTP::ConnectionError
             raise Exceptions::ApiServerError
           end
+          # rubocop:enable Metrics/AbcSize
         end
       end
     end

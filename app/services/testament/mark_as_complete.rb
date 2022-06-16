@@ -12,9 +12,9 @@ module ETestament
           @session = session
         end
 
-        def call(current_account:)
+        def call(current_account:, min_amount_heirs:)
           response = HTTP.auth("Bearer #{current_account.auth_token}")
-                         .post("#{@config.API_URL}/testaments/complete")
+                         .post("#{@config.API_URL}/testaments/complete", json: { min_amount_heirs: })
 
           response_data = JSON.parse(response.to_s)
           raise Exceptions::BadRequestError, response_data['message'] if response.code == 400

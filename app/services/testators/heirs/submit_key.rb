@@ -4,17 +4,17 @@ require 'http'
 
 module ETestament
   module Services
-    module Properties
-      module Documents
-        # Deletes a document
-        class Delete
+    module Testators
+      module Heirs
+        # Submits the key for a particular heir
+        class SubmitKey
           def initialize(config)
             @config = config
           end
 
-          def call(current_account:, property_id:, document_id:)
-            response = HTTP.auth("Bearer #{current_account.auth_token}")
-                           .post("#{@config.API_URL}/properties/#{property_id}/documents/#{document_id}/delete")
+          def call(heir_id:, heir_key:)
+            body = { heir_id:, heir_key: }
+            response = HTTP.post("#{@config.API_URL}/testators/submit-key", json: body)
 
             response_data = JSON.parse(response.to_s)
             raise Exceptions::BadRequestError, response_data['message'] if response.code == 400

@@ -1,6 +1,5 @@
 - if testament_status == 'Under Edition'
-  form method='post' action='/testament/complete' id='form-assign-executor'
-    button.btn.float-right.mb-2.btn-primary type="submit" Mark As Completed
+  button.btn.float-right.mb-2.btn-primary type="button" data-bs-toggle="modal" data-bs-target="#mark-completed-modal" Mark As Completed
 - if testament_status == 'Completed'
   form method='post' action='/testament/enable-edition' id='form-assign-executor'
     button.btn.float-right.mb-2.btn-primary type="submit" Enable Edition
@@ -18,3 +17,21 @@ table.table.table-hover
       td
         - property.heirs.all.each do |heir|
           = "#{heir.percentage}% - #{heir.first_name} #{heir.last_name}"
+          br
+
+
+#mark-completed-modal.modal.fade
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      form#mark-completed-form method='post' action='/testament/complete'
+        .modal-header
+          h5.modal-title#update-title Mark Testament As Completed
+          button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+            span aria-hidden="true"
+        .modal-body
+          .form-group
+            label.col-form-label for="min-amount-heirs" Min number of heirs needed to read testament*
+            input#min-amount-heirs.form-control name="min_amount_heirs" placeholder=("##") type="number" required="true" /
+        .modal-footer
+          button#close-property-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Cancel
+          button#save-property-btn.btn.btn-primary type="submit"  Save

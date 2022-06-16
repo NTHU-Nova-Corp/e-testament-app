@@ -1,4 +1,4 @@
-script src='/js/properties/heirs.js'
+script src='/js/properties/heirs.js' integrity="sha384-ryc8b1oDkeNjulV5SltrDlJtlMl/ELxve4MFzquXNiDkTYqABvE5a/HP92ATC1OO"
 - if testament_status == "Under Edition"
   button#add-heir-btn.btn.btn-primary.mb-2.float-right type="button" data-bs-toggle="modal" data-bs-target="#add-heir-modal"
     span
@@ -61,7 +61,7 @@ table.table.table-hover
           input#update-property-id type="hidden" name="delete_property_id"
           input#update-heir-id type="hidden" name="delete_heir_id"
           .form-group
-            label.col-form-label for="pdate-percentage" Percentag e*
+            label.col-form-label for="pdate-percentage" Percentage*
             input#update-percentage.form-control name="update_percentage" placeholder=("##") type="number" required="true" /
         .modal-footer
           button#close-property-btn.btn.btn-secondary data-bs-dismiss="modal" type="button"  Cancel

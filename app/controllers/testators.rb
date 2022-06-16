@@ -11,6 +11,34 @@ module ETestament
       @testators_route = '/testators'
       @testators_dir = 'testators'
 
+      routing.on 'submit-key' do
+        routing.on String do |token|
+          @submit_key_route = "/testators/submit-key/#{token}"
+          routing.get do
+            heir_data = SecureMessage.decrypt(token)
+            view 'testators/submit_key',
+                 locals: { token:, heir_presentation_name: heir_data['heir_presentation_name'],
+                           heir_id: heir_data['heir_id'] }
+
+            # view 'testators/submit_key', locals: { token:, heir_presentation_name: 'Cesar', heir_id: 'test' }
+          end
+
+          routing.post do
+            heir_data = SecureMessage.decrypt(token)
+
+            Services::Testators::Heirs::SubmitKey.new(App.config, session)
+                                                 .call(heir_id: heir_data['heir_id'],
+                                                       heir_key: routing.params['percentage'])
+
+            flash[:notice] = 'Key submitted!'
+            routing.redirect @submit_key_route
+          rescue Exceptions::BadRequestError => e
+            flash[:error] = "Error: #{e.message}"
+            routing.redirect @submit_key_route
+          end
+        end
+      end
+
       routing.redirect '/auth/signin' unless @current_account.logged_in?
 
       review_dir_path = get_view_path(breadcrumb: 'review', in_page: 'review')
@@ -19,20 +47,41 @@ module ETestament
         view review_dir_path, locals: { testator: @request_testator, status: 'review' }
       end
 
-      # GET /testators/:id/heirs
       routing.on String do |testator_id|
+        # POST /testators/:testator_id/reject
         routing.post 'reject' do
           Services::Testators::RejectRequest.new(App.config).call(current_account: @current_account,
                                                                   testator_id:)
-          view review_dir_path, locals: { status: 'reject' }
+          flash[:notice] = 'The invitation has been rejected!'
+          routing.redirect '/'
+        rescue Exceptions::BadRequestError => e
+          flash[:error] = "Error: #{e.message}"
+          routing.redirect '/'
         end
 
+        # POST /testators/:testator_id/accept
         routing.post 'accept' do
           Services::Testators::AcceptRequest.new(App.config).call(current_account: @current_account,
                                                                   testator_id:)
-          view review_dir_path, locals: { status: 'accept' }
+          flash[:notice] = 'The invitation has been accepted!'
+          routing.redirect @testators_route
+        rescue Exceptions::BadRequestError => e
+          flash[:error] = "Error: #{e.message}"
+          routing.redirect @testators_route
         end
 
+        # POST /testators/:testator_id/release
+        routing.post 'release' do
+          Services::Testators::ReleaseTestament.new(App.config).call(current_account: @current_account,
+                                                                     testator_id:)
+          flash[:notice] = 'The invitation has been rejected!'
+          routing.redirect @testators_route
+        rescue Exceptions::BadRequestError => e
+          flash[:error] = "Error: #{e.message}"
+          routing.redirect @testators_route
+        end
+
+        # GET /testators/:testator_id
         routing.get do
           heirs = Services::Testators::Heirs::GetAll.new(App.config).call(current_account: @current_account,
                                                                           testator_id:)

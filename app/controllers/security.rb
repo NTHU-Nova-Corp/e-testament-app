@@ -11,9 +11,11 @@ module ETestament
     plugin :environments
     plugin :multi_route
 
+    APP_URL = ENV.fetch('APP_URL', nil)
     IMG_SRC = %w[data:].freeze
     FONT_SRC = %w[https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com].freeze
-    SCRIPT_SRC = %w[https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com].freeze
+    SCRIPT_SRC = %w[https://cdnjs.cloudflare.com https://cdn.jsdelivr.net
+                    https://code.jquery.com].freeze
     STYLE_SRC = %w[https://bootswatch.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com].freeze
     configure :production do
       use Rack::SslEnforcer, hsts: true
@@ -49,7 +51,7 @@ module ETestament
         connect_src: %w[wws:],
         img_src: %w['self'] + IMG_SRC,
         font_src: %w['self'] + FONT_SRC,
-        script_src: %w['self'] + SCRIPT_SRC,
+        script_src: %w['self'] + SCRIPT_SRC + %w['unsafe-inline'],
         style_src: %w['self'] + STYLE_SRC,
         form_action: %w['self'],
         frame_ancestors: %w['none'],
