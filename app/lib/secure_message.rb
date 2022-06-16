@@ -2,7 +2,7 @@
 
 require 'base64'
 require 'rbnacl'
-
+require 'cgi'
 # Encrypt and Decrypt from Database
 class SecureMessage
   # Generate key for Rake tasks (typically not called at runtime)
@@ -26,6 +26,7 @@ class SecureMessage
 
   # Encrypt or else return nil if data is nil
   def self.encrypt(message)
+
     return nil unless message
 
     message_json = message.to_json
@@ -37,7 +38,6 @@ class SecureMessage
   # Decrypt or else return nil if database value is nil already
   def self.decrypt(ciphertext64)
     return nil unless ciphertext64
-
     ciphertext = Base64.urlsafe_decode64(ciphertext64)
     simple_box = RbNaCl::SimpleBox.from_secret_key(key)
     message_json = simple_box.decrypt(ciphertext)
