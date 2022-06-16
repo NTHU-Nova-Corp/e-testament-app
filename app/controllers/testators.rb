@@ -26,7 +26,7 @@ module ETestament
           routing.post do
             heir_data = SecureMessage.decrypt(token)
 
-            Services::Testators::Heirs::SubmitKey.new(App.config, session)
+            Services::Testators::Heirs::SubmitKey.new(App.config)
                                                  .call(heir_id: heir_data['heir_id'],
                                                        heir_key: routing.params['percentage'])
 
