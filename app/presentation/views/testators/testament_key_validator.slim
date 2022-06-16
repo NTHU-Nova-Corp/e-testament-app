@@ -1,0 +1,27 @@
+h3 Testament Read Validator
+p In order to read the testament at least #{testator.min_amount_heirs} heirs needs to submit their keys to enable the read option:
+a.btn.btn-primary.mx-1.float-right type="button" title="Reload" href="/testators/#{testator.id}/validate-keys"
+  i.fa-solid.fa-rotate-right
+h3 Heir Keys Submitted: #{heirs.amount_signed?}/#{testator.min_amount_heirs}
+table.table.table-hover
+  thead
+    tr
+      th scope="col"  Name
+      th scope="col"  Email
+      th.text-center scope="col"  Submitted
+  tbody
+  - heirs.all.each do |heir|
+    tr
+      td = heir.presentation_name
+      td = heir.email
+      td.text-center
+        - if heir.key_submitted
+          button.btn.btn-info.mx-1 type="button"
+            i.fa-solid.fa-check
+        - unless heir.key_submitted
+          button.btn.btn-danger.mx-1 type="button"
+            i.fa-solid.fa-xmark
+
+- if heirs.amount_signed? >= testator.min_amount_heirs
+  a#add-heir-btn.btn.btn-primary.mb-2.float-right type="button" title="Read" href="/testators/#{testator.id}/read"
+    span Read Testament

@@ -1,0 +1,23 @@
+- if testament_status == 'Under Edition'
+  button.btn.float-right.mb-2.btn-primary type="button" data-bs-toggle="modal" data-bs-target="#mark-completed-modal" Mark As Completed
+- if testament_status == 'Completed'
+  form method='post' action='/testament/enable-edition' id='form-assign-executor'
+    button.btn.float-right.mb-2.btn-primary type="submit" Enable Edition
+table.table.table-hover
+  thead
+    tr
+      th scope="col"  Name
+      th scope="col"  Description
+      th scope="col"  Heir Distribution
+      th scope="col"  Documents
+      a.btn.btn-success.icon-btn type="button" title="Documents" href="/testators/#{testator.id}/documents"
+        i.fa-solid.fa-file-lines
+  tbody
+  - properties.all.each do |property|
+    tr
+      th scope="row" = property.name
+      td = property.description
+      td
+        - property.heirs.all.each do |heir|
+          = "#{heir.percentage}% - #{heir.first_name} #{heir.last_name}"
+          br
