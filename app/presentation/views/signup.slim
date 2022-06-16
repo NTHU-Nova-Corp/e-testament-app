@@ -1,4 +1,4 @@
-script src="/js/signup.js" integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb"
+script src="/js/signup.js" integrity="sha384-GbcU8/ReC6Ir77/FxjdzwXiY9ctLSxJfA1+ZgPtYTUu/9McaFQKR5cf8NRpoZ1Ic"
 form method='post' action='/auth/signup/#{registration_token}' id='form-signup'
   .card.border-secondary.w-75.center.mx-auto
     .card-header Sign up
@@ -20,7 +20,6 @@ form method='post' action='/auth/signup/#{registration_token}' id='form-signup'
       .form-group
         label.col-form-label.mt-4 for="last_name"  Last name*
         input#last_name.form-control name="last_name" placeholder=("Enter last name") type="text" required="true" /
-
 
       .form-group
         label.form-label.mt-4 for="password" Password*
