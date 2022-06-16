@@ -74,7 +74,7 @@ module ETestament
         routing.post 'release' do
           Services::Testators::ReleaseTestament.new(App.config).call(current_account: @current_account,
                                                                      testator_id:)
-          flash[:notice] = 'The invitation has been rejected!'
+          flash[:notice] = 'The testament has been released!'
           routing.redirect @testators_route
         rescue Exceptions::BadRequestError => e
           flash[:error] = "Error: #{e.message}"
