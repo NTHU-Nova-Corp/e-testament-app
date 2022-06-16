@@ -6,6 +6,7 @@ require_relative './app'
 module ETestament
   # Web controller for ETestament API
   class App < Roda
+    # rubocop: disable Metrics/BlockLength
     route('testament') do |routing|
       @testament_route = '/testament'
       @testaments_dir = 'testament'
@@ -14,7 +15,9 @@ module ETestament
 
       # POST /testament/complete
       routing.post 'complete' do
-        Services::Testament::MarkAsComplete.new(App.config, session).call(current_account: @current_account)
+        Services::Testament::MarkAsComplete.new(App.config, session)
+                                           .call(current_account: @current_account,
+                                                 min_amount_heirs: routing.params['min_amount_heirs'])
 
         flash[:notice] = 'Testament completed!'
         routing.redirect @testament_route
@@ -42,5 +45,6 @@ module ETestament
         view dir_path, locals: { properties:, testament_status: @current_account.testament_status }
       end
     end
+    # rubocop: enable Metrics/BlockLength
   end
 end
