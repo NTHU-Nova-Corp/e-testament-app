@@ -15,6 +15,9 @@ table.table.table-hover
       - if testament_status == "Under Edition"
         th.text-center scope="col"  Manage
   tbody
+  - if heirs.all.size.zero?
+    tr.text-center
+      td colspan="5" = 'No heir information available'
   - heirs.all.each do |heir|
     tr
       td = "#{heir.first_name} #{heir.last_name}"

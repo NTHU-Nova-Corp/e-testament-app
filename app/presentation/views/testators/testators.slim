@@ -9,6 +9,9 @@ table#content-table.content-table.table.table-hover.display
       th.text-center scope="col" = 'View Heirs'
       th.text-center scope="col" = 'Manage'
   tbody
+  - if testators.all.size.zero?
+    tr.text-center
+      td colspan="5" = 'No testator information available'
   - testators.all.each do |testator|
     tr
       td = testator.presentation_name

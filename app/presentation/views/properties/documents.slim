@@ -18,6 +18,9 @@ table.table.table-hover
       - if testament_status == "Under Edition"
         th.text-center scope="col"  Manage
   tbody
+  - if documents.all.size.zero?
+    tr.text-center
+      td colspan="4" = 'No document information available'
   - documents.all.each do |document|
     tr
       th scope="row" = document.file_name

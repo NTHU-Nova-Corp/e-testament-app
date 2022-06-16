@@ -4,6 +4,9 @@ table.table.table-hover
       th scope="col"  Name
       th scope="col"  Email
   tbody
+  - if heirs.all.size.zero?
+    tr.text-center
+      td colspan="2" = 'No heir of testator available'
   - heirs.all.each do |heir|
     tr
       td = heir.presentation_name
