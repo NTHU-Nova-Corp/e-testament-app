@@ -14,7 +14,7 @@ module ETestament
 
         def call(current_account:)
           response = HTTP.auth("Bearer #{current_account.auth_token}")
-                         .post("#{@config.API_URL}/testaments/complete")
+                         .post("#{@config.API_URL}/testaments/complete", json: {})
 
           response_data = JSON.parse(response.to_s)
           raise Exceptions::BadRequestError, response_data['message'] if response.code == 400
