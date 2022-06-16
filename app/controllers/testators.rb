@@ -26,7 +26,11 @@ module ETestament
           routing.post do
             heir_data = SecureMessage.decrypt(token)
 
-            flash[:notice] = 'Key Sent!'
+            Services::Testators::Heirs::SubmitKey.new(App.config, session)
+                                                 .call(heir_id: heir_data['heir_id'],
+                                                       heir_key: routing.params['percentage'])
+
+            flash[:notice] = 'Key submitted!'
             routing.redirect @submit_key_route
           rescue Exceptions::BadRequestError => e
             flash[:error] = "Error: #{e.message}"
