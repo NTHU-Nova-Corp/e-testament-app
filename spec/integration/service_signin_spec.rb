@@ -42,7 +42,7 @@ describe 'Test Service Objects' do
     it 'BAD: should not find a false authenticated account' do
       WebMock.stub_request(:post, "#{API_URL}/auth/authenticate")
              .with(body: SignedMessage.sign(@mal_credentials).to_json)
-             .to_return(status: 403)
+             .to_return(status: 401)
       _(proc {
         ETestament::Services::Accounts::SignInInternal.new.call(**@mal_credentials)
       }).must_raise ETestament::Exceptions::UnauthorizedError
