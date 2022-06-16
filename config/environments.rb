@@ -40,7 +40,7 @@ module ETestament
       use Rack::Session::Redis,
           expire_after: ONE_MONTH,
           httponly: true,
-          same_site: :strict,
+          same_site: :lax,
           redis_server: {
             url: ENV.delete('REDIS_TLS_URL'),
             ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE }
