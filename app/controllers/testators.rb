@@ -81,8 +81,23 @@ module ETestament
           routing.redirect @testators_route
         end
 
+        routing.get 'validate-keys' do
+          testator = Services::Testators::GetInfo.new(App.config).call(current_account: @current_account, testator_id:)
+          heirs = Services::Testators::Heirs::GetAll.new(App.config).call(current_account: @current_account,
+                                                                          testator_id:)
+          dir_path = get_view_path(breadcrumb: "#{@testators_dir}/testament_key_validator",
+                                   display: testator.presentation_name)
+          view dir_path, locals: { testator:, heirs: }
+        end
+
+        routing.get 'read' do
+          testator = Services::Testators::GetInfo.new(App.config).call(current_account: @current_account, testator_id:)
+          dir_path = get_view_path(breadcrumb: "#{@testators_dir}/read", display: testator.presentation_name)
+          view dir_path, locals: {}
+        end
+
         # GET /testators/:testator_id
-        routing.get do
+        routing.get 'heirs' do
           heirs = Services::Testators::Heirs::GetAll.new(App.config).call(current_account: @current_account,
                                                                           testator_id:)
           testator = Services::Testators::GetInfo.new(App.config).call(current_account: @current_account, testator_id:)

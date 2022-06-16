@@ -5,7 +5,7 @@ module ETestament
   module Models
     # Property model
     class Heir
-      attr_reader :id, :first_name, :last_name, :email, :relation_id, :relation, :presentation_name
+      attr_reader :id, :first_name, :last_name, :email, :relation_id, :relation, :presentation_name, :key_submitted
 
       # rubocop:disable Metrics/AbcSize
       def initialize(heir_info)
@@ -15,8 +15,9 @@ module ETestament
         @email = heir_info['attributes']['email']
         @relation_id = heir_info['attributes']['relation_id']
         @relation = heir_info['attributes']['relation']
+        @key_submitted = heir_info['attributes']['key_submitted']
         @presentation_name = "#{heir_info['attributes']['first_name']}
-        #{heir_info['attributes']['last_name']} (#{heir_info['attributes']['relation']})"
+          #{heir_info['attributes']['last_name']} (#{heir_info['attributes']['relation']})"
       end
       # rubocop:enable Metrics/AbcSize
 

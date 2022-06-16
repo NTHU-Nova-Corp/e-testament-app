@@ -1,6 +1,5 @@
 script src="/js/testators/testators.js" integrity="sha384-tLuhqVYMyq63VcP4AA7wphZijeWK7Rw3IgqqAEH4cGR/+DEfWvF6ppXFamxqrNo5" crossorigin="anonymous"
 
-
 table#content-table.content-table.table.table-hover.display
   thead
     tr
@@ -23,8 +22,11 @@ table#content-table.content-table.table.table-hover.display
           button.btn.btn-primary.mx-1 type="button" title="Release" data-bs-toggle="modal" data-bs-target="#release-modal" onClick="open_release_testament_modal(#{testator.to_json})"
             i.fa-solid.fa-chart-pie
         - if testator.testament_status == 'Released'
-          button.btn.btn-success.mx-1 type="button" title="Read" data-bs-toggle="modal" data-bs-target="#release-modal" onClick="open_release_testament_modal(#{testator.to_json})"
-            i.fa-solid.fa-readme
+          a.btn.btn-success.mx-1.icon-btn type="button" title="Read" href="/testators/#{testator.id}/validate-keys"
+            i.fa-solid.fa-book
+        - if testator.testament_status == 'Read'
+          a.btn.btn-success.mx-1.icon-btn type="button" title="Read" href="/testators/#{testator.id}/read"
+            i.fa-solid.fa-book
 
 #release-modal.modal.fade
   .modal-dialog role="testament"

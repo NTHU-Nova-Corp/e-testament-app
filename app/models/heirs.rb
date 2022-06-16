@@ -18,6 +18,10 @@ module ETestament
         heirs_associated = property_heirs.map { |property_heir| property_heir.heir.id }
         @all.reject { |heir| heirs_associated.include? heir.id }
       end
+
+      def amount_signed?
+        @all.count(&:key_submitted)
+      end
     end
   end
 end

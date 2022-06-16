@@ -17,7 +17,7 @@ module ETestament
                            .get("#{@config.API_URL}/testators/#{testator_id}/heirs")
             raise Exceptions::ApiServerError if response.code != 200
 
-            Models::Testators.new(response.code == 200 ? response.parse['data'] : [])
+            Models::Heirs.new(response.code == 200 ? response.parse['data'] : [])
           rescue HTTP::ConnectionError
             raise Exceptions::ApiServerError
           end
