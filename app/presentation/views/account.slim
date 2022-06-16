@@ -20,6 +20,7 @@ ol.breadcrumb.mt-5
       .col-sm-2 Email:
       .col-sm-10
         == executor.email
+    button.btn.btn-outline-danger.mt-2 type="button" data-bs-toggle="modal" data-bs-target="#unassign-executor-modal" = 'Unassign Executor'
 
 - elsif executor.pending_acceptance?
   .container
@@ -31,6 +32,7 @@ ol.breadcrumb.mt-5
       .col-sm-2 Email:
       .col-sm-10
         == executor.email
+    button.btn.btn-outline-danger.mt-2 type="button" data-bs-toggle="modal" data-bs-target="#cancel-executor-modal" = 'Cancel Request'
 
 - elsif executor.pending_registration?
   .container
@@ -42,12 +44,12 @@ ol.breadcrumb.mt-5
       .col-sm-2 Email:
       .col-sm-10
         == executor.email
+    button.btn.btn-outline-danger.mt-2 type="button" data-bs-toggle="modal" data-bs-target="#cancel-executor-modal" = 'Cancel Request'
 
 - elsif executor.unassigned?
   .container
     p == "Executor hasn't been assigned yet"
     button.btn.btn-outline-primary type="button" data-bs-toggle="modal" data-bs-target="#assign-executor-modal" = 'Assign Executor'
-
   #assign-executor-modal.modal.fade
     .modal-dialog role="document"
       .modal-content
@@ -66,3 +68,33 @@ ol.breadcrumb.mt-5
             button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Cancel
             button.btn.btn-primary type="submit"  Send an invitation
 
+
+- if executor.pending_acceptance? || executor.pending_registration?
+  #cancel-executor-modal.modal.fade
+    .modal-dialog role="document"
+      .modal-content
+        form method='post' action="/account/executor/#{executor.email}/cancel" id='form-cancel-executor'
+          .modal-header
+            h5#cancel-executor-title.modal-title Cancel Executor Request
+            button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+              span aria-hidden="true"
+          .modal-body
+            p Please click Cancel Request to confirm the action
+          .modal-footer
+            button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close
+            button.btn.btn-danger type="submit"  Cancel Request
+
+- if executor.active
+  #unassign-executor-modal.modal.fade
+    .modal-dialog role="document"
+      .modal-content
+        form method='post' action="/account/executor/#{executor.email}/unassign" id='form-unassign-executor'
+          .modal-header
+            h5#unassign-executor-title.modal-title Unassign An Executor
+            button.btn-close aria-label="Close" data-bs-dismiss="modal" type="button"
+              span aria-hidden="true"
+          .modal-body
+            p Please click Cancel An Executor to confirm the action
+          .modal-footer
+            button.btn.btn-secondary data-bs-dismiss="modal" type="button"  Close
+            button.btn.btn-danger type="submit"  Unassign An Executor

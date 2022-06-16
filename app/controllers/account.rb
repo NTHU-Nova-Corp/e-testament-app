@@ -10,12 +10,32 @@ module ETestament
     route('account') do |routing|
       routing.on do
 
-        routing.post 'executor' do
-          email = routing.params['assign_email']
-          Services::Executors::AssignExecutor.new(App.config).call(current_account: @current_account, email:)
+        routing.on 'executor' do
+          routing.on String do |executor_email|
+            routing.post 'cancel' do
+              Services::Executors::CancelExecutorRequest.new(App.config).call(current_account: @current_account,
+                                                                              executor_email:)
 
-          flash[:notice] = "Invitation has been sent to #{email}! Please contact the person to complete the process"
-          routing.redirect "/account/#{@current_account.username}"
+              flash[:notice] = "The request to #{executor_email} has been cancelled"
+              routing.redirect "/account/#{@current_account.username}"
+            end
+
+            routing.post 'unassign' do
+              Services::Executors::UnassignExecutor.new(App.config).call(current_account: @current_account,
+                                                                         executor_email:)
+
+              flash[:notice] = 'The executor has been unassigned!'
+              routing.redirect "/account/#{@current_account.username}"
+            end
+          end
+
+          routing.post do
+            email = routing.params['assign_email']
+            Services::Executors::AssignExecutor.new(App.config).call(current_account: @current_account, email:)
+
+            flash[:notice] = "Invitation has been sent to #{email}! Please contact the person to complete the process"
+            routing.redirect "/account/#{@current_account.username}"
+          end
         end
 
         routing.get String do |username|
