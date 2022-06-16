@@ -9,7 +9,6 @@ module ETestament
   class App < Roda
     route('account') do |routing|
       routing.on do
-
         routing.post 'executor' do
           email = routing.params['assign_email']
           Services::Executors::AssignExecutor.new(App.config).call(current_account: @current_account, email:)

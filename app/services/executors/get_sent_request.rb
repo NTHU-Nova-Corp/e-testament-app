@@ -11,6 +11,7 @@ module ETestament
           @config = config
         end
 
+        # rubocop:disable Metrics/AbcSize
         def call(current_account:)
           response = HTTP.auth("Bearer #{current_account.auth_token}")
                          .get("#{@config.API_URL}/executors/sent")
@@ -25,6 +26,7 @@ module ETestament
         rescue HTTP::ConnectionError
           raise Exceptions::ApiServerError
         end
+        # rubocop:enable Metrics/AbcSize
       end
     end
   end
