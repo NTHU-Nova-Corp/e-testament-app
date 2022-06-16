@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Style/HashSyntax
 require 'rake/testtask'
 require './require_app'
 
@@ -57,7 +56,7 @@ namespace :url do
   # usage: $ rake url:integrity URL=http://example.org/script.js
   desc 'Generate integrity hash for a URL'
   task :integrity do
-    sha384 = `curl -L -s #{ENV.fetch['URL']} | openssl dgst -sha384 -binary | \
+    sha384 = `curl -L -s #{ENV.fetch('URL', nil)} | openssl dgst -sha384 -binary | \
               openssl enc -base64`
     puts "sha384-#{sha384}"
   end
@@ -72,4 +71,3 @@ namespace :session do
     puts "#{wiped.count} sessions deleted"
   end
 end
-# rubocop:enable Style/HashSyntax
