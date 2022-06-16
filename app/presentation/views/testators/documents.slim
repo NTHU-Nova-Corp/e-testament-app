@@ -1,0 +1,19 @@
+script src='/js/properties/documents.js' integrity="sha384-SW/60WyK3vlrb1wAj9SCKAiRlu0fTbNXFfF9uzgr7a7gXkRBz7DSigAoa0lA1SjS"
+
+- unless document_to_download.nil?
+  script createAndDownloadBlobFile("#{document_to_download.file_name}", "#{document_to_download.content}")
+
+table.table.table-hover
+  thead
+    tr
+      th scope="col"  Name
+      th scope="col"  Description
+      th.text-center scope="col"  Download
+  tbody
+  - documents.all.each do |document|
+    tr
+      th scope="row" = document.file_name
+      td = document.description
+      td.text-center
+        a.btn.btn-success type="button" href="/testators/#{testator.id}/read/properties/#{property_id}/documents/#{document.id}"
+          i.fa-solid.fa-file-lines

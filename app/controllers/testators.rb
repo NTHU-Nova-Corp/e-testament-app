@@ -90,23 +90,79 @@ module ETestament
           view dir_path, locals: { testator:, heirs: }
         end
 
-        routing.post 'read' do
-          testator = Services::Testators::GetInfo.new(App.config).call(current_account: @current_account, testator_id:)
-          Services::Testators::ReadTestament.new(App.config).call(current_account: @current_account, testator_id:)
-          properties = Services::Testators::GetTestament.new(App.config).call(current_account: @current_account,
-                                                                              testator_id:)
+        routing.on 'read' do
+          routing.on 'properties' do
+            routing.on String do |property_id|
+              routing.on 'documents' do
+                routing.on String do |document_id|
+                  routing.get do
+                    testator = Services::Testators::GetInfo.new(App.config)
+                                                           .call(current_account: @current_account, testator_id:)
 
-          dir_path = get_view_path(breadcrumb: "#{@testators_dir}/testament_read", display: testator.presentation_name)
-          view dir_path, locals: { testator:, properties: }
-        end
+                    documents = Services::Testators::Documents::GetAll.new(App.config)
+                                                                      .call(current_account: @current_account,
+                                                                            testator_id:,
+                                                                            property_id:)
 
-        routing.get 'read' do
-          testator = Services::Testators::GetInfo.new(App.config).call(current_account: @current_account, testator_id:)
-          properties = Services::Testators::GetTestament.new(App.config).call(current_account: @current_account,
-                                                                              testator_id:)
+                    document_to_download = Services::Testators::Documents::Get.new(App.config)
+                                                                              .call(current_account: @current_account,
+                                                                                    testator_id:,
+                                                                                    property_id:,
+                                                                                    document_id:)
 
-          dir_path = get_view_path(breadcrumb: "#{@testators_dir}/testament_read", display: testator.presentation_name)
-          view dir_path, locals: { testator:, properties: }
+                    dir_path = get_view_path(breadcrumb: "#{@testators_dir}/documents",
+                                             display: testator.presentation_name)
+
+                    view dir_path,
+                         locals: { property_id:, testator:, documents:, document_to_download: }
+                  rescue Exceptions::BadRequestError => e
+                    flash[:error] = "Error: #{e.message}"
+                    routing.redirect @documents_route
+                  end
+                end
+
+                routing.get do
+                  testator = Services::Testators::GetInfo.new(App.config)
+                                                         .call(current_account: @current_account, testator_id:)
+
+                  documents = Services::Testators::Documents::GetAll.new(App.config)
+                                                                    .call(current_account: @current_account,
+                                                                          testator_id:,
+                                                                          property_id:)
+
+                  dir_path = get_view_path(breadcrumb: "#{@testators_dir}/documents",
+                                           display: testator.presentation_name)
+
+                  view dir_path,
+                       locals: { property_id:, testator:, documents:, document_to_download: nil }
+                end
+              end
+            end
+          end
+
+          routing.post do
+            testator = Services::Testators::GetInfo.new(App.config)
+                                                   .call(current_account: @current_account, testator_id:)
+
+            Services::Testators::ReadTestament.new(App.config).call(current_account: @current_account, testator_id:)
+            properties = Services::Testators::GetTestament.new(App.config).call(current_account: @current_account,
+                                                                                testator_id:)
+
+            dir_path = get_view_path(breadcrumb: "#{@testators_dir}/testament_read",
+                                     display: testator.presentation_name)
+            view dir_path, locals: { testator:, properties: }
+          end
+
+          routing.get do
+            testator = Services::Testators::GetInfo.new(App.config).call(current_account: @current_account,
+                                                                         testator_id:)
+            properties = Services::Testators::GetTestament.new(App.config).call(current_account: @current_account,
+                                                                                testator_id:)
+
+            dir_path = get_view_path(breadcrumb: "#{@testators_dir}/testament_read",
+                                     display: testator.presentation_name)
+            view dir_path, locals: { testator:, properties: }
+          end
         end
 
         # GET /testators/:testator_id

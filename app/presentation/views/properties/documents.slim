@@ -27,8 +27,6 @@ table.table.table-hover
           i.fa-solid.fa-file-lines
       - if testament_status == "Under Edition"
         td.text-center
-          a.btn.btn-info.mx-1 type="button"
-            i.fa-solid.fa-pen-to-square
           a.btn.btn-danger type="button" data-bs-toggle="modal" data-bs-target="#delete-property-document-modal" onClick="open_delete_document_from_property_modal(#{document.to_json})"
             i.fa-solid.fa-trash
 
