@@ -23,5 +23,5 @@ table.table.table-hover
             i.fa-solid.fa-xmark
 
 - if heirs.amount_signed? >= testator.min_amount_heirs
-  a#add-heir-btn.btn.btn-primary.mb-2.float-right type="button" title="Read" href="/testators/#{testator.id}/read"
-    span Read Testament
+  form#form-key-registration method='post' action='/testators/#{testator.id}/read'
+    button#save-property-btn.btn.btn-primary.float-right.mt-1 type="submit"  Read Testament
