@@ -18,7 +18,7 @@ module ETestament
 
             response_data = JSON.parse(response.to_s)
             raise Exceptions::BadRequestError, response_data['message'] if response.code == 400
-            raise Exceptions::ApiServerError if response.code != 201
+            raise Exceptions::ApiServerError if response.code != 200
 
             response
           rescue HTTP::ConnectionError

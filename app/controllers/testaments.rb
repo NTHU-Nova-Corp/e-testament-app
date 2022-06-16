@@ -17,9 +17,9 @@ module ETestament
         Services::Testament::MarkAsComplete.new(App.config, session).call(current_account: @current_account)
 
         flash[:notice] = 'Testament completed!'
+        routing.redirect @testament_route
       rescue Exceptions::BadRequestError => e
         flash[:error] = "Error: #{e.message}"
-      ensure
         routing.redirect @testament_route
       end
 
@@ -28,9 +28,9 @@ module ETestament
         Services::Testament::SetUnderEdition.new(App.config, session).call(current_account: @current_account)
 
         flash[:notice] = 'Testament is now under edition!'
+        routing.redirect @testament_route
       rescue Exceptions::BadRequestError => e
         flash[:error] = "Error: #{e.message}"
-      ensure
         routing.redirect @testament_route
       end
 

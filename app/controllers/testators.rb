@@ -25,9 +25,9 @@ module ETestament
           Services::Testators::RejectRequest.new(App.config).call(current_account: @current_account,
                                                                   testator_id:)
           flash[:notice] = 'The invitation has been rejected!'
+          routing.redirect '/'
         rescue Exceptions::BadRequestError => e
           flash[:error] = "Error: #{e.message}"
-        ensure
           routing.redirect '/'
         end
 
@@ -36,10 +36,9 @@ module ETestament
           Services::Testators::AcceptRequest.new(App.config).call(current_account: @current_account,
                                                                   testator_id:)
           flash[:notice] = 'The invitation has been accepted!'
+          routing.redirect @testators_route
         rescue Exceptions::BadRequestError => e
-          flash[:error] =
-            "Error: #{e.message}"
-        ensure
+          flash[:error] = "Error: #{e.message}"
           routing.redirect @testators_route
         end
 
@@ -47,11 +46,10 @@ module ETestament
         routing.post 'release' do
           Services::Testators::ReleaseTestament.new(App.config).call(current_account: @current_account,
                                                                      testator_id:)
-          flash[:notice] =
-            'The invitation has been rejected!'
+          flash[:notice] = 'The invitation has been rejected!'
+          routing.redirect @testators_route
         rescue Exceptions::BadRequestError => e
           flash[:error] = "Error: #{e.message}"
-        ensure
           routing.redirect @testators_route
         end
 
