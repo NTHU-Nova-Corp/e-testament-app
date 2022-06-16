@@ -1,0 +1,11 @@
+.d-flex.flex-column.home-container
+.row
+  .col-sm-4
+  .col-sm-4
+    h3.text-center.mt-4 Welcome to E-Testament
+    p Hello #{heir_presentation_name}, please enter the unique key sent by the executor to your email.
+    form#form-key-registration method='post' action='/testators/read/#{token}'
+      .form-group
+        label.col-form-label.mt-1 for="percentage" Key:
+        input#percentage.form-control name="percentage" placeholder=("********") type="password" required="true" /
+        button#save-property-btn.btn.btn-primary.float-right.mt-1 type="submit"  Submit

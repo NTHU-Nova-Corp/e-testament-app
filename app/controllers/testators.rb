@@ -11,6 +11,30 @@ module ETestament
       @testators_route = '/testators'
       @testators_dir = 'testators'
 
+      routing.on 'submit-key' do
+        routing.on String do |token|
+          @submit_key_route = "/testators/submit-key/#{token}"
+          routing.get do
+            heir_data = SecureMessage.decrypt(token)
+            view 'testators/submit_key',
+                 locals: { token:, heir_presentation_name: heir_data['heir_presentation_name'],
+                           heir_id: heir_data['heir_id'] }
+
+            # view 'testators/submit_key', locals: { token:, heir_presentation_name: 'Cesar', heir_id: 'test' }
+          end
+
+          routing.post do
+            heir_data = SecureMessage.decrypt(token)
+
+            flash[:notice] = 'Key Sent!'
+            routing.redirect @submit_key_route
+          rescue Exceptions::BadRequestError => e
+            flash[:error] = "Error: #{e.message}"
+            routing.redirect @submit_key_route
+          end
+        end
+      end
+
       routing.redirect '/auth/signin' unless @current_account.logged_in?
 
       review_dir_path = get_view_path(breadcrumb: 'review', in_page: 'review')
