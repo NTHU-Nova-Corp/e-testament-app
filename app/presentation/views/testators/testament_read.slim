@@ -5,8 +5,7 @@ table.table.table-hover
       th scope="col"  Description
       th scope="col"  Heir Distribution
       th scope="col"  Documents
-      a.btn.btn-success.icon-btn type="button" title="Documents" href="/testators/#{testator.id}/documents"
-        i.fa-solid.fa-file-lines
+
   tbody
   - properties.all.each do |property|
     tr
@@ -16,3 +15,6 @@ table.table.table-hover
         - property.heirs.all.each do |heir|
           = "#{heir.percentage}% - #{heir.first_name} #{heir.last_name}"
           br
+      td
+        a.btn.btn-success.icon-btn type="button" title="Documents" href="/testators/#{testator.id}/documents"
+          i.fa-solid.fa-file-lines

@@ -115,7 +115,7 @@ module ETestament
           # POST /auth/signup/:register_token
           routing.post do
             passwords = Form::Passwords.new.call(routing.params)
-            raise Form.message_values(passwords) if passwords.failure?
+            raise Exceptions::BadRequestError, Form.message_values(passwords) if passwords.failure?
 
             Services::Accounts::SignUp.new(App.config)
                                       .call(
@@ -131,7 +131,7 @@ module ETestament
           rescue Exceptions::BadRequestError => e
             flash.now[:error] = "Error: #{e.message}"
             response.status = e.instance_variable_get(:@status_code)
-            routing.redirect '/auth/signin'
+            routing.redirect "/auth/signup/#{registration_token}"
           end
         end
 

@@ -90,9 +90,18 @@ module ETestament
           view dir_path, locals: { testator:, heirs: }
         end
 
-        routing.get 'read' do
+        routing.post 'read' do
           testator = Services::Testators::GetInfo.new(App.config).call(current_account: @current_account, testator_id:)
           Services::Testators::ReadTestament.new(App.config).call(current_account: @current_account, testator_id:)
+          properties = Services::Testators::GetTestament.new(App.config).call(current_account: @current_account,
+                                                                              testator_id:)
+
+          dir_path = get_view_path(breadcrumb: "#{@testators_dir}/testament_read", display: testator.presentation_name)
+          view dir_path, locals: { testator:, properties: }
+        end
+
+        routing.get 'read' do
+          testator = Services::Testators::GetInfo.new(App.config).call(current_account: @current_account, testator_id:)
           properties = Services::Testators::GetTestament.new(App.config).call(current_account: @current_account,
                                                                               testator_id:)
 
