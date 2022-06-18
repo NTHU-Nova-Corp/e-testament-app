@@ -5,6 +5,7 @@ require_relative './app'
 
 module ETestament
   # Web controller for ETestament API
+  # rubocop:disable Metrics/ClassLength
   class App < Roda
     # rubocop:disable Metrics/BlockLength
     route('testators') do |routing|
@@ -186,4 +187,6 @@ module ETestament
     end
     # rubocop:enable Metrics/BlockLength
   end
+
+  # rubocop:enable Metrics/ClassLength
 end

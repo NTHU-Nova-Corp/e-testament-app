@@ -14,8 +14,10 @@ module ETestament
 
           def call(current_account:, testator_id:, property_id:, document_id:)
             # api/v1/testators/:testator_id/testament/properties/:property_id/documents
+            testator_path_uri = "#{@config.API_URL}/testators/#{testator_id}"
+            full_uri = "#{testator_path_uri}/testament/properties/#{property_id}/documents/#{document_id}"
             response = HTTP.auth("Bearer #{current_account.auth_token}")
-                           .get("#{@config.API_URL}/testators/#{testator_id}/testament/properties/#{property_id}/documents/#{document_id}")
+                           .get(full_uri)
 
             response_data = JSON.parse(response.to_s)
             raise Exceptions::BadRequestError, response_data['message'] if response.code == 400
