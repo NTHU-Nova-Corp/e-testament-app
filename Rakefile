@@ -8,14 +8,14 @@ task :print_env do
 end
 
 desc 'Test all the specs'
-Rake::TestTask.new(:test) do |t|
+Rake::TestTask.new(:spec) do |t|
   t.pattern = 'spec/**/*_spec.rb'
   t.warning = false
 end
 
 desc 'Rerun tests on live code changes'
 task :respec do
-  sh 'rerun -c rake test'
+  sh 'rerun -c rake spec'
 end
 
 desc 'Run application console (pry)'
