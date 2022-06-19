@@ -48,3 +48,6 @@ gem 'google-api-client'
 
 # CSP
 gem 'secure_headers'
+
+# Coverage
+gem 'simplecov'
