@@ -4,14 +4,15 @@ require_relative '../spec_helper'
 require 'webmock/minitest'
 
 # Mock config
+# rubocop:disable Naming/MethodName
 class Config
   def API_URL
     API_URL
   end
 end
+# rubocop:enable Naming/MethodName
 
 describe 'Test Service Objects' do
-
   before do
     @credentials = { username: 'daniel.kong', password: 'mypa$$w0rd3' }
     @mal_credentials = { username: 'daniel.kong', password: 'wrongpassword' }
@@ -26,7 +27,6 @@ describe 'Test Service Objects' do
   session = {}
 
   describe 'Find authenticated account' do
-
     it 'HAPPY: should find an authenticated account' do
       auth_account_file = 'spec/fixtures/auth_account.json'
 
@@ -51,7 +51,9 @@ describe 'Test Service Objects' do
              .to_return(body: { message: 'fail' }.to_json, status: 401)
       _(proc {
         ETestament::Services::Accounts::SignInInternal.new(config, session).call(
-          username: @mal_credentials[:username], password: @mal_credentials[:password])
+          username: @mal_credentials[:username],
+          password: @mal_credentials[:password]
+        )
       }).must_raise ETestament::Exceptions::UnauthorizedError
     end
   end
